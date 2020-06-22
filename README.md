@@ -8,8 +8,9 @@ The main directory in z3r0101 framework. This folder contains the framework core
   <li>Create a website directory<li>
   <li>Under you website directory. Create the following directories
       <ol>
-        <ul>application</ul>
-        <ul>vendors</ul>
+        <li>application</li>
+        <li>vendors</li>
+      </ol>  
   </li>
 </ol>
 
