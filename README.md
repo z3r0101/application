@@ -11,8 +11,6 @@ The main directory in z3r0101 framework. This folder contains the framework core
       <ol>
         <ul>application</ul>
         <ul>vendors</ul>
-        
-      </ol>  
   </li>
 </ol>
 
