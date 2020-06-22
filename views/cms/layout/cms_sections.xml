@@ -1,0 +1,19 @@
+<sections rebuild_user_access="true">
+    <!--section title="Menu" link="menu/list" role="admin|editor"></section-->
+    <!--
+    Sample Only
+    <section title="Home" link="home" role="admin|editor">
+        <sub title="Sub Menu #1" link="home/sub-menu-1/list" role="admin|editor"></sub>
+        <sub title="Sub Menu #2" link="home/sub-menu-2/list" role="admin|editor"></sub>
+    </section>
+
+    Priority Menu - Add order="top"
+    <section title="Menu" link="menu/list" role="admin|editor" order="top"></section>
+
+    For Sub menu access
+    <section menu="false" title="Home" link="home/content-main/list" role="admin|editor" link_method_access="default"></section>
+
+    Separator
+    <section type="separator"></section>
+    //-->
+</sections>

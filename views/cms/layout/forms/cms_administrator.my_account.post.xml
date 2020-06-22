@@ -1,0 +1,33 @@
+<cms>
+    <header>
+        <title>My Account</title>
+        <blurb></blurb>
+    </header>
+    <body
+            table_name="cms_users"
+            saveclose="false"
+            >
+        <panel caption="Details">
+            <control type="text" id="CMS_Users_Name" caption="Email" placeholder="" required="true"></control>
+            <control type="text" input-type="password" id="CMS_Users_Password_Input_Current" caption="Current Password" placeholder="" required="true"></control>
+            <control type="text" input-type="password" id="CMS_Users_Password_Input" caption="New Password" placeholder="" required="true"></control>
+            <control type="text" input-type="password" id="CMS_Users_Password_Confirm" caption="Confirm Password" placeholder="" required="true"></control>
+
+            <control type="text" id="CMS_Users_Name_First" caption="First Name" placeholder="" required="true"></control>
+            <control type="text" id="CMS_Users_Name_Last" caption="Last Name" placeholder="" required="true"></control>
+
+            <!--control type="text" id="CMS_Users_Email" caption="Email" placeholder="" required="true"></control-->
+        </panel>
+        <script>
+            <![CDATA[
+                $('#CMS_Users_Password_Confirm').after('\
+                <span class="cms-notes" style="margin-top: 1%">\
+                    <strong>Password Rules:</strong><br>\
+                    At least 12 characters<br>\
+                    At least one capital and one lower case letter<br>\
+                </span>\
+                ');
+            ]]>
+        </script>
+    </body>
+</cms>

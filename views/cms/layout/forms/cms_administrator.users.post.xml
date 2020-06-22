@@ -1,0 +1,344 @@
+<cms>
+    <header>
+        <title>Users</title>
+        <blurb></blurb>
+        <style id="cmsUserStyle" cms-style-name="users">
+            <![CDATA[
+                .list-group .list-group-item .checkbox {
+                    padding-left: 20px;
+                }
+
+                .cms-access-option li {
+                    display: inline-block;
+                    /* You can also add some margins here to make it look prettier */
+                    zoom:1;
+                    *display:inline;
+                    /* this fix is needed for IE7- */
+
+                    margin-right: 15px;
+                }
+
+                .cms-access-option li label {
+                    font-weight: normal;
+                }
+
+                .cms-disabled-color {
+                    color: #999;
+                }
+
+                @media (max-width: 768px) {
+                    .cms-access-table tr td:nth-child(1) {
+                        width: 50%;
+                        font-size: 12px;
+                    }
+                    .cms-access-table tr td:nth-child(2) {
+                        width: 50%;
+                        font-size: 12px;
+                    }
+                }
+            ]]>
+        </style>
+    </header>
+    <body id="cmsUsersBody"
+        table_name="cms_users"
+        saveclose="true"
+    >
+        <panel caption="Details">
+            <control type="text" id="CMS_Users_Name" caption="Email" placeholder="E.g. johndoe@email.com" required="true"></control>
+            <control type="text" input-type="password" id="CMS_Users_Password_Input" caption="Password" placeholder="" required="true"></control>
+            <control type="text" input-type="password" id="CMS_Users_Password_Confirm" caption="Confirm Password" placeholder="" required="true"></control>
+            <control type="text" input-type="password" id="CMS_Users_Password" caption="Password" placeholder="" required="true" container-obj-class="input-group">
+                <input-group align="left" id="passwordOpener">
+                    <span class="input-group-addon">
+                        <a href="javascript:void(0)" onclick="cmsShowPwd(this)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+                    </span>
+                </input-group>
+            </control>
+            <control type="text" id="CMS_Users_Name_First" caption="First Name" placeholder="" required="true"></control>
+            <control type="text" id="CMS_Users_Name_Last" caption="Last Name" placeholder="" required="true"></control>
+
+            <control type="select" id="CMS_Users_Type" caption="Role" placeholder="" required="true">
+            </control>
+
+            <control type="hidden" id="CMS_Users_Access_Temp"></control>
+            <control type="text" id="CMS_Users_Access" caption="Access" placeholder="" required="true"></control>
+
+            <control type="select" id="CMS_Users_Status" caption="Status" placeholder="" required="true">
+                <option value="0">Hold</option>
+                <option value="1">Active</option>
+            </control>
+        </panel>
+        <buttons id="cmsUsersButtons">
+        </buttons>
+
+        <script id="cmsUserScript" cms-javascript-name="users">
+            <![CDATA[
+                function cmsSSOAction(pAction) {
+                    var urlSSOList = cmsInfo['config']['website']['path']+cmsInfo['config.cms']['route_name']+'/administrator/sso-approval/list';
+                    if (pAction != 2) {
+                        var arrMsg = [[2,'Are you sure you want to allow this account?'], [3,'Are you sure you want to reject this account?']];
+                        if (pAction == 0) {
+                            if ($('#CMS_Users_Type').val() == '' || $('#CMS_Users_Type').val() == '-1') {
+                                BootstrapDialog.alert(
+                                    {
+                                        title: 'SSO Account Approval',
+                                        message: 'Please select a role for this account',
+                                        type: BootstrapDialog.TYPE_WARNING,
+                                        closable: true,
+                                        draggable: true,
+                                        callback: function(result) {
+                                            $('#CMS_Users_Type').focus();
+                                        }
+                                    }
+                                );
+                                return false;
+                            }
+                        }
+
+                        BootstrapDialog.confirm(
+                            {
+                                title: 'SSO Account Approval',
+                                message: arrMsg[pAction][1],
+                                type: BootstrapDialog.TYPE_WARNING,
+                                closable: true,
+                                draggable: true,
+                                callback: function(result) {
+                                    if(result) {
+                                        $('#CMS_Users_Status_SSO').val(arrMsg[pAction][0])
+                                        cmsSave(null, null, urlSSOList);
+                                    }
+                                }
+                            }
+                        );
+                    } else {
+                        window.location = urlSSOList;
+                    }
+                }
+
+                function cmsUsersType() {
+                    if ($('#CMS_Users_Type').val() == 0 || $('#CMS_Users_Type').val() == '-1') {
+                        $('#CMS_Users_Access').parents('.form-group').hide();
+                    } else {
+                        $('#CMS_Users_Access').parents('.form-group').show();
+                    }
+                }
+
+                $('#CMS_Users_Access').parents('.form-group').hide();
+
+                cmsUsersType()
+
+                $('#CMS_Users_Type').on('change',
+                    function () {
+                        cmsUsersType();
+                    }
+                );
+
+                $('#CMS_Users_Password_Confirm').after('\
+                    <span class="cms-notes" style="margin-top: 1%">\
+                        <strong>Password Rules:</strong><br>\
+                        At least 12 characters<br>\
+                        At least one capital and one lower case letter<br>\
+                    </span>\
+                ');
+                $('#CMS_Users_Password').parents('.input-group').after('\
+                    <span class="cms-notes" style="margin-top: 1%">\
+                        <strong>Password Rules:</strong><br>\
+                        At least 12 characters<br>\
+                        At least one capital and one lower case letter<br>\
+                    </span>\
+                ');
+
+                function cmsShowPwd(pObj) {
+                    if ($(pObj).find('span').hasClass('glyphicon-eye-open')) {
+                        $(pObj).parents('.form-group').find('input').attr('type', 'text');
+                        $(pObj).find('span').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
+                    } else {
+                        $(pObj).parents('.form-group').find('input').attr('type', 'password');
+                        $(pObj).find('span').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
+                    }
+                }
+
+                function cmdFnAccess(pObj, isSub, pValDef) {
+                    isSub = (isSub || false);
+                    pValDef = (pValDef || pObj.checked);
+
+                    if (!isSub) {
+                        CMS_Users_Access_Arr[$(pObj).attr('id')]['options']['view'] = pValDef;
+
+                        $('.table tr input.cms-access-items[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').each(
+                            function (pSubIndex, pSubObj) {
+                                $(pSubObj)[0].checked = pValDef;
+                                cmdFnAccess(pSubObj, true, pValDef)
+                            }
+                        );
+                        if (!pValDef) {
+                            $('.table tr input.cms-access-items[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').attr('disabled', 'true');
+                            $('.table tr input.cms-access-items[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').parent().addClass('cms-disabled-color');
+                        } else {
+                            $('.table tr input.cms-access-items[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').removeAttr('disabled');
+                            $('.table tr input.cms-access-items[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').parent().removeClass('cms-disabled-color');
+                        }
+
+                        $('.table tr input.cms-access-items-options[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').each(
+                            function (pSubIndex, pSubObj) {
+                                $(pSubObj)[0].checked = pValDef;
+                                cmdFnAccessOptions(pSubObj, $(pObj).attr('id'), true, pValDef);
+                            }
+                        );
+                        if (!pValDef) {
+                            $('.table tr input.cms-access-items-options[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').attr('disabled', 'true');
+                        } else {
+                            $('.table tr input.cms-access-items-options[item-parent-id="'+$(pObj).attr('id')+'"]:checkbox').removeAttr('disabled');
+                        }
+
+                        $('.table tr input.cms-access-parent-options[id^="'+$(pObj).attr('id')+'_"]:checkbox').each(
+                            function (pSubIndex, pSubObj) {
+                                $(pSubObj)[0].checked = pValDef;
+                                cmdFnAccessOptions(pSubObj, $(pObj).attr('id'), false, pValDef);
+                            }
+                        );
+                        if (!pValDef)
+                            $('.table tr input.cms-access-parent-options[id^="'+$(pObj).attr('id')+'_"]:checkbox').attr('disabled', 'true');
+                        else
+                            $('.table tr input.cms-access-parent-options[id^="'+$(pObj).attr('id')+'_"]:checkbox').removeAttr('disabled');
+
+                    } else {
+                        CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items'][$(pObj).attr('id')]['options']['view'] = pValDef;
+                        $('.table tr input.cms-access-items-options[id^="'+$(pObj).attr('id')+'_"]:checkbox').each(
+                            function (pSubIndex, pSubObj) {
+                                $(pSubObj)[0].checked = pValDef;
+                                cmdFnAccessOptions(pSubObj, $(pSubObj).attr('item-parent-id'), true, pValDef);
+                            }
+                        );
+                        if (!pValDef)
+                            $('.table tr input.cms-access-items-options[id^="'+$(pObj).attr('id')+'_"]:checkbox').attr('disabled', 'true');
+                        else
+                            $('.table tr input.cms-access-items-options[id^="'+$(pObj).attr('id')+'_"]:checkbox').removeAttr('disabled');
+
+                    }
+
+                    //UPDATE ACCESS
+                    $('#CMS_Users_Access').val(base64_encode(json_encode(CMS_Users_Access_Arr)));
+                }
+
+                function cmdFnAccessOptions(pObj, pParentId, isSub, pValDef) {
+                    isSub = (isSub || false);
+                    pValDef = (pValDef || pObj.checked);
+
+                    if (!isSub) {
+                        CMS_Users_Access_Arr[pParentId]['options']['access_options'][$(pObj).attr('id')]['selected'] = pValDef;
+                        if (pValDef) {
+                            $(pObj).parent().removeClass('cms-disabled-color');
+                        } else {
+                            $(pObj).parent().addClass('cms-disabled-color');
+                        }
+                    } else {
+                        var subItem = $(pObj).attr('id').split('_')[0];
+                        if (CMS_Users_Access_Arr[pParentId]['items'][subItem]['options']['access_options']) {
+                            CMS_Users_Access_Arr[pParentId]['items'][subItem]['options']['access_options'][$(pObj).attr('id')]['selected'] = pValDef;
+                        }
+                        if (pValDef) {
+                            $(pObj).parent().removeClass('cms-disabled-color');
+                        } else {
+                            $(pObj).parent().addClass('cms-disabled-color');
+                        }
+                    }
+
+                    //UPDATE ACCESS
+                    $('#CMS_Users_Access').val(base64_encode(json_encode(CMS_Users_Access_Arr)));
+                }
+
+                $('#CMS_Users_Access').hide().after('<div id="CMS_Users_Access_Container">Loading Access...</div>');
+
+                var CMS_Users_Access_Arr = JSON.parse(base64_decode($('#CMS_Users_Access_Temp').val()));
+
+                if ($('#CMS_Users_Access').val()!='') {
+                    CMS_Users_Access_Arr = JSON.parse(base64_decode($('#CMS_Users_Access').val()));
+                }
+
+                $.ajax(
+                    {
+                        type: 'GET',
+                        url: '',
+                        data: 'cms-access=true'
+                    }
+                ).done(
+                    function (data) {
+                        $('#CMS_Users_Access_Container').empty().after(data);
+
+                        $('.table tr input:checkbox').each(
+                            function (pIndex, pObj) {
+
+                                if ($(pObj).hasClass('cms-access-parent')) {
+                                    if (CMS_Users_Access_Arr[$(pObj).attr('id')]) {
+                                        if (CMS_Users_Access_Arr[$(pObj).attr('id')]['options']) {
+                                            if (CMS_Users_Access_Arr[$(pObj).attr('id')]['options']['view']) {
+                                                $(pObj)[0].checked = true;
+                                            } else {
+                                                cmdFnAccess($(pObj)[0], false, false);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if ($(pObj).hasClass('cms-access-parent-options')) {
+                                    if ($(pObj).attr('parent-id')) {
+                                        if (CMS_Users_Access_Arr[$(pObj).attr('parent-id')]) {
+                                            if (CMS_Users_Access_Arr[$(pObj).attr('parent-id')]['options']) {
+                                                if ($(pObj).attr('parent-id')) {
+                                                    if (CMS_Users_Access_Arr[$(pObj).attr('parent-id')]['options']['access_options'][$(pObj).attr('id')]['selected']) { //
+                                                        $(pObj)[0].checked = true;
+                                                        //$(pObj).removeAttr('disabled', 'true');
+                                                    } else {
+                                                        //$(pObj).attr('disabled', 'true');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if ($(pObj).hasClass('cms-access-items')) {
+                                    if (CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items']) {
+                                        if (CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items'][$(pObj).attr('id')]['options']['view']) {
+                                            $(pObj)[0].checked = true;
+                                        } else {
+                                            cmdFnAccess($(pObj)[0], true, false);
+                                        }
+                                    }
+                                }
+
+                                if ($(pObj).hasClass('cms-access-items-options')) {
+                                    if ($(pObj).attr('item-parent-id')) {
+                                        if (CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items']) {
+
+                                            var subItem = $(pObj).attr('id').split('_')[0];
+
+                                            if (CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items'][subItem]['options']['access_options']) {
+                                                if (CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items'][subItem]['options']['access_options'][$(pObj).attr('id')]['selected']) {
+                                                    if (CMS_Users_Access_Arr[$(pObj).attr('item-parent-id')]['items'][subItem]['options']['access_options'][$(pObj).attr('id')]['selected']) {
+                                                        $(pObj)[0].checked = true;
+                                                        //$(pObj).removeAttr('disabled', 'true');
+                                                    } else {
+                                                        //$(pObj).attr('disabled', 'true');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        );
+
+                        //console.log('['+$('#CMS_Users_Access').val()+']');
+
+                        if ($('#CMS_Users_Access').val()=='') {
+                            //console.log(CMS_Users_Access_Arr);
+                            $('#CMS_Users_Access').val(base64_encode(json_encode(CMS_Users_Access_Arr)));
+                        }
+                    }
+                );
+            ]]>
+        </script>
+    </body>
+</cms>

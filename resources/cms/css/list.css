@@ -1,0 +1,48 @@
+.cms-datatable {
+    margin-bottom: 2%;
+    padding-bottom: 2%;
+    border-bottom: 1px dashed #ccc;
+}
+
+.cms-datatable:last-child {
+    border-bottom: none;
+}
+
+.cms-datatable .cms-buttons:nth-child(1) {
+    margin-bottom: 1%;
+}
+
+.cms-datatable .cms-buttons:nth-child(2) {
+    margin-top: 1%;
+}
+
+.cms-action-btn {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.cms-list-spacing {
+    margin-bottom: 40px;
+}
+
+.cms-cursor-ns-resize {
+    cursor: ns-resize;
+}
+
+.cms-action-btn {
+    cursor: pointer;
+}
+
+.cms-datatable-confirm-delete {
+    padding-bottom: 10px;
+}
+
+.dt-body-center {
+    text-align: center;
+}
+.dt-body-left {
+    text-align: left;
+}
+.dt-body-right {
+    text-align: right;
+}

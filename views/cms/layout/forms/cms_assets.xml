@@ -1,0 +1,659 @@
+<cms>
+    <header>
+        <title id="listTitle">CMS : Assets</title>
+        <blurb id="headerBlurb"></blurb>
+        <style>
+            <![CDATA[
+                .dir-separator {
+                    margin-left: 4px;
+                    margin-right: 4px;
+                }
+
+                #tableFiles {
+                  border-collapse: collapse;
+                  width: 100%;
+                  margin-top: 20px;
+                }
+
+                #tableFiles td, #tableFiles th {
+                  border: 1px solid #dddddd;
+                  text-align: left;
+                  padding: 8px;
+                }
+
+                #tableFiles thead tr {
+                  background-color: #f0f0f0;
+                }
+
+                #tableFiles tr:nth-child(even) {
+                  background-color: #f1f1f1;
+                }
+
+                #clearUpload, #tableFiles.upload {
+                    display: none;
+                }
+
+                #dvFolders {
+                    display: inline-block;
+                    width: 100%;
+                    height: 300px;
+                    min-height: 300px;
+                    border: 1px solid #999;
+                    overflow-x: auto;
+                }
+
+                #dvFolders .dvFoldersLoading {
+                    position: absolute;
+                    width: 140px;
+                    height: 25px;
+                    text-align: center;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
+                    display: none;
+                }
+
+                #dvFolders .dvRowFolder {
+                    display: inline-block;
+                    width: 100%;
+                    padding: 5px;
+                    border-bottom: 1px #c0c0c0 solid;
+                    cursor: pointer;
+                }
+
+                #dvFolders .dvRowFolder:nth-child(n+3):last-child {
+                    border-bottom: none;
+                }
+            ]]>
+        </style>
+    </header>
+    <body>
+        <dom>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="javascript:void(0)" class="btn btn-secondary" onclick="cmsFnUploadFiles()"><span class="fa fa-upload"> </span> Upload Multiples Files</a>
+                    <a href="javascript:void(0)" class="btn btn-secondary" onclick="cmsFnUploadImageCrop()"><span class="fa fa-upload"> </span> Upload Image and Crop</a>
+                    <a href="javascript:void(0)" class="btn btn-secondary" onclick="cmsFnCreateFolder()"><span class="fa fa-folder-o"> </span> Create Folder</a>
+                    <hr />
+                </div>
+            </div>
+            <div id="displayPathContainer" class="row">
+                <div class="col-md-12">
+                    <span id="displayPath"> </span>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="tableFiles" class="table" width="80%">
+                        <thead>
+                            <tr>
+                                <th width="1%"><input id="checkAll" type="checkbox" onclick="cmsFnCheckAll(this)" /></th>
+                                <th width="40%">Name</th>
+                                <th width="25%">Size</th>
+                                <th width="25%">Modified</th>
+                                <th width="9%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableFilesBody">
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="cmsFnDeleteSel()">Delete</button>
+                    <button class="btn btn-secondary" onclick="cmsFnCopySel()">Copy</button>
+                </div>
+            </div>
+            <input id="dirPath" type="hidden" />
+            <input id="acceptedFiles" type="hidden" />
+        </dom>
+        <script cms-javascript-name="case">
+            <![CDATA[
+                if ($.url(window.location.href).param("error")) {
+                    BootstrapDialog.alert($.url(window.location.href).param("error"));
+                }
+
+                function cmsFnCheckAll(pObj) {
+                    if ($(pObj)[0].checked) {
+                        $('#tableFilesBody tr').each(
+                            function (pIndex, pObj) {
+                                if ($(pObj).find('input[type="checkbox"]')[0]) $(pObj).find('input[type="checkbox"]')[0].checked = true;
+                            }
+                        );
+                    } else {
+                        $('#tableFilesBody tr').each(
+                            function (pIndex, pObj) {
+                                if ($(pObj).find('input[type="checkbox"]')[0]) $(pObj).find('input[type="checkbox"]')[0].checked = false;
+                            }
+                        );
+                    }
+                }
+
+                function cmsFnFileInfo(pObj) {
+                    var tURL = 'http://'+window.location.hostname+((window.location.hostname!='') ? ':'+window.location.port : '')+cmsInfo["config"]["website"]["path"]+'assets/'+$(pObj).parents('tr').attr('data-path');
+                    var tDialog = BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_INFO,
+                        title: 'CMS : Assets',
+                        message: '\
+                            <div>\
+                                <a href="'+tURL+'" target="_blank">'+tURL+'</a>\
+                                '+(($(pObj).parents('tr').attr('data-image') == '1') ? '\
+                                <hr>\
+                                <img id="imageFileInfoPrev" src="'+tURL+'" style="display: none">\
+                                ' : '')+'\
+                            </div>\
+                        ',
+                        onshown: function () {
+                            if ($(pObj).parents('tr').attr('data-image') == '1') {
+                                var arrImageSize = $(pObj).parents('tr').attr('data-image-size').split('x');
+                                if (parseInt(arrImageSize[0]) > $('.modal-body .bootstrap-dialog-message').width()) {
+                                    $('#imageFileInfoPrev').attr('width', '100%');
+                                }
+                                $('#imageFileInfoPrev').show();
+                            }
+                        },
+                        buttons: [{
+                            label: 'Close',
+                            action: function(dialog) {
+                                dialog.close();
+                            }
+                        }],
+                        closable: true
+                    });
+                }
+
+
+                function cmsFnRename(pObj) {
+                    var tDialog = BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_INFO,
+                        title: 'CMS : Assets',
+                        message: '\
+                            <div>\
+                                <label>Rename '+$(pObj).parents('tr').attr('data-type')+'</label>\
+                                <input id="rename-item" type="text" class="form-control">\
+                            </div>\
+                        ',
+                        onshown: function () {
+                            $('#rename-item').val($(pObj).parents('tr').attr('data-name'));
+                        },
+                        buttons: [{
+                            label: 'Ok',
+                            action: function(dialog) {
+                                if ($('#rename-item').val().trim() == '') {
+                                    $('#rename-item').focus();
+                                    return false;
+                                }
+
+                                window.location = cmsInfo["config"]["website"]["path"]+'cms/assets?rename='+$('#rename-item').val().trim()+'&name='+$(pObj).parents('tr').attr('data-name')+(($('#dirPath').val()!='') ? '&dir='+$('#dirPath').val() : '');
+                            }
+                        }, {
+                            label: 'Cancel',
+                            action: function(dialog) {
+                                dialog.close();
+                            }
+                        }],
+                        closable: false
+                    });
+                }
+
+                function cmsFnDeleteSel() {
+                    var selFiles = [];
+                    var hasFolder = 0;
+                    var hasFile = 0;
+                    var selectedFF = [];
+                    $('#tableFilesBody tr').each(
+                        function (pIndex, pObj) {
+                            if ($(pObj).find('input[type="checkbox"]')[0]) {
+                                if ($(pObj).find('input[type="checkbox"]')[0].checked) {
+                                    selFiles[selFiles.length] = {
+                                        path: $(pObj).attr('data-path'),
+                                        type: $(pObj).attr('data-type')
+                                    }
+                                    if ($(pObj).attr('data-type') == 'folder') hasFolder++;
+                                    if ($(pObj).attr('data-type') == 'file') hasFile++;
+                                }
+                            }
+                        }
+                    );
+
+                    if (hasFolder > 0) {
+                        selectedFF[selectedFF.length] = 'folder'+((hasFolder>=2) ? 's' : '');
+                    }
+                    if (hasFile > 0) {
+                        selectedFF[selectedFF.length] = 'file'+((hasFile>=2) ? 's' : '');
+                    }
+
+                    console.log(selFiles);
+                    //console.log('hasFolder:'+hasFolder);
+                    //console.log('hasFile:'+hasFile);
+
+                    if (selFiles.length > 0) {
+                        BootstrapDialog.confirm('Are you sure you want to delete the selected '+selectedFF.join(' and ')+'?',
+                            function(result){
+                                if(result) {
+                                    $.ajax(
+                                        {
+                                            type: 'POST',
+                                            url: '',
+                                            data: 'cmsPostDeleteSelected='+encodeURIComponent(base64_encode(json_encode(selFiles)))
+                                        }
+                                    ).done(
+                                        function (data) {
+                                            $('#tableFilesBody').empty();
+                                            $('#tableFilesBody').append(data);
+                                        }
+                                    );
+                                }
+                            }
+                        );
+                    }
+                }
+
+                function cmsFnBrowseFolder(pObj) {
+                    var tArr = $(pObj).attr('data-path').split('/');
+                    console.log(tArr);
+
+                    var tDir = [];
+                    $.each(tArr,
+                        function (pIndex, pData) {
+                            var tArrSlice = $(pObj).attr('data-path').split('/');
+                            tArrSlice = tArrSlice.slice(0, pIndex);
+                            var tPath = ((tArrSlice.length>0) ? tArrSlice.join('/')+'/' : '')+pData;
+
+                            tDir[tDir.length] = '<a href="javascript:void(0)" data-path="'+tPath+'" onclick="cmsFnBrowseFolder(this)">'+pData+'</a>'
+                        }
+                    );
+
+                    $('#displayBrowseDir').html('/'+tDir.join('/'));
+
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '',
+                            data: 'cmsPostBrowseFolder='+$(pObj).attr('data-path')
+                        }
+                    ).done(
+                        function (data) {
+                            $('#dvFolders').empty();
+                            $('#dvFolders').append(data);
+                        }
+                    );
+                }
+
+                function cmsFnCopySel() {
+                    var selFiles = [];
+                    var hasFolder = 0;
+                    var hasFile = 0;
+                    var selectedFF = [];
+                    $('#tableFilesBody tr').each(
+                        function (pIndex, pObj) {
+                            if ($(pObj).find('input[type="checkbox"]')[0]) {
+                                if ($(pObj).find('input[type="checkbox"]')[0].checked) {
+                                    selFiles[selFiles.length] = {
+                                        path: $(pObj).attr('data-path'),
+                                        type: $(pObj).attr('data-type')
+                                    }
+                                    if ($(pObj).attr('data-type') == 'folder') hasFolder++;
+                                    if ($(pObj).attr('data-type') == 'file') hasFile++;
+                                }
+                            }
+                        }
+                    );
+
+                    if (hasFolder > 0) {
+                        selectedFF[selectedFF.length] = 'folder'+((hasFolder>=2) ? 's' : '');
+                    }
+                    if (hasFile > 0) {
+                        selectedFF[selectedFF.length] = 'file'+((hasFile>=2) ? 's' : '');
+                    }
+
+                    console.log(selFiles);
+
+                    if (selFiles.length > 0) {
+                        BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_INFO,
+                            title: 'CMS : Assets',
+                            message: '\
+                                <div>\
+                                    Copying the selected '+selectedFF.join(' and ')+'\
+                                    <hr>\
+                                    <table width="100%" border="0">\
+                                        <tr>\
+                                            <td width="25%">Source Folder:</d>\
+                                            <td width="75%">'+cmsInfo["config"]["website"]["path"]+'assets/'+$('#dirPath').val()+'</d>\
+                                        </tr>\
+                                        <tr>\
+                                            <td width="25%">Destination Folder:</d>\
+                                            <td width="75%"><a href="javascript:void(0)" data-path="" onclick="cmsFnBrowseFolder(this)">'+cmsInfo["config"]["website"]["path"]+'assets</a><span id="displayBrowseDir"></span></d>\
+                                        </tr>\
+                                        <tr>\
+                                            <td></td>\
+                                            <td style="padding-top: 5px"><label style="font-weight: normal"><input id="copyMove" type="checkbox"> Move</label></td>\
+                                        </tr>\
+                                    </table>\
+                                    <hr>\
+                                    <div id="dvFolders">\
+                                        <div class="dvFoldersLoading">Loading, please wait.</div>\
+                                    </div>\
+                                </div>\
+                            ',
+                            onshown: function () {
+                                $.ajax(
+                                    {
+                                        type: 'POST',
+                                        url: '',
+                                        data: 'cmsPostBrowseFolder='
+                                    }
+                                ).done(
+                                    function (data) {
+                                        $('#dvFolders').empty();
+                                        $('#dvFolders').append(data);
+                                    }
+                                );
+                            },
+                            buttons: [
+                                {
+                                    id: 'button-ok',
+                                    label: 'Copy',
+                                    action: function(dialog) {
+                                        if (dialog.getButton('button-ok').html() != 'Copy') {
+                                            return false;
+                                        }
+
+                                        dialog.getButton('button-ok').html('Copying, please wait');
+
+                                        var tDes = $('#displayBrowseDir').text();
+                                        if ($('#displayBrowseDir').text().substring(0,1)=='/') {
+                                            tDes = $('#displayBrowseDir').text().substring(1,$('#displayBrowseDir').text().length);
+                                        }
+
+                                        var postData = {
+                                            selected: selFiles,
+                                            source: $('#dirPath').val(),
+                                            destination: tDes,
+                                            move: (($('#copyMove')[0].checked) ? true : false)
+                                        };
+
+                                        $.ajax(
+                                            {
+                                                type: 'POST',
+                                                url: '',
+                                                data: 'cmsPostCopySelected='+encodeURIComponent(base64_encode(json_encode(postData)))
+                                            }
+                                        ).done(
+                                            function (data) {
+                                                dialog.getButton('button-ok').html('Copying, done');
+                                                dialog.getButton('button-cancel').html('Close');
+                                                $('#tableFilesBody').empty();
+                                                $('#tableFilesBody').append(data);
+                                            }
+                                        );
+                                    }
+                                },
+                                {
+                                    id: 'button-cancel',
+                                    label: 'Cancel',
+                                    action: function(dialog) {
+                                        dialog.close();
+                                    }
+                                }
+                            ],
+                            closable: false
+                        });
+                    }
+                }
+
+                var uploadedFileCounter = 0;
+                var uploadedFileLength = 0;
+
+                function handleFileSelect(evt) {
+                    var files = evt.target.files; // FileList object
+                    //console.log(files);
+
+                    // Loop through the FileList and render image files as thumbnails.
+
+                    uploadedFileLength = files.length;
+
+                    for (var i = 0, f; f = files[i]; i++) {
+                        files[i]['cms_index'] = i;
+
+                        // Only process image files.
+                        /*if (!f.type.match('image.*')) {
+                            continue;
+                        }*/
+
+                        var reader = new FileReader();
+
+                        var tRow = '\
+                            <tr>\
+                                <td><i class="'+cmsFnFileIcon((files[i].type.split('/')[1]) ? files[i].type.split('/')[1] : '')+'" aria-hidden="true"> </i> '+files[i].name+'</td>\
+                            </tr>\
+                        ';
+
+                        console.log(files[i]);
+
+                        $('#selectedFiles').append(tRow);
+
+                        // Read in the image file as a data URL.
+                        reader.readAsDataURL(f);
+                    }
+
+                    $('#uploadFiles').hide();
+                    $('#uploadContainer span').hide();
+                    $('#clearUpload').show();
+                    $('#tableFiles.upload').show();
+                }
+
+                function cmsFnFileIcon(pExtension) {
+                    var pExtension = pExtension.toLowerCase();
+
+                    arrIcons = {
+                        'jpg': 'fa fa-file-image-o',
+                        'gif': 'fa fa-file-image-o',
+                        'jpeg': 'fa fa-file-image-o',
+                        'png': 'fa fa-file-image-o',
+                        'pdf': 'fa fa-file-pdf-o',
+                        'xls': 'fa fa-file-excel-o',
+                        'xlsx': 'fa fa-file-excel-o',
+                        'msexcel': 'fa fa-file-excel-o',
+                        'doc': 'fa fa-file-word-o',
+                        'docx': 'fa fa-file-word-o',
+                        'msword': 'fa fa-file-word-o'
+                    };
+
+                    return ((arrIcons[pExtension])) ? arrIcons[pExtension] : 'fa fa-file-o';
+                }
+
+                function cmsFnClearFile() {
+                    $('#uploadContainer').empty();
+                    $('#uploadContainer').append('<input id="uploadFiles" type="file" class="form-control" style="display: inline-block;" multiple>');
+                    document.getElementById('uploadFiles').addEventListener('change', handleFileSelect, false);
+                    $('#tableFiles.upload').hide();
+                    $('#tableFiles.upload tbody').empty()
+                    $('#clearUpload').hide();
+
+                    uploadDialog.getButton('button-ok').html('Upload');
+                    uploadDialog.getButton('button-cancel').html('Cancel');
+                    $('#uploadContainer span').show();
+                }
+
+                function cmsFnUploadImageCrop() {
+                    var tAssetDir = (window.purl(window.location).param('dir')) ? window.purl(window.location).param('dir') : '';
+                    var strControlSettings = base64_encode(json_encode(
+                        {
+                            'form_control_type': 'asset',
+                            'id': 'MCR_Content_Body_Temp',
+                            'asset_default_dir': tAssetDir,
+                            'accept': '.jpg,.jpeg,.png,.gif,.bmp,.tiff',
+                            'img_aspect_ratio': ''
+                        }
+                    ));
+
+                    var iniFile = '';
+
+                    if (!$('#MCR_Content_Body_Temp')[0]) $('body').append('<input type="hidden" id="MCR_Content_Body_Temp" cms-control-settings="'+strControlSettings+'">');
+
+                    cmsAssetUpload(this, 'MCR_Content_Body_Temp', 0, 'custom', iniFile /*initial file*/,
+                        function (pFile) {
+                            window.location.reload();
+                        }
+                    );
+                }
+
+                var uploadDialog = null;
+                function cmsFnUploadFiles() {
+                    uploadDialog = BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_INFO,
+                        title: 'CMS : Assets : Upload Multiple Files',
+                        message: '\
+                            <div>\
+                                <button id="clearUpload" class="btn btn-secondary" onclick="cmsFnClearFile()">Clear files</button> <span id="uploadContainer"><span>You can drag files here.</span><input id="uploadFiles" type="file" class="form-control" style="display: inline-block;" multiple accept="'+$('#acceptedFiles').val()+'"></span>\
+                                <table id="tableFiles" class="table upload" width="100%">\
+                                    <thead>\
+                                        <tr>\
+                                            <th width="100%">Name</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody id="selectedFiles">\
+                                    </tbody>\
+                                </table>\
+                            </div>\
+                        ',
+                        onshown: function () {
+                            document.getElementById('uploadFiles').addEventListener('change', handleFileSelect, false);
+                        },
+                        buttons: [{
+                            id: 'button-ok',
+                            label: 'Upload',
+                            action: function(dialog) {
+                                if ($('#selectedFiles tr').length == 0) {
+                                    $('#uploadFiles').focus();
+                                    return false;
+                                }
+
+                                if (dialog.getButton('button-ok').html().indexOf('Uploading') >= 0) {
+                                    return false;
+                                }
+
+                                if (dialog.getButton('button-ok').html().indexOf('Uploaded') >= 0) {
+                                    return false;
+                                }
+
+                                var file_data = $('#uploadFiles').prop("files");
+                                var form_data = new FormData();
+                                form_data.append('cmsAssetsUpload', 'true');
+                                form_data.append('cmsDirPath', $('#dirPath').val());
+
+                                $.each(file_data,
+                                    function (pIndex, pObj) {
+                                        console.log(pObj);
+                                        form_data.append('cmsFile[]', pObj);
+                                    }
+                                );
+
+                                dialog.getButton('button-ok').html('Uploading, please wait');
+
+                                $.ajax(
+                                    {
+                                        xhr: function() {
+                                            var xhr = new window.XMLHttpRequest();
+                                            xhr.upload.addEventListener("progress", function(evt) {
+                                                if (evt.lengthComputable) {
+                                                    var percentComplete = evt.loaded / evt.total;
+                                                    //Do something with upload progress here
+                                                    var progressCounter = parseInt(percentComplete*100, 10);
+
+                                                    dialog.getButton('button-ok').html('Uploading '+progressCounter+'%, please wait');
+                                                }
+                                            }, false);
+
+                                            xhr.addEventListener("progress", function(evt) {
+                                                if (evt.lengthComputable) {
+                                                    var percentComplete = evt.loaded / evt.total;
+                                                    //Do something with download progress
+                                                    var progressCounter = parseInt(percentComplete*100, 10);
+                                                    dialog.getButton('button-ok').html('Uploading '+progressCounter+'%, please wait');
+                                                }
+                                            }, false);
+
+                                            return xhr;
+                                        },
+                                        url: "",
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        data: form_data,
+                                        type: 'post',
+                                        success: function(){
+                                            dialog.getButton('button-ok').html('Uploaded');
+                                            dialog.getButton('button-cancel').html('Close');
+                                        }
+                                    }
+                                ).done(
+                                    function (data) {
+                                        var tHTML = $(data);
+                                        if (!$(tHTML).filter('.upload-failed')[0]) {
+                                            $('#tableFilesBody').empty();
+                                            $('#tableFilesBody').append(data);
+                                        } else {
+                                            var tMsg = '<strong>'+$(tHTML).filter('.upload-failed').find('td').html()+'</strong> has failed to upload.<br><br>Sorry, this file type is not permitted for security reasons.';
+                                            BootstrapDialog.alert(tMsg);
+                                        }
+                                    }
+                                );
+                            }
+                        }, {
+                            id: 'button-cancel',
+                            label: 'Cancel',
+                            action: function(dialog) {
+                                dialog.close();
+                            }
+                        }],
+                        closable: false
+                    });
+                }
+
+                function cmsFnCreateFolder() {
+                    var tDialog = BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_INFO,
+                        title: 'CMS : Assets',
+                        message: '\
+                            <div>\
+                                <label>New folder name</label>\
+                                <input id="new-folder" type="text" class="form-control">\
+                            </div>\
+                        ',
+                        buttons: [{
+                            label: 'Ok',
+                            action: function(dialog) {
+                                if ($('#new-folder').val().trim() == '') {
+                                    $('#new-folder').focus();
+                                    return false;
+                                }
+
+                                window.location = cmsInfo["config"]["website"]["path"]+'cms/assets?new-dir='+$('#new-folder').val().trim()+(($('#dirPath').val()!='') ? '&dir='+$('#dirPath').val() : '');
+                            }
+                        }, {
+                            label: 'Cancel',
+                            action: function(dialog) {
+                                dialog.close();
+                            }
+                        }],
+                        closable: false
+                    });
+                }
+
+                function cmsFnConfirmRemove(pObj) {
+                    BootstrapDialog.confirm('Are you sure you want to delete this <strong>'+$(pObj).attr('data-name')+'</strong> '+$(pObj).attr('data-type')+'?',
+                        function(result){
+                                if(result) {
+                                    window.location = $(pObj).attr('href');
+                                }
+                        }
+                    );
+                    return false;
+                }
+            ]]>
+        </script>
+    </body>
+</cms>

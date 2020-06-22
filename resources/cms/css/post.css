@@ -1,0 +1,11 @@
+.card-header {
+    background-color: #dae9f9;
+}
+
+.card-header .btn-link {
+    color: #495057;
+}
+
+.card-header.selected {
+    border-bottom: 2px #337ab7 solid;
+}

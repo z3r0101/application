@@ -1,0 +1,13 @@
+<header>
+    <brand>
+        <img src="[RES_URL]images/logo-white.png" />
+    </brand>
+    <menu>
+        <div class="navbar-form navbar-left" role="search">
+            <script>
+                <![CDATA[
+                ]]>
+            </script>
+        </div>
+    </menu>
+</header>

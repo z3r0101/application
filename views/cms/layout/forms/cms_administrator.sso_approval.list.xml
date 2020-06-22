@@ -1,0 +1,101 @@
+<cms>
+    <header>
+        <title>SSO Approval</title>
+        <blurb></blurb>
+        <style cms-style-name="users">
+            <![CDATA[
+                @media (max-width: 768px) {
+                    .cms-action-btn {
+                       margin-right: 0px;
+                    }
+
+                    .cms-extended-col a {
+                       display: inline-block;
+                       margin-top: 10px;
+                       font-size: 14px;
+                    }
+                }
+            ]]>
+        </style>
+    </header>
+    <body default_cms_field="false">
+        <datatable>
+            <table
+                    id="users"
+                    table_select="
+                    "
+                    table_name="cms_users"
+            >
+                <body>
+                    <column type="data" fieldname="CMS_Users_Name" caption="Email" width="20%"></column>
+                    <column type="data" fieldname="CMS_Users_FullName" caption="Name" width="20%"></column>
+                    <column type="data" fieldname="CMS_Users_Date_Created" caption="Date" width="15%"></column>
+                    <column type="data" fieldname="CMS_Editor_IP" caption="IP Address" width="15%"></column>
+                    <column type="action" class="dt-body-center" width="10%">
+                        <button type="custom" link="[CONFIG_WEBSITE_PATH][CONFIG_CMS_DIRECTORY_NAME]/administrator/users/post/[id]/sso" class="fas fa-eye">User Information</button>
+                    </column>
+                </body>
+            </table>
+        </datatable>
+        <script>
+            <![CDATA[
+            function cmsSSOApproval(pId, pEmail) {
+                BootstrapDialog.show(
+                    {
+                        title: 'SSO Account Approval',
+                        message: 'Do you want to allow this account "'+pEmail+'"?',
+                        type: BootstrapDialog.TYPE_WARNING,
+                        closable: false,
+                        draggable: false,
+                        buttons: [
+                            {
+                                label: 'Allow',
+                                cssClass: 'btn-primary',
+                                action: function (pDialog) {
+                                    var $button = this;
+                                    $button.disable();
+                                    $button.spin();
+
+                                    var postData = {
+                                        id: pId
+                                    }
+
+                                    $.ajax(
+                                        {
+                                            type: 'POST',
+                                            url: '',
+                                            data: 'cmsApprovalData='+encodeURIComponent(base64_encode(json_encode(postData)))
+                                        }
+                                    ).done(
+                                        function (data) {
+                                            var arrRetPost = JSON.parse(data);
+                                            //console.log(arrRetPost);
+                                            window.location.reload();
+                                        }
+                                    );
+                                }
+                            },
+                            {
+                                label: 'Reject',
+                                cssClass: 'btn-secondary',
+                                action: function (pDialog) {
+                                    var $button = this;
+                                    $button.disable();
+                                    $button.spin();
+                                }
+                            },
+                            {
+                                label: 'Cancel',
+                                cssClass: 'btn-secondary',
+                                action: function (pDialog) {
+                                    pDialog.close();
+                                }
+                            }
+                        ]
+                    }
+                );
+            }
+            ]]>
+        </script>
+    </body>
+</cms>
