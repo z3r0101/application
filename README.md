@@ -1,10 +1,14 @@
-# application
+# What is zr30101
+zr30101 is an open-source rapid development web framework for use in building dynamic web sites with PHP.
 
-The main directory in z3r0101 framework. This folder contains the framework core files. It is not advised to make changes in this directory or put your own application code into this directory.
+<hr>
 
-# Setup z30101 framework project
+## Server Requirements
+PHP version 5.6 or newer is recommended.
 
-# Manual steps:
+## Installation
+
+### Manual steps:
 <ol>
   <li>Create a website directory</li>
   <li>Create the following directories under your website root directory
@@ -42,7 +46,7 @@ The main directory in z3r0101 framework. This folder contains the framework core
   </li>
 </ol>
 
-# z3r0101 framework structure
+## z3r0101 framework structure
 <table>
   <tr>
     <td width="50%"><ul><li>application</li></ul></td>
