@@ -11,14 +11,14 @@ The main directory in z3r0101 framework. This folder contains the framework core
       <ul>
         <li>application</li>
         <li>vendors</li>
-        <li>compiles (This directory must have write permission)
+        <li>compiles (This directory must have a write permission)
             <ul>
-              <li>cms (This directory must have write permission)</li>
+              <li>cms (This directory must have a write permission)</li>
             </ul>  
         </li>
-        <li>uploads (This directory must have write permission)
+        <li>uploads (This directory must have a write permission)
             <ul>
-              <li>temp (This directory must have write permission)</li>
+              <li>temp (This directory must have a write permission)</li>
             </ul>  
         </li>
         <li>www</li>
