@@ -11,15 +11,28 @@ The main directory in z3r0101 framework. This folder contains the framework core
       <ul>
         <li>application</li>
         <li>vendors</li>
-        <li>compiles</li>
+        <li>compiles
+            <ul>
+              <li>cms</li>
+            </ul>  
+        </li>
+        <li>uploads
+            <ul>
+              <li>temp</li>
+            </ul>  
+        </li>
         <li>www</li>
       </ul>
   </li>
-  <li>Download the following directories under your website root directory
+  <li>Download the following files under your website root directory
       <ul>
         <li>https://raw.githubusercontent.com/z3r0101/webroot/master/index.php</li>  
-        <li>https://raw.githubusercontent.com/z3r0101/webroot/master/index.php</li>  
+        <li>https://raw.githubusercontent.com/z3r0101/webroot/master/.htaccess</li>  
+        <li>https://raw.githubusercontent.com/z3r0101/webroot/master/.gitignore</li>
       </ul>  
+  </li>
+  <li>Under your application directory.
+    Run the clone command: git clone https://github.com/z3r0101/application.git
   </li>
 </ol>
 
