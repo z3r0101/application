@@ -51,3 +51,10 @@ The main directory in z3r0101 framework. This folder contains the framework core
   <li>.htaccess</li>
   <li>index.php</li>
 </ul>
+
+<table>
+  <tr>
+    <td>application</td>
+    <td>(z3r0101 framework files)</td>
+  </tr>  
+</table>  
