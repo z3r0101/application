@@ -4,9 +4,11 @@ zr30101 is an open-source rapid development web framework for use in building dy
 <hr>
 
 ## Server Requirements
-PHP version 5.6 or newer is recommended.
-MySQL version 5 or newer is recommended.
-MariaDB version 10 or newer is recommended.
+<ul>
+<li>PHP version 5.6 or newer is recommended.</li>
+<li>MySQL version 5 or newer is recommended.</li>
+<li>MariaDB version 10 or newer is recommended.</li>
+</ul>  
 
 ## Installation
 
