@@ -54,7 +54,7 @@ zr30101 is an open-source rapid development web framework for use in building dy
 <table>
   <tr>
     <td width="50%"><ul><li>application</li></ul></td>
-    <td width="50%" valign="top">z3r0101 framework core files</td>
+    <td width="50%" valign="top">This folder contains the framework core files. It is not advised to make changes in this directory or put your own application code into this directory.</td>
   </tr>  
   <tr>
     <td><ul><li>vendors</li></ul></td>
