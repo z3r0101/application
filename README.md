@@ -11,14 +11,14 @@ The main directory in z3r0101 framework. This folder contains the framework core
       <ul>
         <li>application</li>
         <li>vendors</li>
-        <li>compiles
+        <li>compiles (This directory must have write permission)
             <ul>
-              <li>cms</li>
+              <li>cms (This directory must have write permission)</li>
             </ul>  
         </li>
-        <li>uploads
+        <li>uploads (This directory must have write permission)
             <ul>
-              <li>temp</li>
+              <li>temp (This directory must have write permission)</li>
             </ul>  
         </li>
         <li>www</li>
@@ -33,6 +33,12 @@ The main directory in z3r0101 framework. This folder contains the framework core
   </li>
   <li>Under your application directory.
     Run the clone command:<br>git clone https://github.com/z3r0101/application.git .
+  </li>
+  <li>Under your vendors directory.
+    Run the clone command:<br>git clone https://github.com/z3r0101/vendors.git .
+  </li>
+  <li>The www directory will be your working web files directory<br>
+    You can download web project samples in http://z3r0101.com
   </li>
 </ol>
 
