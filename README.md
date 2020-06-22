@@ -5,12 +5,13 @@ The main directory in z3r0101 framework. This folder contains the framework core
 # To create z3r0101 framework project:
 
 <ol>
-  <li>Create a website directory<li>
-  <li>Under you website directory. Create the following directories</li>
+  <li>Create a website directory</li>
+  <li>Under you website directory. Create the following directories
       <ol>
         <li>application</li>
         <li>vendors</li>
       </ol>
+  </li>
 </ol>
 
 # z3r0101 framework structure
