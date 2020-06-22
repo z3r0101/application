@@ -52,7 +52,7 @@ The main directory in z3r0101 framework. This folder contains the framework core
   <li>index.php</li>
 </ul>
 
-<table width="100%">
+<table style="width: 100%">
   <tr>
     <td width="50%">application</td>
     <td width="50%">z3r0101 framework core files</td>
