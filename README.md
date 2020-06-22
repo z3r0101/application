@@ -75,7 +75,7 @@ The main directory in z3r0101 framework. This folder contains the framework core
     <td valign="top">CMS file upload directory storage</td>
   </tr>  
   <tr>
-    <td>www</td>
+    <td><ul><li>www</li></ul></td>
     <td>Your dev working project files directory</td>
   </tr>  
 </table>  
