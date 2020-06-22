@@ -32,7 +32,7 @@ The main directory in z3r0101 framework. This folder contains the framework core
       </ul>  
   </li>
   <li>Under your application directory.
-    Run the clone command: git clone https://github.com/z3r0101/application.git
+    Run the clone command:<br>git clone https://github.com/z3r0101/application.git
   </li>
 </ol>
 
