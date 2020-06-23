@@ -46,7 +46,10 @@ zr30101 is an open-source rapid development web framework for use in building dy
     Run the clone command:<br>git clone https://github.com/z3r0101/vendors.git .
   </li>
   <li>The www directory will be your working web files directory<br>
-    You can download web project samples in http://z3r0101.com
+    Available project sample:
+    <ul>
+      <li><a href="https://github.com/z3r0101/www-content">https://github.com/z3r0101/www-content</a></li>
+    </ul>  
   </li>
 </ol>
 
