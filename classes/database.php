@@ -26,7 +26,7 @@ class cmsDatabaseClass {
             print pageError("Database connection failed", $this->mysqli->connect_error."<br>Please check your database configuration in ".WWWPATH."www/config.php");
             exit;
         } else {
-            $cmsDBCheckData = self::select("SHOW TABLES LIKE 'cms_users'");
+            /*$cmsDBCheckData = self::select("SHOW TABLES LIKE 'cms_users'");
             if (count($cmsDBCheckData) == 0) {
 
                 #Detect import
@@ -114,9 +114,6 @@ class cmsDatabaseClass {
                                 if (!preg_match("#[a-z]+#", $CMS_Users_Password)) {
                                     $arrDBErrorMsg[] = "Password must include at least one lower case letter";
                                 }
-                                /*elseif(!(preg_match('#[0-9]#', $CMS_Users_Password))) {
-                                    $arrDBErrorMsg[] = "Password must contain at least one number";
-                                }*/
                             }
                         }
                     }
@@ -190,7 +187,7 @@ HTML;
                     print pageError("CMS Administrator", $htmlData);
                     exit;
                 }
-            }
+            }*/
         }
         $this->database = $CONFIG['database'][$index]['name'];
     }
