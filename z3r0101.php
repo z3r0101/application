@@ -2,13 +2,13 @@
 /*
  * z3r0101
  *
+ * https://github.com/z3r0101
+ *
  * An open source application development framework for PHP
  *
  * @package:    z3r0101
  * @author:     ryanzkizen@gmail.com
  * @version:    Beta 1.0
- *
- *
  *
  */
 
@@ -33,7 +33,7 @@ $resources_folder = realpath($resources_folder);
 $resources_folder = rtrim($resources_folder, '/').'/'; #ensure there's a trailing slash
 define('RESPATH_WWW', $resources_folder);
 
-$resources_folder = "resources";
+$resources_folder = "application/resources";
 $resources_folder = realpath($resources_folder);
 $resources_folder = rtrim($resources_folder, '/').'/'; #ensure there's a trailing slash
 define('RESPATH', $resources_folder);
