@@ -49,9 +49,11 @@
             <control type="text" input-type="password" id="CMS_Users_Password_Confirm" caption="Confirm Password" placeholder="" required="true"></control>
             <control type="text" input-type="password" id="CMS_Users_Password" caption="Password" placeholder="" required="true" container-obj-class="input-group">
                 <input-group align="left" id="passwordOpener">
-                    <span class="input-group-addon">
-                        <a href="javascript:void(0)" onclick="cmsShowPwd(this)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-                    </span>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <a href="javascript:void(0)" onclick="cmsShowPwd(this)"><span class="fas fa-eye" aria-hidden="true"></span></a>
+                        </span>
+                    </div>
                 </input-group>
             </control>
             <control type="text" id="CMS_Users_Name_First" caption="First Name" placeholder="" required="true"></control>
@@ -149,12 +151,12 @@
                 ');
 
                 function cmsShowPwd(pObj) {
-                    if ($(pObj).find('span').hasClass('glyphicon-eye-open')) {
+                    if ($(pObj).find('span').hasClass('fas fa-eye')) {
                         $(pObj).parents('.form-group').find('input').attr('type', 'text');
-                        $(pObj).find('span').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
+                        $(pObj).find('span').removeClass('fas fa-eye').addClass('fas fa-eye-slash');
                     } else {
                         $(pObj).parents('.form-group').find('input').attr('type', 'password');
-                        $(pObj).find('span').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
+                        $(pObj).find('span').removeClass('fas fa-eye-slash').addClass('fas fa-eye');
                     }
                 }
 

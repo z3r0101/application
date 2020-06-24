@@ -143,7 +143,7 @@ class BaseControllerCMS extends BaseController {
                 if (count($arrData) > 0) {
                     $crypt = new cmsCryptonite();
                     #$cmsArrSession = json_decode(base64_decode($cmsSession));
-                    $cmsArrSession = json_decode($crypt->decrypt($cmsSession));
+                    $cmsArrSession = json_decode($crypt->decode($cmsSession));
 
                     if (is_array($cmsArrSession)) {
                         if (isset($cmsArrSession[0])) {
@@ -179,7 +179,7 @@ class BaseControllerCMS extends BaseController {
                                 sprintf("SELECT * FROM cms_users WHERE CMS_Users_Status = 1 and CMS_Users_SessionId='%s' AND CMS_Users_Website = '%s' AND CMS_Users_Id = %d",
                                     mysqli_real_escape_string($this->dbClass->mysqli, $cmsSession),
                                     mysqli_real_escape_string($this->dbClass->mysqli, $CONFIG['website']['domain']),
-                                    mysqli_real_escape_string($this->dbClass->mysqli, $crypt->decrypt($cmsArrSession[0]))
+                                    mysqli_real_escape_string($this->dbClass->mysqli, $crypt->decode($cmsArrSession[0]))
                                 )
                             );*/
                             if (count($arrData) == 0) {
@@ -1135,7 +1135,7 @@ class BaseControllerCMS extends BaseController {
 
                                                 #DELETE TEMP DIR & FILES
                                                 $crypt = new cmsCryptonite();
-                                                $uploadTemp = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']); #cmsTools::rmDir(WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']));
+                                                $uploadTemp = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']); #cmsTools::rmDir(WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']));
 
                                                 #DEBUG
                                                 if ($CONFIG['environment'] == 'development') {
@@ -1264,7 +1264,7 @@ class BaseControllerCMS extends BaseController {
 
                                                                 #DELETE TEMP DIR & FILES
                                                                 $crypt = new cmsCryptonite();
-                                                                $uploadTemp = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']); #cmsTools::rmDir(WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']));
+                                                                $uploadTemp = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']); #cmsTools::rmDir(WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']));
 
                                                                 #UPDATE DIR
                                                                 if ($uploadType == 0) {

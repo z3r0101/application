@@ -29,9 +29,9 @@ class cmsDatabaseClass {
             /*$cmsDBCheckData = self::select("SHOW TABLES LIKE 'cms_users'");
             if (count($cmsDBCheckData) == 0) {
 
-                #Detect import
-                $arrImport = glob(WWWPATH."import/*");
-                foreach($arrImport as $Index => $File) {
+                #Detect setup
+                $arrsetup = glob(WWWPATH."setup/*");
+                foreach($arrsetup as $Index => $File) {
                     $tFile = basename($File);
                     $tPathInfo = pathinfo($tFile);
 
@@ -126,7 +126,7 @@ class cmsDatabaseClass {
                                 'CMS_Users_Name'=>$CMS_Users_Name,
                                 'CMS_Users_Name_First'=>$CMS_Users_Name_First,
                                 'CMS_Users_Name_Last'=>$CMS_Users_Name_Last,
-                                'CMS_Users_Password'=>$tCrypt->encrypt($CMS_Users_Password),
+                                'CMS_Users_Password'=>$tCrypt->encode($CMS_Users_Password),
                                 'CMS_Users_Status'=>1,
                                 'CMS_Users_Date_Created'=>date("Y-m-d H:i:s"),
                                 'CMS_Users_Website'=>$CONFIG['website']['domain']

@@ -43,11 +43,11 @@ class cms_login extends BaseController
 
                 #$arrJSONReturn["debug"] = print_r($arrData, true); #sprintf("SELECT * FROM cms_users WHERE CMS_Users_Name='%s' AND CMS_Users_Status = 1 AND CMS_Users_Website = '%s'", $cmsLoginUser, $CONFIG['website']['domain']); #$cmsLoginUser . "::" . $db->mysqli->real_escape_string($cmsLoginUser); #mysqli_real_escape_string($db->mysqli, $cmsLoginUser); #sprintf("SELECT * FROM cms_users WHERE CMS_Users_Name='%s' AND CMS_Users_Status = 1 AND CMS_Users_Website = '%s'", mysqli_real_escape_string($db->mysqli, $cmsLoginUser), mysqli_real_escape_string($db->mysqli, $CONFIG['website']['domain']));
 
-                if ($crypt->decrypt($CMS_Users_Password) == $cmsLoginPass) {
+                if ($crypt->decode($CMS_Users_Password) == $cmsLoginPass) {
 
                     /*$arrSession = array(
-                        $crypt->encrypt($CMS_Users_Id),
-                        $crypt->encrypt(time())
+                        $crypt->encode($CMS_Users_Id),
+                        $crypt->encode(time())
                     );
                     $cmsSession = base64_encode(json_encode($arrSession));*/
 
@@ -57,7 +57,7 @@ class cms_login extends BaseController
                         $CMS_Users_Id,
                         time()
                     );
-                    $cmsSession = $crypt->encrypt(json_encode($arrSession));
+                    $cmsSession = $crypt->encode(json_encode($arrSession));
 
                     $_SESSION[$CONFIG['cookie']['prefix']."_cms_session"] = $cmsSession;
 
@@ -145,7 +145,7 @@ class cms_login extends BaseController
                     $CMS_Users_Id,
                     time()
                 );
-                $cmsSession = $crypt->encrypt(json_encode($arrSession));
+                $cmsSession = $crypt->encode(json_encode($arrSession));
                 $this->dbClass->update("cms_users",
                     array(
                         'CMS_Users_SessionId'=>$cmsSession

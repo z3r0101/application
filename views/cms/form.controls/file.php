@@ -223,7 +223,7 @@ HTML;
             if (count($arrData) > 0) {
                 $uploadType = (isset($arrUploadReturn['control-settings']['file']['upload_type'])) ? intval($arrUploadReturn['control-settings']['file']['upload_type']) : 0;
 
-                $uploadPath = $CONFIG['cms']['directory_upload_name'] . '/temp/' . $crypt->decrypt($arrUploadReturn['cms-token']['upload_temp']).(($postRepeaterId!='') ? "/".cmsTools::makeSlug($postRepeaterId).'/'.$postRepeaterRowIndex : '');
+                $uploadPath = $CONFIG['cms']['directory_upload_name'] . '/temp/' . $crypt->decode($arrUploadReturn['cms-token']['upload_temp']).(($postRepeaterId!='') ? "/".cmsTools::makeSlug($postRepeaterId).'/'.$postRepeaterRowIndex : '');
                 $uploadedDir = $uploadPath . '/' . cmsTools::makeSlug($arrUploadReturn['control-settings']['id']);
                 $tempDir = WWWPATH . '/' . $uploadedDir;
 

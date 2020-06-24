@@ -291,8 +291,8 @@ if (isset($_GET["cms-javascript"])) {
                         $token = bin2hex(openssl_random_pseudo_bytes(1000));
                         $token = hash('sha256', $token);
                         $arrToken = array(
-                            'token'=>$crypt->encrypt($token),
-                            'upload_temp'=>$crypt->encrypt(time())
+                            'token'=>$crypt->encode($token),
+                            'upload_temp'=>$crypt->encode(time())
                         );
                         $strToken = base64_encode(json_encode($arrToken));
                         ?>

@@ -85,7 +85,7 @@ function cmsLogin($arrUser, $loginType = 0, $sso_id = 0) {
         $arrUser['CMS_Users_Id'],
         time()
     );
-    $cmsSession = $crypt->encrypt(json_encode($arrSession));
+    $cmsSession = $crypt->encode(json_encode($arrSession));
 
     $_SESSION[$CONFIG['cookie']['prefix']."_cms_session"] = $cmsSession;
 

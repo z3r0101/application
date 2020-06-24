@@ -1,15 +1,15 @@
 <?php
 
 /**********************************************************************************************************
-'*	String Encryption/Decryption function (Cryptonite - Function PHP Version)  							  *
+'*	String Encoding/Decoding function (Cryptonite - Function PHP Version)  							  *
 '*	Programmed by: Ryan P. Sandigan													  				  	  *
 '*	Email: ryanzkizen@gmail.com																			  *
 '*	Date Created: 05/26/2004																			  *
 '*  Date Updated: 10/19/2016                                                                              *
 '**********************************************************************************************************
 
-'	- encrypt(gStr)					-> return the ecrypted string
-'	- decrypt(gStr)					-> return the decrpted string
+'	- encode(gStr)					-> return the ecrypted string
+'	- decode(gStr)					-> return the decrpted string
  ***********************************************************************************************************/
 
 class cmsCryptonite {
@@ -25,7 +25,7 @@ class cmsCryptonite {
     }
     #endregion
 
-    function decrypt($gStr) {
+    function decode($gStr) {
         $i = 0;
         $sLen = 0;
         $gHex = ""; $cHex = ""; $nHex = 0; $dStr = "";
@@ -69,7 +69,7 @@ class cmsCryptonite {
 
         return($dStr);
     }
-    function encrypt($gStr) {
+    function encode($gStr) {
         $lpEx = false;
         $sBuf = "";
         $sLen = strlen($gStr);

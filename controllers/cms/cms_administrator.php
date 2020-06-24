@@ -99,8 +99,8 @@ class cms_administrator extends BaseControllerCMS {
 
                 if (isset($this->requestSlug[0])) {
                     if (CMS_Users_Name != 'dev') {
-                        $this->deleteTagById("passwordOpener");
-                        $this->attributeById("CMS_Users_Password", "container-obj-class", "");
+                        #$this->deleteTagById("passwordOpener");
+                        #$this->attributeById("CMS_Users_Password", "container-obj-class", "");
                     }
                 }
 
@@ -283,7 +283,7 @@ class cms_administrator extends BaseControllerCMS {
 
                         if (count($this->alert)==0) {
                             #$this->cmsPost['primary']['CMS_Users_Type'] = 1;
-                            $this->cmsPost['primary']['CMS_Users_Password'] = $tCrypt->encrypt($this->cmsPost['primary']['CMS_Users_Password_Input']);
+                            $this->cmsPost['primary']['CMS_Users_Password'] = $tCrypt->encode($this->cmsPost['primary']['CMS_Users_Password_Input']);
                             $this->cmsPost['primary']['CMS_Users_Status'] = 1;
                             $this->cmsPost['primary']['CMS_Users_Date_Created'] = date("Y-m-d");
                             $this->cmsPost['primary']['CMS_Users_Website'] = $CONFIG['website']['domain'];
@@ -294,7 +294,7 @@ class cms_administrator extends BaseControllerCMS {
                     $this->attributeById("CMS_Users_Status", "visible", "false");
                 } else {
                     if ($_POST) {
-                        $this->cmsPost['primary']['CMS_Users_Password'] = $tCrypt->encrypt($this->cmsPost['primary']['CMS_Users_Password']);
+                        $this->cmsPost['primary']['CMS_Users_Password'] = $tCrypt->encode($this->cmsPost['primary']['CMS_Users_Password']);
                     }
 
                     $this->attributeById("CMS_Users_Name", "readonly", "true");
@@ -362,7 +362,7 @@ class cms_administrator extends BaseControllerCMS {
                 #POST AFTER INITIALIZE
                 if ($this->postType == 1) {
                     $tCrypt = new cmsCryptonite();
-                    $this->postFields[0]['CMS_Users_Password'] = $tCrypt->decrypt($this->postFields[0]['CMS_Users_Password']);
+                    $this->postFields[0]['CMS_Users_Password'] = $tCrypt->decode($this->postFields[0]['CMS_Users_Password']);
                 }
             },
             function () {
@@ -398,7 +398,7 @@ class cms_administrator extends BaseControllerCMS {
                     if (isset($this->cmsPost['primary']['CMS_Users_Password_Input_Current'])) {
                         $tCrypt = new cmsCryptonite();
                         $arrData = $this->dbClass->select("SELECT * FROM cms_users WHERE CMS_Users_Id = " . CMS_Users_Id);
-                        $CMS_Users_Password = $tCrypt->decrypt($arrData[0]["CMS_Users_Password"]);
+                        $CMS_Users_Password = $tCrypt->decode($arrData[0]["CMS_Users_Password"]);
 
                         if ($CMS_Users_Password == $this->cmsPost['primary']['CMS_Users_Password_Input_Current']) {
                             if ($this->cmsPost['primary']['CMS_Users_Password_Input'] != $this->cmsPost['primary']['CMS_Users_Password_Confirm']) {
@@ -427,7 +427,7 @@ class cms_administrator extends BaseControllerCMS {
                         }
 
                         if (count($this->alert) == 0) {
-                            $this->cmsPost['primary']['CMS_Users_Password'] = $tCrypt->encrypt($this->cmsPost['primary']['CMS_Users_Password_Input']);
+                            $this->cmsPost['primary']['CMS_Users_Password'] = $tCrypt->encode($this->cmsPost['primary']['CMS_Users_Password_Input']);
                         }
                     }
                 }

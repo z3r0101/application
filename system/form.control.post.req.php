@@ -163,7 +163,7 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
 
                         $isRepeaterObj = (isset($arrUploadReturn['control-settings']['repeaterId'])) ? (($arrUploadReturn['control-settings']['repeaterId']!='') ? true : false) : false;
                         if ($isRepeaterObj) {
-                            $delTempDir = $CONFIG['cms']['directory_upload_name']."/temp/".$crypt->decrypt($arrUploadReturn['cms-token']['upload_temp']) . "/" . cmsTools::makeSlug($arrUploadReturn['control-settings']['repeaterId']) . "/" . $arrUploadReturn['control-settings']['repeaterRowIndex'];
+                            $delTempDir = $CONFIG['cms']['directory_upload_name']."/temp/".$crypt->decode($arrUploadReturn['cms-token']['upload_temp']) . "/" . cmsTools::makeSlug($arrUploadReturn['control-settings']['repeaterId']) . "/" . $arrUploadReturn['control-settings']['repeaterRowIndex'];
                             if (is_dir($delTempDir)) {
                                 cmsTools::rmDir($delTempDir);
                             } else {

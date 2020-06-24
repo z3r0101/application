@@ -36,7 +36,7 @@ class cms_reset_password extends BaseController
                 $CMS_Users_Id = $arrData[0]["CMS_Users_Id"];
                 $crypt = new cmsCryptonite();
                 $CMS_Users_SessionId = $arrData[0]["CMS_Users_SessionId"];
-                $dCMS_Users_SessionId = $crypt->decrypt($CMS_Users_SessionId);
+                $dCMS_Users_SessionId = $crypt->decode($CMS_Users_SessionId);
                 if ($dCMS_Users_SessionId == "") {
                     $arrValidation['message'] = "Invalid password reset data";
                     $arrValidation['error'] = true;
@@ -75,7 +75,7 @@ class cms_reset_password extends BaseController
                     $CMS_Users_Access = json_decode(base64_decode($arrData[0]["CMS_Users_Access"]), true);
                 }
                 $CMS_Users_SessionId = $arrData[0]["CMS_Users_SessionId"];
-                $dCMS_Users_SessionId = $crypt->decrypt($CMS_Users_SessionId);
+                $dCMS_Users_SessionId = $crypt->decode($CMS_Users_SessionId);
                 if ($dCMS_Users_SessionId == "") {
                     $arrJSONReturn['message'] = "Invalid password reset data";
                     $arrJSONReturn['error'] = true;
@@ -129,7 +129,7 @@ class cms_reset_password extends BaseController
 
                             $this->dbClass->update("cms_users",
                                 array(
-                                    'CMS_Users_Password'=>$crypt->encrypt($posData["password"]),
+                                    'CMS_Users_Password'=>$crypt->encode($posData["password"]),
                                 ),
                                 array('CMS_Users_Id'=>$CMS_Users_Id)
                             );
