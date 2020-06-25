@@ -80,7 +80,7 @@ define('WEBSITE_URL', $CONFIG['website']['path']);
 define('CONFIG_CMS_DIRECTORY_NAME', $CONFIG['cms']['directory_name']);
 define('CONFIG_CMS_ROUTE_NAME', $CONFIG['cms']['route_name']);
 
-define('RES_URL', $CONFIG['website']['path'].'www/resources/');
+define('RES_URL', $CONFIG['website']['path'].'resources/'); #define('RES_URL', $CONFIG['website']['path'].'www/resources/');
 
 define('RES_CMS_URL', $CONFIG['website']['path'].'application/resources/cms/');
 
