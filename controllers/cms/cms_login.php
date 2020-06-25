@@ -204,7 +204,7 @@ HTML;
 
                 #DEBUG
                 if ($CONFIG['environment'] == 'development') {
-                    file_put_contents(WWWPATH . "uploads/debug.txt", date("Y-m-d H:i:s") . "\nTo:{$to}\nSubject:{$subject}\n{$message}\n".implode("\r\n", $arrEmailHeader)."\n\n\n" . PHP_EOL, FILE_APPEND);
+                    file_put_contents(SITEROOTPATH . "uploads/debug.txt", date("Y-m-d H:i:s") . "\nTo:{$to}\nSubject:{$subject}\n{$message}\n".implode("\r\n", $arrEmailHeader)."\n\n\n" . PHP_EOL, FILE_APPEND);
                 }
 
                 $arrJSONReturn['message'] = "A message has been sent to {$arrData[0]["CMS_Users_Name"]} with instructions to reset your password.";

@@ -352,8 +352,8 @@ class BaseControllerCMS extends BaseController {
     function setFormLayoutData($xmlFile = "") {
         if ($xmlFile=="") {
             if ($this->formLayoutFile == "") {
-                if (file_exists(WWWPATH.'www/views/cms/'.$this->selectedClass.'.'.$this->selectedMethod.'.'.$this->selectedFormType.'.xml')) {
-                    $this->formLayoutData = $this->loadForm(WWWPATH . 'www/views/cms/' . $this->selectedClass . '.' . $this->selectedMethod . '.' . $this->selectedFormType . '.xml');
+                if (file_exists(SITEROOTPATH.'www/views/cms/'.$this->selectedClass.'.'.$this->selectedMethod.'.'.$this->selectedFormType.'.xml')) {
+                    $this->formLayoutData = $this->loadForm(SITEROOTPATH . 'www/views/cms/' . $this->selectedClass . '.' . $this->selectedMethod . '.' . $this->selectedFormType . '.xml');
                 } else {
                     if (!file_exists(APPPATH . 'views/cms/layout/forms/' . $this->selectedClass . '.' . $this->selectedMethod . '.' . $this->selectedFormType . '.xml')) {
                         if (!file_exists(APPPATH . 'views/cms/layout/forms/' . $this->selectedClass . '_' . $this->selectedMethod . '_' . $this->selectedFormType . '.xml')) {
@@ -367,8 +367,8 @@ class BaseControllerCMS extends BaseController {
                     }
                 }
             } else {
-                if (file_exists(WWWPATH.'www/views/cms/'.$this->formLayoutFile)) {
-                    $this->formLayoutData = $this->loadForm(WWWPATH . 'www/views/cms/' . $this->formLayoutFile);
+                if (file_exists(SITEROOTPATH.'www/views/cms/'.$this->formLayoutFile)) {
+                    $this->formLayoutData = $this->loadForm(SITEROOTPATH . 'www/views/cms/' . $this->formLayoutFile);
                 } else {
                     if (!file_exists(APPPATH . 'views/cms/layout/forms/' . $this->formLayoutFile)) {
                         print pageError("CMS Form Layout Not Found", "The form layout you requested (" . APPPATH . 'views/cms/layout/forms/' . $this->formLayoutFile . ") was not found.");
@@ -1066,7 +1066,7 @@ class BaseControllerCMS extends BaseController {
                                                 }
                                                 $tArrPath = array_values($tArrPath);
 
-                                                $uploadDir = WWWPATH.$CONFIG['cms']['directory_upload_name'];
+                                                $uploadDir = SITEROOTPATH.$CONFIG['cms']['directory_upload_name'];
                                                 $uploadParentDir = strval($controlObj['upload_parent_dir']);
                                                 $uploadContainerDir = (strval($controlObj['upload_container_dir'])!='') ? '/'.strval($controlObj['upload_container_dir']) : '';
                                                 $uploadSavePath = $uploadDir.'/'.$uploadParentDir.'/'.$primaryId.$uploadContainerDir;
@@ -1090,7 +1090,7 @@ class BaseControllerCMS extends BaseController {
                                                 $dbug .= $uploadSaveUrl."\n";
 
                                                 #if ($CONFIG['environment'] == 'development') {
-                                                    file_put_contents(WWWPATH . "uploads/temp/debug-upload.txt", date("Y-m-d H:i:s") . " - {$dbug}\n" . PHP_EOL, FILE_APPEND);
+                                                    file_put_contents(SITEROOTPATH . "uploads/temp/debug-upload.txt", date("Y-m-d H:i:s") . " - {$dbug}\n" . PHP_EOL, FILE_APPEND);
                                                 #}
                                                 #exit;
 
@@ -1116,30 +1116,30 @@ class BaseControllerCMS extends BaseController {
                                             $jsonFile = json_decode($cmsPost['primary'][$fileId], true);
                                             $dirPath = $jsonFile['path'];
                                             $filePath = $jsonFile['path'].'/'.$jsonFile['name'];
-                                            if (is_file(WWWPATH.$filePath) && isset($jsonFile['upload_temp'])) {
+                                            if (is_file(SITEROOTPATH.$filePath) && isset($jsonFile['upload_temp'])) {
                                                 $uploadDir = $CONFIG['cms']['directory_upload_name'].'/'.$controlObj['dir'].'/'.$primaryId.'/'.$slugId;
                                                 if ($uploadType == 0) {
-                                                    if (!is_dir(WWWPATH.$uploadDir)) {
-                                                        mkdir(WWWPATH.$uploadDir, 0777, true);
+                                                    if (!is_dir(SITEROOTPATH.$uploadDir)) {
+                                                        mkdir(SITEROOTPATH.$uploadDir, 0777, true);
                                                     } else {
-                                                        cmsTools::rmDir(WWWPATH.$uploadDir);
-                                                        mkdir(WWWPATH.$uploadDir, 0777, true);
+                                                        cmsTools::rmDir(SITEROOTPATH.$uploadDir);
+                                                        mkdir(SITEROOTPATH.$uploadDir, 0777, true);
                                                     }
-                                                    cmsTools::xcopy(WWWPATH.$dirPath, WWWPATH.$uploadDir, 0777);
+                                                    cmsTools::xcopy(SITEROOTPATH.$dirPath, SITEROOTPATH.$uploadDir, 0777);
                                                 } else if ($uploadType == 1) {
                                                     $tPathInfo = pathinfo($jsonFile['name']);
                                                     $uploadDir = $CONFIG['cms']['directory_upload_name'].'/'.$controlObj['dir'].'/'.$primaryId.'.'.$tPathInfo['extension'];
                                                     $jsonFile['name'] = $primaryId.'.'.$tPathInfo['extension'];
-                                                    cmsTools::xcopy(WWWPATH.$filePath, WWWPATH.$uploadDir, 0777);
+                                                    cmsTools::xcopy(SITEROOTPATH.$filePath, SITEROOTPATH.$uploadDir, 0777);
                                                 }
 
                                                 #DELETE TEMP DIR & FILES
                                                 $crypt = new cmsCryptonite();
-                                                $uploadTemp = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']); #cmsTools::rmDir(WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']));
+                                                $uploadTemp = SITEROOTPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']); #cmsTools::rmDir(SITEROOTPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decrypt($jsonFile['upload_temp']));
 
                                                 #DEBUG
                                                 if ($CONFIG['environment'] == 'development') {
-                                                    file_put_contents(WWWPATH . "uploads/temp/debug.txt", date("Y-m-d H:i:s") . " - upload temp: {$uploadTemp}\n" . PHP_EOL, FILE_APPEND);
+                                                    file_put_contents(SITEROOTPATH . "uploads/temp/debug.txt", date("Y-m-d H:i:s") . " - upload temp: {$uploadTemp}\n" . PHP_EOL, FILE_APPEND);
                                                 }
                                                 #DELETE UPLOADED TEMP DIR/FILES
                                                 if ($uploadTemp!='') {
@@ -1158,7 +1158,7 @@ class BaseControllerCMS extends BaseController {
                                         } else {
                                             #remove file if column is empty
                                             if ($uploadType == 0) {
-                                                $dirPath = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/'.strval($controlObj['dir']).'/'.$primaryId.'/'.$slugId;
+                                                $dirPath = SITEROOTPATH.$CONFIG['cms']['directory_upload_name'].'/'.strval($controlObj['dir']).'/'.$primaryId.'/'.$slugId;
                                                 if (is_dir($dirPath)) {
                                                     cmsTools::rmDir($dirPath);
                                                 }
@@ -1166,7 +1166,7 @@ class BaseControllerCMS extends BaseController {
                                                 if ($cmsPost['primary'][$fileId]!='') {
                                                     $jsonFile = json_decode($cmsPost['primary'][$fileId], true);
                                                     $tPathInfo = pathinfo($jsonFile['name']);
-                                                    $filePath = WWWPATH . $CONFIG['cms']['directory_upload_name'] . '/' . strval($controlObj['dir']) . '/' . $primaryId . '.' . $tPathInfo['extension'];
+                                                    $filePath = SITEROOTPATH . $CONFIG['cms']['directory_upload_name'] . '/' . strval($controlObj['dir']) . '/' . $primaryId . '.' . $tPathInfo['extension'];
                                                     if (is_file($filePath)) {
                                                         unlink($filePath);
                                                     }
@@ -1243,28 +1243,28 @@ class BaseControllerCMS extends BaseController {
                                                             $dirPath = $jsonFile['path'];
                                                             $filePath = $jsonFile['path'].'/'.$jsonFile['name'];
 
-                                                            if (is_file(WWWPATH.$filePath) && isset($jsonFile['upload_temp'])) {
+                                                            if (is_file(SITEROOTPATH.$filePath) && isset($jsonFile['upload_temp'])) {
                                                                 $newImagePath = cmsTools::makeSlug($repeater_id).'/'.$repeater_row_id.'/'.cmsTools::makeSlug($fileId);
 
                                                                 $uploadDir = $CONFIG['cms']['directory_upload_name'].'/'.$controlObj['dir'].'/'.$primaryId.'/'.$newImagePath;
                                                                 if ($uploadType == 0) {
-                                                                    if (!is_dir(WWWPATH.$uploadDir)) {
-                                                                        mkdir(WWWPATH.$uploadDir, 0777, true);
+                                                                    if (!is_dir(SITEROOTPATH.$uploadDir)) {
+                                                                        mkdir(SITEROOTPATH.$uploadDir, 0777, true);
                                                                     } else {
-                                                                        cmsTools::rmDir(WWWPATH.$uploadDir);
-                                                                        mkdir(WWWPATH.$uploadDir, 0777, true);
+                                                                        cmsTools::rmDir(SITEROOTPATH.$uploadDir);
+                                                                        mkdir(SITEROOTPATH.$uploadDir, 0777, true);
                                                                     }
-                                                                    cmsTools::xcopy(WWWPATH.$dirPath, WWWPATH.$uploadDir, 0777);
+                                                                    cmsTools::xcopy(SITEROOTPATH.$dirPath, SITEROOTPATH.$uploadDir, 0777);
                                                                 } else if ($uploadType == 1) {
                                                                     $tPathInfo = pathinfo($jsonFile['name']);
                                                                     $uploadDir = $CONFIG['cms']['directory_upload_name'].'/'.$controlObj['dir'].'/'.$primaryId.'-'.$repeater_row_id.'.'.$tPathInfo['extension'];
                                                                     $jsonFile['name'] = $primaryId.'-'.$repeater_row_id.'.'.$tPathInfo['extension'];
-                                                                    cmsTools::xcopy(WWWPATH.$filePath, WWWPATH.$uploadDir, 0777);
+                                                                    cmsTools::xcopy(SITEROOTPATH.$filePath, SITEROOTPATH.$uploadDir, 0777);
                                                                 }
 
                                                                 #DELETE TEMP DIR & FILES
                                                                 $crypt = new cmsCryptonite();
-                                                                $uploadTemp = WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']); #cmsTools::rmDir(WWWPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']));
+                                                                $uploadTemp = SITEROOTPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']); #cmsTools::rmDir(SITEROOTPATH.$CONFIG['cms']['directory_upload_name'].'/temp/'.$crypt->decode($jsonFile['upload_temp']));
 
                                                                 #UPDATE DIR
                                                                 if ($uploadType == 0) {
@@ -1298,7 +1298,7 @@ class BaseControllerCMS extends BaseController {
                                                 if (count($arrData) > 0) {
                                                     /*$jsonFile = json_decode($arrData[0]['Content_Block_Image'], true);
                                                     $dirBasePath = $jsonFile['base_path'];
-                                                    $dirBasePath = WWWPATH.$CONFIG['cms']['directory_upload_name']."/".$dirBasePath."/".$repeaterDataId;
+                                                    $dirBasePath = SITEROOTPATH.$CONFIG['cms']['directory_upload_name']."/".$dirBasePath."/".$repeaterDataId;
                                                     if (is_dir($dirBasePath)) {
                                                         #print $dirBasePath;
                                                         cmsTools::rmDir($dirBasePath);
@@ -1679,7 +1679,7 @@ class BaseControllerCMS extends BaseController {
             include_once(APPPATH.'views/'.$viewName.'.php');
         } else if ($type == 1) {
             include VENDORSPATH.'BladeOne/BladeOne.php';
-            $blade=new \eftec\bladeone\BladeOne(APPPATH.'views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+            $blade=new \eftec\bladeone\BladeOne(APPPATH.'views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
             echo $blade->run($viewName.".php", $variant);
         }
     }
@@ -2282,7 +2282,7 @@ EOL;
                                 $tArrNew['value']
                             );
 
-                            $uploadedDir = WWWPATH . $CONFIG['cms']['directory_upload_name'] . '/' . $uploadedDir;
+                            $uploadedDir = SITEROOTPATH . $CONFIG['cms']['directory_upload_name'] . '/' . $uploadedDir;
 
                             if (!is_dir($uploadedDir)) {
                                 mkdir($uploadedDir, 0777, true);

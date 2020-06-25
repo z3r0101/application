@@ -59,8 +59,8 @@ class BaseController {
     function loadView($viewName, $type = 0 /* 0: include, 1: blade */, $variant = null) {
         include_once(APPPATH.'system/globals.php');
         if ($type == 0) {
-            if (file_exists(WWWPATH . 'www/views/' . $viewName . '.php')) {
-                include_once(WWWPATH . 'www/views/' . $viewName . '.php');
+            if (file_exists(SITEROOTPATH . 'www/views/' . $viewName . '.php')) {
+                include_once(SITEROOTPATH . 'www/views/' . $viewName . '.php');
             } else {
                 include_once(APPPATH . 'views/' . $viewName . '.php');
             }
@@ -75,10 +75,10 @@ class BaseController {
 
                     $variant['view_name'] = $viewName[''];
 
-                    if (file_exists(WWWPATH . 'www/views/'.$viewName[''].".php")) {
-                        $blade = new \eftec\bladeone\BladeOne(WWWPATH . 'www/views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+                    if (file_exists(SITEROOTPATH . 'www/views/'.$viewName[''].".php")) {
+                        $blade = new \eftec\bladeone\BladeOne(SITEROOTPATH . 'www/views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
                     } else {
-                        $blade = new \eftec\bladeone\BladeOne(APPPATH . 'views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+                        $blade = new \eftec\bladeone\BladeOne(APPPATH . 'views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
                     }
 
                     echo $blade->run($viewName[''].".php", $variant);
@@ -90,10 +90,10 @@ class BaseController {
 
                         $variant['view_name'] = $viewName[$this->requestSlug[0]];
 
-                        if (file_exists(WWWPATH . 'www/views/'.$viewName[$this->requestSlug[0]] . ".php")) {
-                            $blade = new \eftec\bladeone\BladeOne(WWWPATH . 'www/views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+                        if (file_exists(SITEROOTPATH . 'www/views/'.$viewName[$this->requestSlug[0]] . ".php")) {
+                            $blade = new \eftec\bladeone\BladeOne(SITEROOTPATH . 'www/views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
                         } else {
-                            $blade = new \eftec\bladeone\BladeOne(APPPATH . 'views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+                            $blade = new \eftec\bladeone\BladeOne(APPPATH . 'views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
                         }
 
                         echo $blade->run($viewName[$this->requestSlug[0]] . ".php", $variant);
@@ -106,10 +106,10 @@ class BaseController {
 
                 $variant['view_name'] = $viewName;
 
-                if (file_exists(WWWPATH . 'www/views/'.$viewName.".php")) {
-                    $blade = new \eftec\bladeone\BladeOne(WWWPATH . 'www/views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+                if (file_exists(SITEROOTPATH . 'www/views/'.$viewName.".php")) {
+                    $blade = new \eftec\bladeone\BladeOne(SITEROOTPATH . 'www/views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
                 } else {
-                    $blade = new \eftec\bladeone\BladeOne(APPPATH . 'views', null, \eftec\bladeone\BladeOne::MODE_DEBUG);
+                    $blade = new \eftec\bladeone\BladeOne(APPPATH . 'views', SITEROOTPATH.'compiles', \eftec\bladeone\BladeOne::MODE_DEBUG);
                 }
 
                 echo $blade->run($viewName.".php", $variant);
@@ -123,8 +123,8 @@ class BaseController {
         global $CONFIG;
         if (file_exists(APPPATH.'helpers/'.$helperName.'.php')) {
             include_once(APPPATH . 'helpers/' . $helperName . '.php');
-        } else if (file_exists(WWWPATH.'www/helpers/'.$helperName.'.php')) {
-            include_once(WWWPATH . 'www/helpers/' . $helperName . '.php');
+        } else if (file_exists(SITEROOTPATH.'www/helpers/'.$helperName.'.php')) {
+            include_once(SITEROOTPATH . 'www/helpers/' . $helperName . '.php');
         } else {
             print pageError("PHP script not found", "Check if the PHP script located in helpers directory.");
             exit;

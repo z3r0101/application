@@ -23,14 +23,14 @@ class cmsDatabaseClass {
         }
 
         if ($this->mysqli->connect_error) {
-            print pageError("Database connection failed", $this->mysqli->connect_error."<br>Please check your database configuration in ".WWWPATH."www/config.php");
+            print pageError("Database connection failed", $this->mysqli->connect_error."<br>Please check your database configuration in ".SITEROOTPATH."www/config.php");
             exit;
         } else {
             /*$cmsDBCheckData = self::select("SHOW TABLES LIKE 'cms_users'");
             if (count($cmsDBCheckData) == 0) {
 
                 #Detect setup
-                $arrsetup = glob(WWWPATH."setup/*");
+                $arrsetup = glob(SITEROOTPATH."setup/*");
                 foreach($arrsetup as $Index => $File) {
                     $tFile = basename($File);
                     $tPathInfo = pathinfo($tFile);
@@ -41,7 +41,7 @@ class cmsDatabaseClass {
                     if ($tPathInfo['extension'] == 'json') {
                         $arrJSON = json_decode(file_get_contents($File), true);
                         foreach($arrJSON as $Index => $Data) {
-                            $upload_parent_dir = WWWPATH.'uploads/'.$Data['upload_parent_dir'];
+                            $upload_parent_dir = SITEROOTPATH.'uploads/'.$Data['upload_parent_dir'];
 
                             if (!file_exists($upload_parent_dir))
                                 mkdir($upload_parent_dir, 0777);

@@ -225,7 +225,7 @@ HTML;
 
                 $uploadPath = $CONFIG['cms']['directory_upload_name'] . '/temp/' . $crypt->decode($arrUploadReturn['cms-token']['upload_temp']).(($postRepeaterId!='') ? "/".cmsTools::makeSlug($postRepeaterId).'/'.$postRepeaterRowIndex : '');
                 $uploadedDir = $uploadPath . '/' . cmsTools::makeSlug($arrUploadReturn['control-settings']['id']);
-                $tempDir = WWWPATH . '/' . $uploadedDir;
+                $tempDir = SITEROOTPATH . '/' . $uploadedDir;
 
                 if ($uploadType == 0) {
                     if (!is_dir($tempDir)) {
@@ -242,7 +242,7 @@ HTML;
                 if ($uploadType == 1) {
                     $uploadPath = $CONFIG['cms']['directory_upload_name'] . '/temp';
                     $uploadedDir = $uploadPath;
-                    $tempDir = WWWPATH . '/' . $uploadedDir;
+                    $tempDir = SITEROOTPATH . '/' . $uploadedDir;
 
                     $tFile = strtotime(date("Y-m-d H:i:s")).".".$tPathInfo['extension'];
                 }

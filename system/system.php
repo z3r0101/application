@@ -16,22 +16,22 @@
 if (APPPATH . 'config/config.php') {
     require_once(APPPATH . 'config/config.php');
 }
-if (file_exists(WWWPATH.'www/config.php')) {
-    require_once(WWWPATH . 'www/config.php');
+if (file_exists(SITEROOTPATH.'www/config.php')) {
+    require_once(SITEROOTPATH . 'www/config.php');
 }
 
 if (APPPATH . 'config/config.cms.php') {
     require_once(APPPATH . 'config/config.cms.php');
 }
-if (file_exists(WWWPATH.'www/config.cms.php')) {
-    require_once(WWWPATH . 'www/config.cms.php');
+if (file_exists(SITEROOTPATH.'www/config.cms.php')) {
+    require_once(SITEROOTPATH . 'www/config.cms.php');
 }
 
 if (APPPATH . 'config/routes.php') {
     require_once(APPPATH . 'config/routes.php');
 }
-if (file_exists(WWWPATH.'www/routes.php')) {
-    require_once(WWWPATH . 'www/routes.php');
+if (file_exists(SITEROOTPATH.'www/routes.php')) {
+    require_once(SITEROOTPATH . 'www/routes.php');
 }
 
 require_once(APPPATH.'config/cron.php');
@@ -82,11 +82,7 @@ define('CONFIG_CMS_ROUTE_NAME', $CONFIG['cms']['route_name']);
 
 define('RES_URL', $CONFIG['website']['path'].'www/resources/');
 
-if (file_exists(APPPATH.'resources/cms')) {
-    define('RES_CMS_URL', $CONFIG['website']['path'].'application/resources/cms/');
-} else {
-    define('RES_CMS_URL', $CONFIG['website']['path'].'application/resources/cms/');
-}
+define('RES_CMS_URL', $CONFIG['website']['path'].'application/resources/cms/');
 
 define('VENDORS_URL', $CONFIG['website']['path'].'vendors/');
 
@@ -242,8 +238,8 @@ if (PATH_INFO!='') {
         $cmsPageDB = new cmsDatabaseClass();
 
         $xmlSectionFile = '';
-        if (file_exists(WWWPATH.'www/views/cms/layout/cms_sections.xml')) {
-            $xmlSectionFile = WWWPATH.'www/views/cms/layout/cms_sections.xml';
+        if (file_exists(SITEROOTPATH.'www/views/cms/layout/cms_sections.xml')) {
+            $xmlSectionFile = SITEROOTPATH.'www/views/cms/layout/cms_sections.xml';
         } else {
             $xmlSectionFile = APPPATH.'views/cms/layout/cms_sections.xml';
         }
@@ -412,8 +408,8 @@ if (PATH_INFO!='') {
                     }
 
                 }
-            } else if (file_exists(WWWPATH.'www/controllers/'.$pageCMSBasePath.'index.php')) {
-                include_once(WWWPATH.'www/controllers/'.$pageCMSBasePath.'index.php');
+            } else if (file_exists(SITEROOTPATH.'www/controllers/'.$pageCMSBasePath.'index.php')) {
+                include_once(SITEROOTPATH.'www/controllers/'.$pageCMSBasePath.'index.php');
                 $pageClass = 'index';
                 $pageObj = new $pageClass();
 
@@ -466,8 +462,8 @@ if (PATH_INFO!='') {
                     }
                 }
             }
-        } else if (file_exists(WWWPATH.'www/controllers/'.$pageCMSBasePath.$pageUrlClass[0].'.php')) {
-            include_once(WWWPATH . 'www/controllers/' . $pageCMSBasePath . $pageUrlClass[0] . '.php');
+        } else if (file_exists(SITEROOTPATH.'www/controllers/'.$pageCMSBasePath.$pageUrlClass[0].'.php')) {
+            include_once(SITEROOTPATH . 'www/controllers/' . $pageCMSBasePath . $pageUrlClass[0] . '.php');
             if (class_exists($pageUrlClass[0])) {
                 $pageClass = $pageUrlClass[0];
                 $pageObj = new $pageClass(0);
@@ -519,8 +515,8 @@ if (PATH_INFO!='') {
                     }
 
                 }
-            } else if (file_exists(WWWPATH.'www/controllers/'.$pageCMSBasePath.'index.php')) {
-                include_once(WWWPATH.'www/controllers/'.$pageCMSBasePath.'index.php');
+            } else if (file_exists(SITEROOTPATH.'www/controllers/'.$pageCMSBasePath.'index.php')) {
+                include_once(SITEROOTPATH.'www/controllers/'.$pageCMSBasePath.'index.php');
                 $pageClass = 'index';
                 $pageObj = new $pageClass();
 
@@ -622,8 +618,8 @@ if (PATH_INFO!='') {
     $pageClass = 'index';
     $pageMethod = "index";
 
-    if (file_exists(WWWPATH . 'www/controllers/' . $pageClass . '.php')) {
-        include_once(WWWPATH . 'www/controllers/' . $pageClass . '.php');
+    if (file_exists(SITEROOTPATH . 'www/controllers/' . $pageClass . '.php')) {
+        include_once(SITEROOTPATH . 'www/controllers/' . $pageClass . '.php');
     } else {
         include_once(APPPATH . 'controllers/' . $pageClass . '.php');
     }

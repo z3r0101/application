@@ -44,8 +44,8 @@ class cms_assets extends BaseControllerCMS
         if (isset($_REQUEST['CMS_POST_REQ'])) {
             $postControlSettings = json_decode(base64_decode(strval($_REQUEST['CMS_POST_REQ'])), true);
 
-            $assetsDir = WWWPATH.$CONFIG['cms']['directory_assets_name'];
-            $uploadDir = WWWPATH.$CONFIG['cms']['directory_upload_name'];
+            $assetsDir = SITEROOTPATH.$CONFIG['cms']['directory_assets_name'];
+            $uploadDir = SITEROOTPATH.$CONFIG['cms']['directory_upload_name'];
 
             $defaultPath = ($postControlSettings['asset_default_dir']!='') ? $CONFIG['website']['path'].$postControlSettings['asset_default_dir'] : '';
 
@@ -166,7 +166,7 @@ class cms_assets extends BaseControllerCMS
                 $arrFiles = [];
 
                 $path = ($_POST['cmsAssetBrowseFolder']!='') ? $_POST['cmsAssetBrowseFolder'].'/*' : '*';
-                $arrWWWPath = explode('/', $assetsDir);
+                $arrSITEROOTPATH = explode('/', $assetsDir);
 
                 if ($path != '*') {
                     $tArrDir = explode('/', $_POST['cmsAssetBrowseFolder']);
@@ -179,14 +179,14 @@ class cms_assets extends BaseControllerCMS
                         ';
                 }
 
-                $arrDisplayFolders = glob(WWWPATH."assets/{$path}", GLOB_ONLYDIR);
+                $arrDisplayFolders = glob(SITEROOTPATH."assets/{$path}", GLOB_ONLYDIR);
                 natcasesort($arrDisplayFolders);
                 foreach ($arrDisplayFolders as $filename) {
                     $tPathInfo = pathinfo($filename);
 
                     $tArr = explode('/', $filename);
                     foreach($tArr as $Index => $Value) {
-                        if (isset($arrWWWPath[$Index]) && $arrWWWPath[$Index] == $Value) {
+                        if (isset($arrSITEROOTPATH[$Index]) && $arrSITEROOTPATH[$Index] == $Value) {
                             unset($tArr[$Index]);
                         }
                     }
@@ -228,7 +228,7 @@ class cms_assets extends BaseControllerCMS
 
 
                     $path = ($_POST["cmsAssetListDirFiles"] != '') ? $_POST["cmsAssetListDirFiles"].'/*' : '*';
-                    $arrWWWPath = explode('/', $assetsDir);
+                    $arrSITEROOTPATH = explode('/', $assetsDir);
 
                     if ($path != '*') {
                         $tArrDir = explode('/', $_POST["cmsAssetListDirFiles"]);
@@ -241,14 +241,14 @@ class cms_assets extends BaseControllerCMS
                             ';
                     }
 
-                    $arrDisplayFolders = glob(WWWPATH."assets/{$path}", GLOB_ONLYDIR);
+                    $arrDisplayFolders = glob(SITEROOTPATH."assets/{$path}", GLOB_ONLYDIR);
                     natcasesort($arrDisplayFolders);
                     foreach ($arrDisplayFolders as $filename) {
                         $tPathInfo = pathinfo($filename);
 
                         $tArr = explode('/', $filename);
                         foreach($tArr as $Index => $Value) {
-                            if (isset($arrWWWPath[$Index]) && $arrWWWPath[$Index] == $Value) {
+                            if (isset($arrSITEROOTPATH[$Index]) && $arrSITEROOTPATH[$Index] == $Value) {
                                 unset($tArr[$Index]);
                             }
                         }
@@ -275,14 +275,14 @@ class cms_assets extends BaseControllerCMS
                     }
                     $path = ($_POST["cmsAssetListDirFiles"] != '') ? $_POST["cmsAssetListDirFiles"].'/'.$tFileType : $tFileType;
 
-                    $arrDisplayFiles = array_filter(glob(WWWPATH."assets/{$path}", GLOB_BRACE), 'is_file');
+                    $arrDisplayFiles = array_filter(glob(SITEROOTPATH."assets/{$path}", GLOB_BRACE), 'is_file');
                     natcasesort($arrDisplayFiles);
                     foreach ($arrDisplayFiles as $filename) {
                         $tPathInfo = pathinfo($filename);
 
                         $tArr = explode('/', $filename);
                         foreach($tArr as $Index => $Value) {
-                            if (isset($arrWWWPath[$Index]) && $arrWWWPath[$Index] == $Value) {
+                            if (isset($arrSITEROOTPATH[$Index]) && $arrSITEROOTPATH[$Index] == $Value) {
                                 unset($tArr[$Index]);
                             }
                         }
@@ -328,7 +328,7 @@ class cms_assets extends BaseControllerCMS
 
         $this->setFormLayoutData(APPPATH."views/cms/layout/forms/cms_assets.xml");
 
-        $this->assetPath = WWWPATH.$CONFIG['cms']['directory_assets_name'];
+        $this->assetPath = SITEROOTPATH.$CONFIG['cms']['directory_assets_name'];
 
 
         if (isset($_GET['new-dir'])) {
@@ -466,7 +466,7 @@ class cms_assets extends BaseControllerCMS
             $arrFiles = [];
 
             $path = ($_POST['cmsPostBrowseFolder']!='') ? $_POST['cmsPostBrowseFolder'].'/*' : '*';
-            $arrWWWPath = explode('/', $this->assetPath);
+            $arrSITEROOTPATH = explode('/', $this->assetPath);
 
             if ($path != '*') {
                 $tArrDir = explode('/', $_POST['cmsPostBrowseFolder']);
@@ -479,14 +479,14 @@ class cms_assets extends BaseControllerCMS
                 ';
             }
 
-            $arrDisplayFolders = glob(WWWPATH."assets/{$path}", GLOB_ONLYDIR);
+            $arrDisplayFolders = glob(SITEROOTPATH."assets/{$path}", GLOB_ONLYDIR);
             natcasesort($arrDisplayFolders);
             foreach ($arrDisplayFolders as $filename) {
                 $tPathInfo = pathinfo($filename);
 
                 $tArr = explode('/', $filename);
                 foreach($tArr as $Index => $Value) {
-                    if (isset($arrWWWPath[$Index]) && $arrWWWPath[$Index] == $Value) {
+                    if (isset($arrSITEROOTPATH[$Index]) && $arrSITEROOTPATH[$Index] == $Value) {
                         unset($tArr[$Index]);
                     }
                 }
@@ -566,7 +566,7 @@ class cms_assets extends BaseControllerCMS
         $arrFiles = [];
 
         $path = (isset($_GET['dir'])) ? $_GET['dir'].'/*' : '*';
-        $arrWWWPath = explode('/', $this->assetPath);
+        $arrSITEROOTPATH = explode('/', $this->assetPath);
 
         if ($path != '*') {
             $tArrDir = explode('/', $_GET['dir']);
@@ -580,14 +580,14 @@ class cms_assets extends BaseControllerCMS
             ';
         }
 
-        $arrDisplayFolders = glob(WWWPATH."assets/{$path}", GLOB_ONLYDIR);
+        $arrDisplayFolders = glob(SITEROOTPATH."assets/{$path}", GLOB_ONLYDIR);
         natcasesort($arrDisplayFolders);
         foreach ($arrDisplayFolders as $filename) {
             $tPathInfo = pathinfo($filename);
 
             $tArr = explode('/', $filename);
             foreach($tArr as $Index => $Value) {
-                if (isset($arrWWWPath[$Index]) && $arrWWWPath[$Index] == $Value) {
+                if (isset($arrSITEROOTPATH[$Index]) && $arrSITEROOTPATH[$Index] == $Value) {
                     unset($tArr[$Index]);
                 }
             }
@@ -598,20 +598,20 @@ class cms_assets extends BaseControllerCMS
                     <td><input type="checkbox" /></td>
                     <td><i class="fa fa-folder-o" aria-hidden="true"> </i> <a href="'.WEBSITE_URL.'cms/assets?dir='.$filename.'">'.$tPathInfo['filename'].'</a></td>
                     <td>Folder</td>
-                    <td>'.date("Y-m-d H:i:s", filemtime(WWWPATH.'assets/'.$filename)).'</td>
+                    <td>'.date("Y-m-d H:i:s", filemtime(SITEROOTPATH.'assets/'.$filename)).'</td>
                     <td style="text-align: right"><a href="javascript:void(0)" onclick="cmsFnRename(this)" style="margin-right: 10px"><img src="'.WEBSITE_URL.'resources/cms/images/icon-rename.png" height="22" /></a><a href="'.WEBSITE_URL.'cms/assets?rm-dir='.$filename.((isset($_GET['dir'])) ? '&amp;dir='.$_GET['dir'] : '').'" onclick="return cmsFnConfirmRemove(this)" data-type="folder" data-name="'.$tPathInfo['filename'].'"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                 </tr>
             ';
         }
 
-        $arrDisplayFiles = array_filter(glob(WWWPATH."assets/{$path}"), 'is_file');
+        $arrDisplayFiles = array_filter(glob(SITEROOTPATH."assets/{$path}"), 'is_file');
         natcasesort($arrDisplayFiles);
         foreach ($arrDisplayFiles as $filename) {
             $tPathInfo = pathinfo($filename);
 
             $tArr = explode('/', $filename);
             foreach($tArr as $Index => $Value) {
-                if (isset($arrWWWPath[$Index]) && $arrWWWPath[$Index] == $Value) {
+                if (isset($arrSITEROOTPATH[$Index]) && $arrSITEROOTPATH[$Index] == $Value) {
                     unset($tArr[$Index]);
                 }
             }
