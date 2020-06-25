@@ -13,7 +13,12 @@ zr30101 is an open-source rapid development web framework for use in building dy
 ## Installation
 
 ### Using shell script
-1. Pull or Download https://github.com/z3r0101/tools/blob/master/z3r0101.sh
+1. Clone or Download https://github.com/z3r0101/tools/blob/master/z3r0101.sh
+```
+# git clone https://github.com/z3r0101/tools/blob/master/z3r0101.sh
+- or -
+# wget https://github.com/z3r0101/tools/blob/master/z3r0101.sh
+```
 2. Copy the z3r0101.ssh to your www root directory (E.g. /var/www)
 3. Make it executable
 ```
