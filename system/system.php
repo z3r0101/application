@@ -76,7 +76,6 @@ define('PATH_INFO', $tPath);
 
 define('CONFIG_ENVIRONMENT', $CONFIG['environment']);
 
-define('WEBSITE_PATH', $CONFIG['website']['path']); #DEPRECATE
 define('WEBSITE_URL', $CONFIG['website']['path']);
 define('CONFIG_CMS_DIRECTORY_NAME', $CONFIG['cms']['directory_name']);
 define('CONFIG_CMS_ROUTE_NAME', $CONFIG['cms']['route_name']);

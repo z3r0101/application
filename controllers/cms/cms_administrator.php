@@ -19,7 +19,7 @@ class cms_administrator extends BaseControllerCMS {
 
     function index() {
         #print 'You are in root directory of administrator';
-        header("location: ".WEBSITE_PATH.CONFIG_CMS_ROUTE_NAME."/administrator/users/list");
+        header("location: ".WEBSITE_URL.CONFIG_CMS_ROUTE_NAME."/administrator/users/list");
     }
 
     function users($data) {

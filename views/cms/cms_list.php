@@ -166,7 +166,6 @@ $error = array();
                                                                     $buttonId = (isset($subButton['id'])) ? $child->table['id'] . '_' . $subButton['id'] : "";
                                                                     $buttonHref = (isset($subButton['href'])) ? $subButton['href'] : "javascript:void(0)";
 
-                                                                    #$buttonHref = str_replace('[CONFIG_WEBSITE_PATH]', $CONFIG['website']['path'], $buttonHref);
                                                                     $buttonHref = $self->layoutConfigCode($buttonHref);
 
                                                                     $buttonOnClick = (isset($subButton['onclick'])) ? 'onclick="'.$self->layoutConfigCode($subButton['onclick']).'"' : '';
@@ -277,7 +276,6 @@ $error = array();
                                                                         $buttonId = (isset($subButton['id'])) ? $child->table['id'] . '_' . $subButton['id'] : "";
                                                                         $buttonHref = (isset($subButton['href'])) ? $subButton['href'] : "javascript:void(0)";
 
-                                                                        #$buttonHref = str_replace('[CONFIG_WEBSITE_PATH]', $CONFIG['website']['path'], $buttonHref);
                                                                         $buttonHref = $self->layoutConfigCode($buttonHref);
 
                                                                         $buttonOnClick = (isset($subButton['onclick'])) ? 'onclick="'.$self->layoutConfigCode($subButton['onclick']).'"' : '';

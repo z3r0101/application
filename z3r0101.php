@@ -43,4 +43,9 @@ $vendors_folder = realpath($vendors_folder);
 $vendors_folder = rtrim($vendors_folder, '/').'/'; #ensure there's a trailing slash
 define('VENDORSPATH', $vendors_folder);
 
+$vendors_folder = "www/vendors";
+$vendors_folder = realpath($vendors_folder);
+$vendors_folder = rtrim($vendors_folder, '/').'/'; #ensure there's a trailing slash
+define('VENDORSPATH_WWW', $vendors_folder);
+
 require_once 'system/system.php';
