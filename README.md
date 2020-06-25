@@ -52,9 +52,9 @@ E.g.
   </li>
   <li>Download the following files under your website root directory
       <ul>
-        <li>https://raw.githubusercontent.com/z3r0101/webroot/master/index.php</li>  
-        <li>https://raw.githubusercontent.com/z3r0101/webroot/master/.htaccess</li>  
-        <li>https://raw.githubusercontent.com/z3r0101/webroot/master/.gitignore</li>
+        <li>https://raw.githubusercontent.com/z3r0101/siteroot/master/index.php</li>  
+        <li>https://raw.githubusercontent.com/z3r0101/siteroot/master/.htaccess</li>  
+        <li>https://raw.githubusercontent.com/z3r0101/siteroot/master/.gitignore</li>
       </ul>  
   </li>
   <li>Under your application directory.
