@@ -65,7 +65,7 @@ E.g.
   <li>The www directory will be your working web files directory<br>
     Available project sample:
     <ul>
-      <li><a href="https://github.com/z3r0101/www-basic-cms">https://github.com/z3r0101/www-basic-cm</a></li>
+      <li><a href="https://github.com/z3r0101/www-basic-cms">https://github.com/z3r0101/www-basic-cms</a></li>
     </ul>  
   </li>
 </ol>
