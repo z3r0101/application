@@ -30,6 +30,28 @@ var glbWinCall = function () {
     }
 }
 
+$(window).on('load', glbWinCall);
+$(window).resize(glbWinCall);
+
+$(window).on('orientationchange',
+    function () {
+        setTimeout(
+            function () {
+                cssIsScrMob = (($('.cms-media')[0]) ? ((window.getComputedStyle($('.cms-media')[0],':after').content.toString().replace(/\"/g,'')=='mobile') ? true : false) : false);
+                if (cssIsScrMob) {
+                    $('.cms-mobile-menu').removeClass('is-active');
+                    $('.cms-sidebar').hide();
+                    $('.cms-content .container-fluid').css({width: '100%'});
+                } else {
+                    $('.cms-mobile-menu').removeClass('is-active');
+                    $('.cms-sidebar').show();
+                    $('.cms-content .container-fluid').css({width: '100%'});
+                }
+            }, 400
+        )
+    }
+);
+
 $(document).ready(
     function () {
         $('.cms-mobile-menu').on('click',
@@ -43,28 +65,6 @@ $(document).ready(
                     $('.cms-sidebar').show();
                     $('.cms-content .container-fluid').css({width: '200%'});
                 }
-            }
-        );
-
-        $(window).on('load', glbWinCall);
-        $(window).resize(glbWinCall);
-
-        $(window).on('orientationchange',
-            function () {
-                setTimeout(
-                    function () {
-                        cssIsScrMob = (($('.cms-media')[0]) ? ((window.getComputedStyle($('.cms-media')[0],':after').content.toString().replace(/\"/g,'')=='mobile') ? true : false) : false);
-                        if (cssIsScrMob) {
-                            $('.cms-mobile-menu').removeClass('is-active');
-                            $('.cms-sidebar').hide();
-                            $('.cms-content .container-fluid').css({width: '100%'});
-                        } else {
-                            $('.cms-mobile-menu').removeClass('is-active');
-                            $('.cms-sidebar').show();
-                            $('.cms-content .container-fluid').css({width: '100%'});
-                        }
-                    }, 400
-                )
             }
         );
     }
