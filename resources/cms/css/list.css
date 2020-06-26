@@ -46,3 +46,10 @@
 .dt-body-right {
     text-align: right;
 }
+
+.dt-wrapper {
+    overflow: hidden;
+}
+.dt-overflow-table {
+    overflow: auto;
+}
