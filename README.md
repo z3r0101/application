@@ -105,6 +105,6 @@ E.g.
   </tr>  
   <tr>
     <td><ul><li>www</li></ul></td>
-    <td>Your dev working project files directory</td>
+    <td>Your dev working project files directory<br>Sample project: https://github.com/z3r0101/www-basic-cms</td>
   </tr>  
 </table>  
