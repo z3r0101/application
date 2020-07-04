@@ -43,11 +43,15 @@ E.g.
               <li>cms (This directory must have a write permission)</li>
             </ul>  
         </li>
-        <li>uploads (This directory must have a write permission)
-            <ul>
-              <li>temp (This directory must have a write permission)</li>
-            </ul>  
-        </li>
+        <li>assets
+          <ul>
+            <li>uploads (This directory must have a write permission)
+                <ul>
+                  <li>temp (This directory must have a write permission)</li>
+                </ul>  
+            </li>
+          </ul>  
+        </li>  
         <li>www</li>
       </ul>
   </li>
