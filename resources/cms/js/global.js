@@ -30,27 +30,7 @@ var glbWinCall = function () {
     }
 }
 
-$(window).on('load', glbWinCall);
-$(window).resize(glbWinCall);
 
-$(window).on('orientationchange',
-    function () {
-        setTimeout(
-            function () {
-                cssIsScrMob = (($('.cms-media')[0]) ? ((window.getComputedStyle($('.cms-media')[0],':after').content.toString().replace(/\"/g,'')=='mobile') ? true : false) : false);
-                if (cssIsScrMob) {
-                    $('.cms-mobile-menu').removeClass('is-active');
-                    $('.cms-sidebar').hide();
-                    $('.cms-content .container-fluid').css({width: '100%'});
-                } else {
-                    $('.cms-mobile-menu').removeClass('is-active');
-                    $('.cms-sidebar').show();
-                    $('.cms-content .container-fluid').css({width: '100%'});
-                }
-            }, 400
-        )
-    }
-);
 
 $(document).ready(
     function () {
@@ -298,7 +278,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
     pExt = (typeof(pExt) != 'undefined') ? pExt : null;
     pExt2 = (typeof(pExt2) != 'undefined') ? pExt2 : null;
 
-    var cmsControlSettings = json_decode(base64_decode($('#'+pId).attr('cms-control-settings'))); console.log(cmsControlSettings);
+    var cmsControlSettings = json_decode(base64_decode($('#'+pId).attr('cms-control-settings'))); //console.log(cmsControlSettings);
     if (cmsControlSettings['repeaterId']) {
         if (cmsControlSettings['repeaterId']!='') {
             cmsControlSettings['id'] = pId;
@@ -559,7 +539,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
             <div id="cmsAssetDialogContainer">\
                 <h3 style="margin-top: 0px">Insert '+tDialogHeader+'</h3>\
                 <ul class="nav nav-tabs" style="margin-bottom: 10px">\
-                    <li class="nav-item"><a href="javascript:void(0)" class="nav-link active" onclick="cmsAssetUpload(this, \''+pId+'\', 6)">Upload</a></li>\
+                    <li class="nav-item active"><a href="javascript:void(0)" class="nav-link active" onclick="cmsAssetUpload(this, \''+pId+'\', 6)">Upload</a></li>\
                     <li class="nav-item"><a href="javascript:void(0)" class="nav-link" onclick="cmsAssetUpload(this, \''+pId+'\', 6)">Assets</a></li>\
                     <li class="nav-item"><a href="javascript:void(0)" class="nav-link" onclick="cmsAssetUpload(this, \''+pId+'\', 6)">Web Address (URL)</a></li>\
                 </ul>\
@@ -596,19 +576,19 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                 <div id="cmsAssetsBrowser" class="cmsAssetDialogGroup" data-option="1" style="display: none; width: 100%; height: 400px; margin-bottom: 10px">\
                     <div style="display: inline-block; width: 100%; height: 400px;">\
                         <div style="position: relative; display: block; float: left; width: 70%;">\
-                            <div style="position: relative; display: block; float: left; width: 100%; height: auto; overflow-y: scroll; ; border-top: 1px solid #ddd">\
-                                <table class="table cmsAssetTable">\
+                            <div style="position: relative; display: block; float: left; width: 100%; height: auto; background-color: #f3f3f3;">\
+                                <table class="table cmsAssetTable dt-header">\
                                     <thead>\
                                         <tr>\
-                                            <th width="60%">Name</th>\
+                                            <th width="55%">Name</th>\
                                             <th width="25%">Size</th>\
-                                            <th width="15%"></th>\
+                                            <th width="20%"></th>\
                                         </tr>\
                                     </thead>\
                                 </table>\
                             </div>\
                             <div style="position: relative; display: block; float: left; width: 100%; height: 360px; overflow-y: scroll; ; border-bottom: 1px solid #ddd">\
-                                <table class="table cmsAssetTable" width="100%">\
+                                <table class="table cmsAssetTable dt-body" width="100%">\
                                     <tbody id="cmsAssetFilesBody">\
                                     </tbody>\
                                 </table>\
@@ -851,6 +831,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                         var tAspectRatio = $cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2); //parseFloat(cmsAssetFileInfo['image_info'][0]/cmsAssetFileInfo['image_info'][1]).toFixed(2);
                                         if (tArr.length == 2) {
                                             tAspectRatioDefault = parseInt(tArr[0],10) / parseInt(tArr[1],10);
+                                            //console.log(cmsControlSettings['img_aspect_ratio'].split(':'), tAspectRatio, $cmsAssetImage.cropper('getCropBoxData').left);
                                             if (tAspectRatio != tAspectRatioDefault) {
                                                 BootstrapDialog.confirm('The image you want to insert does not match the required aspect ratio. You can crop the image to get the right size.<br><br>Are you sure you want to ignore the image aspect ratio?', function(result){
                                                     if(result) {
@@ -1376,6 +1357,9 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
         $('#cmsAssetDialogContainer .nav-tabs li a').removeClass('active');
         $('#cmsAssetDialogContainer .nav-tabs li:eq('+tIndex+') a').addClass('active');
 
+        $('#cmsAssetDialogContainer .nav-tabs li').removeClass('active');
+        $('#cmsAssetDialogContainer .nav-tabs li:eq('+tIndex+')').addClass('active');
+
         $('#cmsAssetDialogContainer .cmsAssetDialogGroup').hide();
         $('#cmsAssetDialogContainer .cmsAssetDialogGroup[data-option="'+tIndex+'"]').css('display', 'inline-block');
 
@@ -1392,6 +1376,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
             //ASSETS
 
             $(window).unbind('paste');
+
+            $('.cmsAssetTable.dt-header').css('width', $('.cmsAssetTable.dt-body').width()+'px');
 
             var form_data = new FormData();
             form_data.append('cmsAssetListDirFiles', cmsControlSettings['asset_default_dir']);
@@ -1915,7 +1901,7 @@ function cmsUploadUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
     pExt = (typeof(pExt) != 'undefined') ? pExt : null;
     pExt2 = (typeof(pExt2) != 'undefined') ? pExt2 : null;
 
-    var cmsControlSettings = json_decode(base64_decode($('#'+pId).attr('cms-control-settings'))); console.log(cmsControlSettings);
+    var cmsControlSettings = json_decode(base64_decode($('#'+pId).attr('cms-control-settings'))); //console.log(cmsControlSettings);
     if (cmsControlSettings['repeaterId']) {
         if (cmsControlSettings['repeaterId']!='') {
             cmsControlSettings['id'] = pId;
@@ -2286,7 +2272,7 @@ function cmsUploadUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                         cmsUploadDialog.getButton('btn-save').show();
                         cmsUploadDialog.getButton('btn-save').html('Insert');
                     } else {
-                        tOpenFile = cmsInfo["config"]['website']['path']+tOpenFile;
+                        tOpenFile = cmsInfo['global']['UPLOADS_URL']+tOpenFile;
                         cmsUploadUpload(pObj, pId, 8, tOpenFile);
                     }
                 }
@@ -2317,18 +2303,13 @@ function cmsUploadUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                             } else if (cmsUploadIsCustom) {
                                 pExt2($('#cmsUploadUploadBody .cmsUploadUploadSavePath').attr('data-save-path') + '/' + cmsUploadFileInfo['upload_file']);
                             } else {
+                                //$('#' + pId + '_display').val(cmsUploadFileInfo['upload_file']);
+                                //#eval('' + pId + '_add_file();');
+                                //$('#' + pId).val(cmsUploadFileInfo['upload_file']);
+
                                 $('#' + pId + '_display').val(cmsUploadFileInfo['upload_file']);
                                 eval('' + pId + '_add_file();');
-                                $('#' + pId).val(cmsUploadFileInfo['upload_file']);
-
-                                //$('#' + pId + '_display').val(cmsInfo["config"]['website']['path']+cmsUploadFileInfo['upload_file']);
-                                //eval('' + pId + '_add_file();');
-                                //$('#' + pId).val(cmsInfo["config"]['website']['path']+cmsUploadFileInfo['upload_file']);
-
-                                //$('#' + pId + '_display').val($('#cmsUploadUploadBody .cmsUploadUploadSavePath').attr('data-save-path') + '/' + cmsUploadFileInfo['upload_file']);
-                                //eval('' + pId + '_add_file();');
-                                //$('#' + pId).val($('#cmsUploadUploadBody .cmsUploadUploadSavePath').attr('data-save-path') + '/' + cmsUploadFileInfo['upload_file']);
-                                //$('#cmsUploadUploadBody .cmsUploadUploadSavePath').attr('data-save-path-ini', $('#cmsUploadUploadBody .cmsUploadUploadSavePath').attr('data-save-path'));
+                                $('#' + pId).val(cmsUploadFileInfo['upload_short_file']);
                             }
 
                             cmsUploadDialog.close();
@@ -3019,13 +3000,14 @@ function cmsUploadUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
         if (cmsUploadUploadFileType[cmsFnFileExtension(pOption)]) {
             if (cmsUploadUploadFileType[cmsFnFileExtension(pOption)]['type'] == 'image') {
                 var xhr = new XMLHttpRequest();
+                console.log(pOption);
                 xhr.open("GET", pOption);
                 xhr.responseType = "blob";
                 xhr.onload = function (e) {
                     var urlCreator = window.URL || window.webkitURL;
                     var xhrURL = urlCreator.createObjectURL(this.response);
                     var tFileName = (!pExt) ? cmsFnBaseName(pOption) : pExt[1];
-                    var tSavePath = (!pExt) ? cmsFnDirName(pOption) : pExt[0];
+                    var tSavePath = (!pExt) ? cmsFnDirName(pOption) : pExt[0]; //console.log(pOption, cmsFnDirName(pOption), pExt);
 
                     cmsUploadLoadImage(xhrURL, tFileName, e.currentTarget.response.type);
 
@@ -3194,9 +3176,9 @@ function cmsUploadUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                 }
                             }
 
-                            cmsUploadUpload(pObj, pId, 8, cmsInfo["config"]['website']['path']+data,
+                            cmsUploadUpload(pObj, pId, 8, cmsInfo['global']['UPLOADS_URL']+data /*cmsInfo["config"]['website']['path']+data*/,
                                 [
-                                    cmsInfo["config"]["website"]["path"]+'uploads'+((cmsControlSettings['upload_parent_dir']!='') ? '/'+cmsControlSettings['upload_parent_dir'] : ''),
+                                    cmsInfo['global']['UPLOADS_URL']+((cmsControlSettings['upload_parent_dir']!='') ? cmsControlSettings['upload_parent_dir'] : ''), /*cmsInfo["config"]["website"]["path"]+'uploads'+((cmsControlSettings['upload_parent_dir']!='') ? '/'+cmsControlSettings['upload_parent_dir'] : '')*/
                                     tFileName,
                                     dialog,
                                     data

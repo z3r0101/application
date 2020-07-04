@@ -48,6 +48,21 @@ $vendors_folder = realpath($vendors_folder);
 $vendors_folder = rtrim($vendors_folder, '/').'/'; #ensure there's a trailing slash
 define('VENDORSPATH_WWW', $vendors_folder);
 
+$vendors_folder = SITEROOTPATH."assets";
+$vendors_folder = realpath($vendors_folder);
+$vendors_folder = rtrim($vendors_folder, '/').'/'; #ensure there's a trailing slash
+define('ASSETSPATH', $vendors_folder);
+
+$vendors_folder = SITEROOTPATH."assets/uploads";
+$vendors_folder = realpath($vendors_folder);
+$vendors_folder = rtrim($vendors_folder, '/').'/'; #ensure there's a trailing slash
+define('UPLOADSPATH', $vendors_folder);
+
+$vendors_folder = SITEROOTPATH."assets/uploads/temp";
+$vendors_folder = realpath($vendors_folder);
+$vendors_folder = rtrim($vendors_folder, '/').'/'; #ensure there's a trailing slash
+define('UPLOADSTEMPPATH', $vendors_folder);
+
 $resources_folder = SITEROOTPATH."www";
 $resources_folder = realpath($resources_folder);
 $resources_folder = rtrim($resources_folder, '/').'/'; #ensure there's a trailing slash

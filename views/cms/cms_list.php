@@ -46,6 +46,7 @@ $error = array();
         foreach($self->formLayoutData->header->link as $Index => $cssExternal) {
 
             $cssExternal = str_replace('[resources]', RES_URL, $cssExternal->asXML());
+            $cssExternal = str_replace('[RES_CMS_URL]', VENDORS_URL, $cssExternal);
             $cssExternal = str_replace('[vendors]', VENDORS_URL, $cssExternal);
 
             print "\n".$cssExternal."\n";
@@ -59,6 +60,7 @@ $error = array();
                 print '<link href="?cms-style='.$Style["cms-style-name"].'" rel="stylesheet" type="text/css">';
             } else {
                 $styleBlock = str_replace('[resources]', RES_URL, $Style->asXML());
+                $styleBlock = str_replace('[RES_CMS_URL]', RES_CMS_URL, $styleBlock);
                 $styleBlock = str_replace('[vendors]', VENDORS_URL, $styleBlock);
                 print "\n".$styleBlock."\n";
             }
@@ -70,6 +72,7 @@ $error = array();
         foreach($self->formLayoutData->header->script as $Index => $Script) {
 
             $scriptBlock = str_replace('[resources]', RES_URL, $Script->asXML());
+            $scriptBlock = str_replace('[RES_CMS_URL]', RES_CMS_URL, $scriptBlock);
             $scriptBlock = str_replace('[vendors]', VENDORS_URL, $scriptBlock);
 
             print "\n".$scriptBlock."\n";

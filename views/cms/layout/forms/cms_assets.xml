@@ -2,6 +2,11 @@
     <header>
         <title id="listTitle">CMS : Assets</title>
         <blurb id="headerBlurb"></blurb>
+        <script src="[vendors]jquery.cropper/cropper.js"> </script>
+        <link rel="stylesheet" href="[vendors]jquery.cropper/cropper.min.css" />
+        <script src="[vendors]jquery.cropper/cropper.js"> </script>
+        <script src="[vendors]jquery.cropper/jquery-cropper.js"> </script>
+        <script src="[RES_CMS_URL]js/cms-content-blocks.js"> </script>
         <style>
             <![CDATA[
                 .dir-separator {

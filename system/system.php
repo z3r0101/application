@@ -86,6 +86,9 @@ define('RES_CMS_URL', $CONFIG['website']['path'].'application/resources/cms/');
 
 define('VENDORS_URL', $CONFIG['website']['path'].'vendors/');
 
+define('ASSETS_URL', $CONFIG['website']['path'].'assets/');
+define('UPLOADS_URL', $CONFIG['website']['path'].'assets/uploads/');
+
 $_pageArrPath = explode('/', substr(PATH_INFO,1));
 $pageUrlData = array();
 

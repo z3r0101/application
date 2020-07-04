@@ -40,13 +40,6 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
 
             arrForms[arrForms.length] = '\
                     <div class="form-group">\
-                        <label>Title</label>\
-                        <input type="text" id="block_picture_title" class="form-control">\
-                    </div>\
-            ';
-
-            arrForms[arrForms.length] = '\
-                    <div class="form-group">\
                         <label>Description:</label>\
                         <textarea id="block_picture_description" class="form-control"></textarea>\
                     </div>\
@@ -77,12 +70,9 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
                             }
 
                             if (($('#block_picture_title').val().trim()+$('#block_picture_description').val().trim())=='') {
-                                tinyMCE.activeEditor.insertContent('\
-                                    <img src="'+$('#block_picture').val()+'" style="display: block; float: left; margin-right: 1%; width: 33.3333%">\
-                                ');
+                                tinyMCE.activeEditor.insertContent('<img src="'+$('#block_picture').val()+'" style="display: block; float: left; margin-right: 1%; width: 33.3333%">');
                             } else {
-                                tinyMCE.activeEditor.insertContent('\
-                                     <div class="mceNonEditable" style="display: block; float: left; margin-right: 1%; width: 33.3333%">\
+                                tinyMCE.activeEditor.insertContent('<div class="mceNonEditable" style="display: block; float: left; margin-right: 1%; width: 33.3333%">\
                                         <img src="'+$('#block_picture').val()+'" style="max-width: 100%">\
                                         '+($('#block_picture_title').val().trim()!='' ? '<div>'+$('#block_picture_title').val().trim()+'</div>' : '')+'\
                                         '+($('#block_picture_description').val().trim()!='' ? '<div>'+$('#block_picture_description').val().trim()+'</div>' : '')+'\

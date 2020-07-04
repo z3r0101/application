@@ -20,6 +20,9 @@ class cms_asset
     public $isRepeaterControl = false;
     public $group_name = "";
 
+    public $vendor_js_path = array('jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js');
+    public $vendor_css_path = 'jquery.cropper/cropper.min.css';
+
     function __construct($controlObj)
     {
         #parent::__construct();

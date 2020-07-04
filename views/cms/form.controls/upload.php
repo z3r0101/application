@@ -46,6 +46,7 @@ class cms_upload
         $this->data = $data;
     }
 
+
     function css()
     {
         return <<<CSS
@@ -112,6 +113,8 @@ CSS;
     function render() {
         global $CONFIG;
 
+        $UPLOADS_URL = UPLOADS_URL;
+
         $tId = ($this->id === NULL) ? $this->controlObj['id'] : $this->id;
         $tName = strval($this->controlObj['id']);
         $tCaption = (isset($this->controlObj['caption'])) ? '<label for="'.$tId.'">'.$this->controlObj['caption'].'</label>' : '';
@@ -146,7 +149,7 @@ CSS;
         );
         $strControlSettings = base64_encode(json_encode($controlSettings));
 
-        $tDisplay = ($tValue!='') ? $tValue : 'Upload File';
+        $tDisplay = ($tValue!='') ? $UPLOADS_URL.$tValue : 'Upload File';
 
 
 

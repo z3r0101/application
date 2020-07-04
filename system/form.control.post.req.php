@@ -107,113 +107,11 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
                     print json_encode($tArrOptions);
                 }
                 break;
-
-            /*case 'file':
-                if (isset($_POST['cms-file-upload']) && isset($_POST['cms-file-upload-opt'])) {
-                    $formControlsPath = APPPATH.'views/cms/form.controls/file.php';
-                    $cmsFileUploadOpt = intval($_POST['cms-file-upload-opt']);
-                    if ($cmsFileUploadOpt == 0) {
-                        #UPLOAD TEMP FILE
-                        if (file_exists($formControlsPath)) {
-                            include_once($formControlsPath);
-
-                            #$postControlSettings = json_decode(base64_decode(strval($_POST['control-settings'])), true);
-                            $postRepeaterId = (isset($postControlSettings['repeaterId'])) ? $postControlSettings['repeaterId'] : '';
-
-                            #print_r($postControlSettings);
-                            #exit;
-
-                            if ($postRepeaterId == '') {
-                                cms_file::upload($table_name, $postControlSettings);
-                            } else {
-                                $repeaterObj = $this->simpleXMLElementObjXPath($this->formLayoutData, 'body/panel/repeater');
-                                foreach($repeaterObj as $repeaterItem) {
-                                    $repeater_table_name = strval($repeaterItem['table_name']);
-                                    $repeater_id = strval($repeaterItem['id']);
-
-                                    if ($postRepeaterId==$repeater_id) {
-                                        cms_file::upload($repeater_table_name, $postControlSettings);
-                                    }
-                                }
-                            }
-                        }
-                    } else if ($cmsFileUploadOpt == 1) {
-                        #DELETE TEMP FILE
-                        $arrUploadReturn = array();
-                        $arrUploadReturn['control-settings'] = $postControlSettings; #json_decode(base64_decode(strval($_POST['control-settings'])), true);
-                        $arrUploadReturn['cms-token'] = json_decode(base64_decode(strval($_POST['cms-file-upload'])), true);
-
-                        $isRepeaterObj = (isset($arrUploadReturn['control-settings']['repeaterId'])) ? (($arrUploadReturn['control-settings']['repeaterId']!='') ? true : false) : false;
-
-                        if (is_file($arrUploadReturn['control-settings']['file']['path'] . '/' . $arrUploadReturn['control-settings']['file']['name'])) {
-                            unlink($arrUploadReturn['control-settings']['file']['path'] . '/' . $arrUploadReturn['control-settings']['file']['name']);
-                            cmsTools::rmDir($arrUploadReturn['control-settings']['file']['path']);
-                        } else {
-                            #File not found
-                            $arrUploadReturn['error'] = $arrUploadReturn['control-settings']['file']['path'] . '/' . $arrUploadReturn['control-settings']['file']['name']." not found.";
-                        }
-
-                        print json_encode($arrUploadReturn);
-                    } else if ($cmsFileUploadOpt == 2) {
-                        #DELETE TEMP FILE BASE DIR
-                        $crypt = new cmsCryptonite();
-                        $arrUploadReturn = array();
-                        $arrUploadReturn['control-settings'] = $postControlSettings; #json_decode(base64_decode(strval($_POST['control-settings'])), true);
-                        $arrUploadReturn['cms-token'] = json_decode(base64_decode(strval($_POST['cms-file-upload'])), true);
-
-                        $isRepeaterObj = (isset($arrUploadReturn['control-settings']['repeaterId'])) ? (($arrUploadReturn['control-settings']['repeaterId']!='') ? true : false) : false;
-                        if ($isRepeaterObj) {
-                            $delTempDir = $CONFIG['cms']['directory_upload_name']."/temp/".$crypt->decode($arrUploadReturn['cms-token']['upload_temp']) . "/" . cmsTools::makeSlug($arrUploadReturn['control-settings']['repeaterId']) . "/" . $arrUploadReturn['control-settings']['repeaterRowIndex'];
-                            if (is_dir($delTempDir)) {
-                                cmsTools::rmDir($delTempDir);
-                            } else {
-                                #Dir not found
-                                $arrUploadReturn['error'] = "{$delTempDir} not found.";
-                            }
-                        }
-
-                        print json_encode($arrUploadReturn);
-                    } else if ($cmsFileUploadOpt == 3) {
-                        #CROP IMAGE
-                        $arrUploadReturn = array();
-                        $arrUploadReturn['control-settings'] = $postControlSettings;
-                        $arrUploadReturn['cms-token'] = json_decode(base64_decode(strval($_POST['cms-file-upload'])), true);
-                        $arrUploadReturn['cropper-data'] = $_POST['cropper-data'];
-
-                        include_once(VENDORSPATH.'cropperjs/1.0.0/cropper.php');
-                        #include_once(VENDORSPATH.'cropperjs/cropper.php');
-
-                        $tOriginalPath = $postControlSettings['file']['path'].'/original';
-
-                        $tSrc = $postControlSettings['file']['path'].'/'.$postControlSettings['file']['name'];
-
-                        mkdir($tOriginalPath, 0777, true);
-                        copy($tSrc, $tOriginalPath.'/'.$postControlSettings['file']['name']);
-
-                        $crop = new Cropper(
-                            $tSrc,
-                            $tSrc,
-                            isset($_POST['cropper-data']) ? $_POST['cropper-data'] : null
-                        );
-
-                        $response = array(
-                            'response'=>$arrUploadReturn,
-                            'state'  => 200,
-                            'message' => $crop -> getMsg(),
-                            'result' => $crop -> getResult()
-                        );
-
-                        echo json_encode($response);
-                        #print json_encode($arrUploadReturn);
-                    }
-                    exit;
-                }
-                break;
-            */
             case 'upload':
-                $uploadDir = SITEROOTPATH.$CONFIG['cms']['directory_upload_name'];
+                $uploadDir = UPLOADSPATH;
 
                 $defaultPath = ($postControlSettings['upload_parent_dir']!='') ? $CONFIG['website']['path'].$postControlSettings['upload_parent_dir'] : '';
+                #$defaultPath = '/content'
 
                 $defaultPath = (isset($_POST['cmsUploadSavePath'])) ? (($_POST['cmsUploadSavePath'] != '') ? ltrim($_POST['cmsUploadSavePath'], $CONFIG['website']['path']) : $defaultPath) : $defaultPath;
                 if (substr($defaultPath, 0, strlen($CONFIG['cms']['directory_upload_name'])) == $CONFIG['cms']['directory_upload_name']) $defaultPath = substr($defaultPath, strlen($CONFIG['cms']['directory_upload_name']));
@@ -222,16 +120,16 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
                     $upload_file = basename($_POST["cmsUploadWebURL"]);
                     $image = file_get_contents($_POST["cmsUploadWebURL"]);
 
-                    $uploadContainerDir = ($postControlSettings['upload_container_dir']!='') ? '/'.$postControlSettings['upload_container_dir'] : '';
-                    $uploadTempContainerDir = CMS_Users_Id.'_'.time().$uploadContainerDir;
-                    $uploadTempDir = '/temp/'.$uploadTempContainerDir;
-                    $tempDir = $uploadDir.$uploadTempDir;
-                    mkdir($tempDir, 0777, true);
-                    $tempFile = $tempDir.'/'.$upload_file;
-                    file_put_contents($tempFile, $image);
+                    $arrPathDestination = array();
+                    if (strval($postControlSettings['upload_parent_dir'])!='') $arrPathDestination[] = strval($postControlSettings['upload_parent_dir']);
+                    if (strval($postControlSettings['upload_container_dir'])!='') $arrPathDestination[] = strval($postControlSettings['upload_container_dir']);
+                    $uploadContainerDir = CMS_Users_Id.'_'.time().'/'.implode('/',$arrPathDestination);
+                    mkdir(UPLOADSTEMPPATH.$uploadContainerDir, 0777, true);
+
+                    file_put_contents(UPLOADSTEMPPATH.$uploadContainerDir.'/'.$upload_file, $image);
 
                     #rawurlencode
-                    print $CONFIG['cms']['directory_upload_name'].$uploadTempDir.'/'.($upload_file);
+                    print 'temp/'.$uploadContainerDir.'/'.($upload_file);
                     #print $CONFIG['website']['path'].$CONFIG['cms']['directory_upload_name'].$uploadTempDir.'/'.rawurlencode($upload_file);
                     exit;
                 }
@@ -241,29 +139,18 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
                     $cmsUploadFileInfo = json_decode($_POST["cmsUploadFileInfo"], true);
                     $cmsUploadFileInfo['upload_file'] = cms_assets::file_format($cmsUploadFileInfo['upload_file']);
 
-                    #DEBUG
-                    #print_r($postControlSettings);
-                    #print "\n";
-                    #print_r($cmsUploadFileInfo);
-                    #print "\n";
-                    #print $_FILES['cmsUploadUploadFile']['tmp_name']."\n";
-                    #print $uploadDir.$defaultPath."\n";
-                    #print $cmsUploadFileInfo['upload_file']."\n";
+                    $arrPathDestination = array();
+                    if (strval($postControlSettings['upload_parent_dir'])!='') $arrPathDestination[] = strval($postControlSettings['upload_parent_dir']);
+                    if (strval($postControlSettings['upload_container_dir'])!='') $arrPathDestination[] = strval($postControlSettings['upload_container_dir']);
+                    $uploadContainerDir = CMS_Users_Id.'_'.time().'/'.implode('/',$arrPathDestination);
+                    mkdir(UPLOADSTEMPPATH.$uploadContainerDir, 0777, true);
 
+                    move_uploaded_file($_FILES['cmsUploadUploadFile']['tmp_name'], UPLOADSTEMPPATH.$uploadContainerDir.'/'.$cmsUploadFileInfo['upload_file']);
 
-                    $uploadContainerDir = ($postControlSettings['upload_container_dir']!='') ? '/'.$postControlSettings['upload_container_dir'] : '';
-                    $uploadTempContainerDir = CMS_Users_Id.'_'.time().$uploadContainerDir;
-                    $uploadTempDir = '/temp/'.$uploadTempContainerDir;
-                    $tempDir = $uploadDir.$uploadTempDir;
-                    mkdir($tempDir, 0777, true);
-                    $tempFile = $tempDir.'/'.$cmsUploadFileInfo['upload_file'];
-                    move_uploaded_file($_FILES['cmsUploadUploadFile']['tmp_name'], $tempFile);
-
-                    #rawurlencode
                     print json_encode(
                         array(
-                            'temp_short_url' =>$uploadTempContainerDir.'/'.($cmsUploadFileInfo['upload_file']),
-                            'temp_full_url' => $CONFIG['cms']['directory_upload_name'].$uploadTempDir.'/'.($cmsUploadFileInfo['upload_file'])
+                            'temp_short_url' =>'temp/'.$uploadContainerDir.'/'.$cmsUploadFileInfo['upload_file'],
+                            'temp_full_url' => 'assets/uploads/temp/'.$uploadContainerDir.'/'.$cmsUploadFileInfo['upload_file']
                         )
                     );
                     exit;
@@ -490,7 +377,7 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
                                 <tr data-path="'.$filename.'" data-type="folder" data-name="'.$tPathInfo['filename'].'">
                                     <td width="60%"><i class="fa fa-folder-o" aria-hidden="true"> </i> <a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 0, \''.$filename.'\')">'.$tPathInfo['filename'].'</a></td>
                                     <td width="25%">Folder</td>
-                                    <td width="15%" style="text-align: right"><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 2)" style="margin-right: 10px" data-dir="'.(($_POST["cmsAssetListDirFiles"]!='') ? $_POST["cmsAssetListDirFiles"] : '').'"><img src="'.WEBSITE_URL.'resources/cms/images/icon-rename.png" height="22" /></a><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 3, \''.$filename.'\')" data-type="folder" data-name="'.$tPathInfo['filename'].'" data-dir="'.(($_POST["cmsAssetListDirFiles"]!='') ? $_POST["cmsAssetListDirFiles"] : '').'"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+                                    <td width="15%" style="text-align: right"><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 2)" style="margin-right: 10px" data-dir="'.(($_POST["cmsAssetListDirFiles"]!='') ? $_POST["cmsAssetListDirFiles"] : '').'"><img src="'.RES_CMS_URL.'images/icon-rename.png" height="22" /></a><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 3, \''.$filename.'\')" data-type="folder" data-name="'.$tPathInfo['filename'].'" data-dir="'.(($_POST["cmsAssetListDirFiles"]!='') ? $_POST["cmsAssetListDirFiles"] : '').'"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                                 </tr>
                             ';
                         }
@@ -531,9 +418,9 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
 
                             $arrFiles[] = '
                                 <tr data-path="'.$assetFile.'" data-type="file" data-name="'.$tPathInfo['basename'].'" '.((cmsTools::isImage($filename)) ? 'data-image="1" data-image-size="'.implode('x', $arrImageSize).'"' : 'data-image="0"').'>
-                                    <td width="60%"><i class="'.$tFuncFileIcon((isset($tPathInfo['extension'])) ? $tPathInfo['extension'] : '').'" aria-hidden="true"> </i> <a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 1)">'.$tPathInfo['basename'].'</a></td>
+                                    <td width="55%"><i class="'.$tFuncFileIcon((isset($tPathInfo['extension'])) ? $tPathInfo['extension'] : '').'" aria-hidden="true"> </i> <a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 1)">'.$tPathInfo['basename'].'</a></td>
                                     <td width="25%">'.cmsTools::formatBytes(filesize($filename)).'</td>
-                                    <td width="15%" style="text-align: right"><a href="?CMS_REQ='.urlencode(base64_encode(json_encode($postControlSettings))).'&asset-download='.$assetFile.'" style="margin-right: 10px"><i class="fa fa-download" aria-hidden="true"> </i></a><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 2)" style="margin-right: 10px" data-dir="'.$tPathInfo2["dirname"].'"><img src="'.WEBSITE_URL.'resources/cms/images/icon-rename.png" height="22" /></a><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 3, \''.$assetFile.'\')" data-type="file" data-name="'.$tPathInfo['basename'].'" data-dir="'.$tPathInfo2["dirname"].'"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+                                    <td width="20%" style="text-align: right"><a href="?CMS_REQ='.urlencode(base64_encode(json_encode($postControlSettings))).'&asset-download='.$assetFile.'" style="margin-right: 10px"><i class="fa fa-download" aria-hidden="true"> </i></a><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 2)" style="margin-right: 10px" data-dir="'.$tPathInfo2["dirname"].'"><img src="'.RES_CMS_URL.'images/icon-rename.png" height="22" /></a><a href="javascript:void(0)" onclick="cmsAssetUpload(this, \''.$postControlSettings['id'].'\', 7, 3, \''.$assetFile.'\')" data-type="file" data-name="'.$tPathInfo['basename'].'" data-dir="'.$tPathInfo2["dirname"].'"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                                 </tr>
                             ';
                         }

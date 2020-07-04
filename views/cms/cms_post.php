@@ -171,6 +171,7 @@ if (isset($_GET["cms-javascript"])) {
         foreach($self->formLayoutData->header->link as $Index => $cssExternal) {
 
             $cssExternal = str_replace('[resources]', RES_URL, $cssExternal->asXML());
+            $cssExternal = str_replace('[RES_CMS_URL]', RES_CMS_URL, $cssExternal);
             $cssExternal = str_replace('[vendors]', VENDORS_URL, $cssExternal);
 
             print "\n".$cssExternal."\n";
@@ -184,6 +185,7 @@ if (isset($_GET["cms-javascript"])) {
                 print '<link href="?cms-style='.$Style["cms-style-name"].'" rel="stylesheet" type="text/css">';
             } else {
                 $styleBlock = str_replace('[resources]', RES_URL, $Style->asXML());
+                $styleBlock = str_replace('[RES_CMS_URL]', RES_CMS_URL, $styleBlock);
                 $styleBlock = str_replace('[vendors]', VENDORS_URL, $styleBlock);
                 print "\n".$styleBlock."\n";
             }
@@ -200,6 +202,7 @@ if (isset($_GET["cms-javascript"])) {
                 print '<script src="?cms-javascript='.$Script["cms-javascript-name"].'"></script>';
             } else {
                 $scriptBlock = str_replace('[resources]', RES_URL, $Script->asXML());
+                $scriptBlock = str_replace('[resources_cms]', RES_CMS_URL, $scriptBlock);
                 $scriptBlock = str_replace('[vendors]', VENDORS_URL, $scriptBlock);
                 print "\n". html_entity_decode($scriptBlock) . "\n";
             }
@@ -504,6 +507,10 @@ $arrCMSInfo = array(
         'directory_name'=>$CONFIG['cms']['directory_name'],
         'route_name'=>$CONFIG['cms']['route_name'],
         'directory_upload_name'=>$CONFIG['cms']['directory_upload_name']
+    ),
+    'global'=>array(
+        'ASSETS_URL' => ASSETS_URL,
+        'UPLOADS_URL' => UPLOADS_URL
     )
 )
 ?>
