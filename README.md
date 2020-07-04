@@ -99,11 +99,16 @@ E.g.
   <tr>
     <td>
       <ul>
-      <li>
-        uploads
-        <ul><li>temp</li></ul>
-      </li>
-      </ul>
+        <li>
+          assets
+          <ul>
+          <li>
+            uploads
+            <ul><li>temp</li></ul>
+          </li>
+          </ul>
+        </li>  
+      </ul>  
     </td>
     <td valign="top">CMS file upload directory storage</td>
   </tr>  
