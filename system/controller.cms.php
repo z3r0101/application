@@ -1838,6 +1838,7 @@ class BaseControllerCMS extends BaseController {
                                                         if (isset($actionButton['cms-url'])) {
                                                             $cmsUrl = strval($actionButton['cms-url']);
                                                             $cmsUrl = str_replace('[id]', '{$d}', $cmsUrl);
+                                                            $cmsUrl = $this->layoutConfigCode($cmsUrl);
                                                             $tHref = $cmsUrl;
                                                         } else {
                                                             $tHref = $tHref.'/{$d}';

@@ -166,6 +166,8 @@ header("Content-Type: text/javascript")
         $save_message_button_new_caption = (isset($self->formLayoutData->body["save_message_button_new_caption"])) ? $self->formLayoutData->body["save_message_button_new_caption"] : 'Create new';
         $save_message_autoclose = (isset($self->formLayoutData->body["save_message_autoclose"])) ? filter_var(strval($self->formLayoutData->body["save_message_autoclose"]), FILTER_VALIDATE_BOOLEAN) : true;
         $save_message_saveclose = strval($self->formLayoutData->body["saveclose"]);
+
+        $save_redirect = strval($self->formLayoutData->body["save_redirect"]);
         ?>
 
         $.ajax(
@@ -225,6 +227,15 @@ header("Content-Type: text/javascript")
                             $('.cms-alert-message div[role="alert"]').removeClass().addClass('alert alert-success');
                             $('.cms-alert-message').addClass('show');
                             $(window).scrollTop(0);
+
+                            if ('<?=$save_redirect?>'=='true') {
+                                setTimeout(
+                                    function () {
+                                        window.location = (redirect=='') ? selectedUrlPath+'/list' : redirect;
+                                    }, 1000
+                                );
+                            }
+
                         } else {
                             var counter = 10;
                             var closeLabel = 'Exit';
