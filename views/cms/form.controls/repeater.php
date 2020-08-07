@@ -132,7 +132,7 @@ class cms_repeater
             if (isset($this->postRepeaterFields[$tId])) {
                 foreach($this->postRepeaterFields[$tId] as $repeaterRow => $repeaterData) {
                     $counter = $repeaterRow+1;
-                    $collapse = ($repeaterRow == 0) ? ' in' : '';
+                    $collapse = ($repeaterRow == 0) ? ' show' : '';
 
                     $arrHTMLOut = array();
                     foreach($this->controlObj as $controlKey => $controlItem) {
@@ -210,17 +210,17 @@ class cms_repeater
 
                     if ($repeater_style=='group' || $repeater_style=='list') {
                         $arrRepeaterHTML[] = <<<HTML
-                            <div class="panel panel-default repeater-row data-{$repeaterRow}" data-row="{$repeaterRow}">
-                                <div class="panel-heading" role="tab" id="{$tId}_heading_{$repeaterRow}">
-                                    <h4 class="panel-title">
+                            <div class="card panel-default repeater-row data-{$repeaterRow}" data-row="{$repeaterRow}">
+                                <div class="card-header" role="tab" id="{$tId}_heading_{$repeaterRow}">
+                                    <h5 class="mb-0">
                                         <a role="button" data-toggle="collapse" data-parent="#{$tId}" href="#{$tId}_collapse_{$repeaterRow}" aria-expanded="true" aria-controls="{$tId}_collapse_{$repeaterRow}">
                                             {$tRowCaptionDisplay}
                                         </a>
                                         <a href="javascript:void(0)" class="pull-right repeater-delete" cms-repeater-id="{$tId}" onclick="cmsFnRepeater{$tId}(this)"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                    </h4>
+                                    </h5>
                                 </div>
-                                <div id="{$tId}_collapse_{$repeaterRow}" class="panel-collapse collapse{$collapse}" role="tabpanel" aria-labelledby="{$tId}_heading_{$repeaterRow}">
-                                    <div class="panel-body">
+                                <div id="{$tId}_collapse_{$repeaterRow}" class="collapse {$collapse}" aria-labelledby="{$tId}_heading_{$repeaterRow}">
+                                    <div class="card-body">
                                         <input type="hidden" class="cms-form-control-repeater cms-form-primary-id" id="{$tId}_{$repeaterRow}_{$tPrimaryKey}" name="{$tPrimaryKey}" value="{$tPrimaryKeyVal}">
                                         {$strRepeaterHTMLControls}
                                     </div>
@@ -303,7 +303,7 @@ HTML;
 
             if ($arrButton === null) {
                 $strButton = <<<HTML
-                    <a class="btn btn-default cms-button repeater-add" href="javascript:void(0)" role="button" cms-repeater-id="{$tId}">{$tAddButtonCaption}</a>
+                    <a class="btn btn-secondary cms-button repeater-add" href="javascript:void(0)" role="button" cms-repeater-id="{$tId}">{$tAddButtonCaption}</a>
 HTML;
             } else {
                 $buttonCaption = (isset($arrButton['caption'])) ? strval($arrButton['caption']) : 'Add';
@@ -318,7 +318,7 @@ HTML;
                 if (count($strButtonGroup) > 0) {
                     $strButton = <<<HTML
                         <div class="btn-group">
-                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" cms-repeater-id="{$tId}" cms-repeater-group-control="{$arrButton['id']}">
+                          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" cms-repeater-id="{$tId}" cms-repeater-group-control="{$arrButton['id']}">
                             {$buttonCaption} <span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu">
@@ -328,7 +328,7 @@ HTML;
 HTML;
                 } else {
                     $strButton = <<<HTML
-                        <a class="btn btn-default cms-button repeater-add" href="javascript:void(0)" role="button" cms-repeater-id="{$tId}">{$buttonCaption}</a>
+                        <a class="btn btn-secondary cms-button repeater-add" href="javascript:void(0)" role="button" cms-repeater-id="{$tId}">{$buttonCaption}</a>
 HTML;
                 }
 

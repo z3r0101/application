@@ -117,7 +117,8 @@ CSS;
 
         $tId = ($this->id === NULL) ? $this->controlObj['id'] : $this->id;
         $tName = strval($this->controlObj['id']);
-        $tCaption = (isset($this->controlObj['caption'])) ? '<label for="'.$tId.'">'.$this->controlObj['caption'].'</label>' : '';
+        $tCaption = (isset($this->controlObj['caption'])) ? (($this->controlObj['caption']!='') ? '<label for="'.$tId.'">'.$this->controlObj['caption'].'</label>' : '') : '';
+        $tPlaceHolder = (isset($this->controlObj['placeholder'])) ? $this->controlObj['placeholder'] : '';
         $tValue = ($this->data !== NULL) ? $this->data : '';
         $tGroup = (isset($this->controlObj['group'])) ? 'cms-group="'.strval($this->controlObj['group']).'"' : "";
         if ($tGroup!='') {
@@ -149,7 +150,7 @@ CSS;
         );
         $strControlSettings = base64_encode(json_encode($controlSettings));
 
-        $tDisplay = ($tValue!='') ? $UPLOADS_URL.$tValue : 'Upload File';
+        $tDisplay = ($tValue!='') ? $UPLOADS_URL.$tValue : (($tPlaceHolder!='') ? $tPlaceHolder : 'Upload File');
 
 
 

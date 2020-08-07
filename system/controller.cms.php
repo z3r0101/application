@@ -1248,9 +1248,9 @@ class BaseControllerCMS extends BaseController {
                                     }
 
                                     #DELETE UPLOADED TEMP DIR/FILES
-                                    if ($uploadTemp!='') {
-                                        cmsTools::rmDir($uploadTemp);
-                                    }
+                                    #if ($uploadTemp!='') {
+                                    #    cmsTools::rmDir($uploadTemp);
+                                    #}
 
                                     #DELETE REPEATER DATA IF MARKED AS 'deleted'
                                     if (isset($repeaterObj['deleted'])) {

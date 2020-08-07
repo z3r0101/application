@@ -131,6 +131,7 @@ if (CMS_Users_Type == 0) {
     <?php
         foreach ($sectionXML->children() as $tagObjects) {
             $separator = strval($tagObjects['type']);
+            $parent = strval($tagObjects['parent']);
             $selection = (isset($tagObjects['selection'])) ? $tagObjects['selection'] : 'class';
             $Menu = (isset($tagObjects['menu'])) ? filter_var($tagObjects['menu'], FILTER_VALIDATE_BOOLEAN) : true;
 
@@ -174,7 +175,7 @@ if (CMS_Users_Type == 0) {
                         if (CMS_Users_Type == 0) $tView = true;
 
                         if ($tView) {
-                            print '<li'.(($selectionUrl == $sectionActive) ? ' class="active '.$tClassName.'"' : ' class="not-active '.$tClassName.'"').'><a href="'.$CONFIG['website']['path'].$CONFIG['cms']['route_name'].'/'.$tagObjects['link'].'" class="cms-menu-head" onclick="/*return cmsMenuClick(this)*/">'.$tagObjects['title'].' '.$tBadgeCount.'</a>';
+                            print '<li'.(($selectionUrl == $sectionActive) ? ' class="active '.$tClassName.'"' : ' class="not-active '.$tClassName.'"').' data-menu-name="'.$tClassName.'"><a href="'.$CONFIG['website']['path'].$CONFIG['cms']['route_name'].'/'.$tagObjects['link'].'" class="cms-menu-head" onclick="/*return cmsMenuClick(this)*/">'.$tagObjects['title'].' '.$tBadgeCount.'</a>';
                             if (isset($tagObjects->sub)) {
                                 print '<ul>';
                                 $tMenuCounter = 0;
@@ -224,7 +225,7 @@ if (CMS_Users_Type == 0) {
                     }
                 }
             } else {
-                print '<li class="not-active separator"><hr class="dotted"></li>';
+                print '<li class="not-active separator d-none" data-menu-parent="'.$parent.'"><hr class="dotted"></li>';
             }
         }
     ?>

@@ -93,7 +93,7 @@ CSS;
         $contextMenu = (isset($this->controlObj['context_menu'])) ? strval($this->controlObj['context_menu']) : 'link openlink image inserttable | cell row column deletetable'; #cmsAssetContextMenu cmsAssetContextMenuLeft cmsAssetContextMenuRight cmsAssetContextMenuCaption cmsAssetContextMenuRemove
         $tValue = ($this->data !== NULL) ? $this->data : '';
         $tGroup = (isset($this->controlObj['group'])) ? 'cms-group="'.strval($this->controlObj['group']).'"' : "";
-        $tAutoResizeMinHeight = (isset($this->controlObj['auto_resize_min_height'])) ? strval($this->controlObj['auto_resize_min_height']) : 800;
+        $tAutoResizeMinHeight = (isset($this->controlObj['auto_resize_min_height'])) ? strval($this->controlObj['auto_resize_min_height']) : 400;
         if ($tGroup!='') {
             if ($this->group_name!=strval($this->controlObj['group'])) {
                 $tGroup .= ' style="display: none"';
@@ -105,6 +105,9 @@ CSS;
         $tContentCSS = (isset($this->controlObj['content_css'])) ? strval($this->controlObj['content_css']) : '';
         $tContentCSS = str_replace('[resources]', RES_URL, $tContentCSS);
 
+        $tContainerStyle = (isset($this->controlObj['container-style'])) ? 'style="'.$this->controlObj['container-style'].'"' : '';
+        $tContainerObjStyle = (isset($this->controlObj['container-obj-style'])) ? 'style="'.$this->controlObj['container-obj-style'].'"' : '';
+        $tContainerObjClass = (isset($this->controlObj['container-obj-class'])) ? 'class="'.$this->controlObj['container-obj-class'].'"' : '';
 
         $arrTinyMCESettings = array(
             'height'=>$tHeight,
@@ -205,9 +208,11 @@ CSS;
         $strBlocks = implode(' ', $arrBlocks);
 
         return <<<HTML
-            <div class="form-group" {$tGroup}>
+            <div class="form-group" {$tGroup} {$tContainerStyle}>
                 {$tCaption}
+                <div {$tContainerObjClass} {$tContainerObjStyle}>
                 <textarea class="form-control {$tClass} html" id="{$tId}" name="{$tName}" cms-tinymce-settings="{$strTinyMCESettings}" cms-control-settings="{$strControlSettings}">{$tValue}</textarea>
+                </div>
             </div>
             <script>
                 var tinyMCESettings = JSON.parse(base64_decode($('#{$tId}').attr('cms-tinymce-settings')));

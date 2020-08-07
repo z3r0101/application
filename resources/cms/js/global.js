@@ -47,6 +47,16 @@ $(document).ready(
                 }
             }
         );
+
+        $('.cms-sidebar ul li.separator').each(
+            function (pIndex, pObj) {
+                if (!$('.cms-sidebar ul li[data-menu-name="'+$(pObj).attr('data-menu-parent')+'"]')[0]) {
+                    $(pObj).remove();
+                } else {
+                    $(pObj).removeClass('d-none');
+                }
+            }
+        );
     }
 );
 
@@ -2331,7 +2341,7 @@ function cmsUploadUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
 
                                     if ($('#cmsUploadUploadBody .cmsUploadUploadImagePreview')[0]) {
                                         var tFuncSaveImage = function () {
-                                            $cmsUploadImage.cropper('getCroppedCanvas').toBlob(
+                                            $cmsUploadImage.cropper('getCroppedCanvas', { imageSmoothingEnabled: false, imageSmoothingQuality: 'high' }).toBlob(
                                                 function (blob) {
                                                     var form_data = new FormData();
                                                     form_data.append('cmsUploadUploadFile', blob);
