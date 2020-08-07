@@ -39,6 +39,8 @@ class cms_html
     function css() {
         global $CONFIG;
 
+        $resCMSURL = RES_CMS_URL;
+
         return <<<CSS
             .mce-ico.mce-i-far, .mce-ico.mce-i-fas {
                 display: inline-block;
@@ -54,7 +56,7 @@ class cms_html
 
             .mce-ico.mce-i-cmsassetimageleft {
                 display: inline-block;
-                background-image: url({$CONFIG['website']['path']}resources/cms/images/icon-image-left.png);
+                background-image: url({$resCMSURL}images/icon-image-left.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 height: 16px;
@@ -63,7 +65,7 @@ class cms_html
 
             .mce-ico.mce-i-cmsassetimageright {
                 display: inline-block;
-                background-image: url({$CONFIG['website']['path']}resources/cms/images/icon-image-right.png);
+                background-image: url({$resCMSURL}resources/cms/images/icon-image-right.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 height: 16px;
@@ -72,7 +74,7 @@ class cms_html
 
             .mce-ico.mce-i-cmsassetimagecaption {
                 display: inline-block;
-                background-image: url({$CONFIG['website']['path']}resources/cms/images/icon-image-caption.png);
+                background-image: url({$resCMSURL}resources/cms/images/icon-image-caption.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 height: 16px;

@@ -31,7 +31,7 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
                 </div>\
             ';
 
-            arrForms[arrForms.length] = '\
+            /*arrForms[arrForms.length] = '\
                     <div class="form-group">\
                         <label>Title</label>\
                         <input type="text" id="block_picture_title" class="form-control">\
@@ -43,7 +43,7 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
                         <label>Description:</label>\
                         <textarea id="block_picture_description" class="form-control"></textarea>\
                     </div>\
-            ';
+            ';*/
 
             return arrForms.join('');
         },
@@ -90,7 +90,7 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
                         }
                     }
                 ],
-                size: BootstrapDialog.SIZE_WIDE
+                //size: BootstrapDialog.SIZE_WIDE
             }
         );
     }
