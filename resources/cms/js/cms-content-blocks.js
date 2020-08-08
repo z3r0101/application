@@ -1,4 +1,4 @@
-function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
+function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData = null, pAction = null) {
     var arrBlockObj = json_decode(base64_decode(pBlockObj));
 
     var arrBlockRef = [
@@ -69,15 +69,19 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData) {
                                 return false;
                             }
 
-                            if (($('#block_picture_title').val().trim()+$('#block_picture_description').val().trim())=='') {
-                                tinyMCE.activeEditor.insertContent('<img src="'+$('#block_picture').val()+'" style="display: block; float: left; margin-right: 1%; width: 33.3333%">');
-                            } else {
-                                tinyMCE.activeEditor.insertContent('<div class="mceNonEditable" style="display: block; float: left; margin-right: 1%; width: 33.3333%">\
-                                        <img src="'+$('#block_picture').val()+'" style="max-width: 100%">\
-                                        '+($('#block_picture_title').val().trim()!='' ? '<div>'+$('#block_picture_title').val().trim()+'</div>' : '')+'\
-                                        '+($('#block_picture_description').val().trim()!='' ? '<div>'+$('#block_picture_description').val().trim()+'</div>' : '')+'\
+                            if (!pAction) {
+                                if (($('#block_picture_title').val().trim() + $('#block_picture_description').val().trim()) == '') {
+                                    tinyMCE.activeEditor.insertContent('<img src="' + $('#block_picture').val() + '" style="display: block; float: left; margin-right: 1%; width: 33.3333%">');
+                                } else {
+                                    tinyMCE.activeEditor.insertContent('<div class="mceNonEditable" style="display: block; float: left; margin-right: 1%; width: 33.3333%">\
+                                        <img src="' + $('#block_picture').val() + '" style="max-width: 100%">\
+                                        ' + ($('#block_picture_title').val().trim() != '' ? '<div>' + $('#block_picture_title').val().trim() + '</div>' : '') + '\
+                                        ' + ($('#block_picture_description').val().trim() != '' ? '<div>' + $('#block_picture_description').val().trim() + '</div>' : '') + '\
                                      </div>\
                                 ');
+                                }
+                            } else {
+                                pAction();
                             }
                             dialog.close();
                         }

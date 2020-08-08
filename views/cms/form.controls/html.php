@@ -191,7 +191,32 @@ CSS;
                 if ($objBlock['type'] == 'gallery') {
                     $jsCall = 'cmsContentBlockFn(\'' . base64_encode(json_encode($arrControlsHandle)) . '\', null, 0);';
                 } else if ($objBlock['type'] == 'picture') {
-                    $jsCall = 'cmsContentPictureBlock(\'' . base64_encode(json_encode($arrControlsHandle)) . '\', null, 0);';
+
+
+
+                    $jsCall = '
+                        cmsContentPictureBlock(\'' . base64_encode(json_encode($arrControlsHandle)) . '\', null, 0, null,
+                            function () {
+                                '.strval($objBlock->action).'                                
+                            }
+                        );
+                    ';
+                }
+
+                $addMenuItem = '';
+                if (strval($objBlock['context_menu']) == 'true') {
+                    $addMenuItem = '
+                        editor.addMenuItem(\'' . $objBlock['id'] . '\', {
+                            tooltip: \'' . $objBlock['caption'] . '\',
+                            context: \'' . $objBlock['caption'] . '\',
+                            prependToContext: true,
+                            text: \'' . $objBlock['caption'] . '\',
+                            icon: \'' . $objBlock['icon'] . '\',
+                            onclick: function () {
+                                ' . $jsCall . ';
+                            }
+                        });     
+                    ';
                 }
 
                 $arrBlocks[] = '
@@ -204,6 +229,7 @@ CSS;
                         ' . $jsCall . ';
                     }
                 });
+                '.$addMenuItem.'
             ';
             }
         }
