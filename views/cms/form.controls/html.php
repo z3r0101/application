@@ -19,7 +19,8 @@ class cms_html
     public $isRepeaterControl = false;
     public $group_name = "";
 
-    public $vendor_js_path = array("tinymce/4.4.3/js/tinymce/tinymce.min.js", "tinymce/4.4.3/js/tinymce/jquery.tinymce.min.js");
+    public $vendor_js_path = array("tinymce/4.4.3/js/tinymce/tinymce.min.js", "tinymce/4.4.3/js/tinymce/jquery.tinymce.min.js", 'jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js');
+    public $vendor_css_path = 'jquery.cropper/cropper.min.css';
 
     function __construct($controlObj)
     {
