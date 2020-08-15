@@ -10,7 +10,7 @@ function cmsContentPictureBlock(pBlockObj, pObj, pOption, pData = null, pAction 
                 {
                     'form_control_type': 'asset',
                     'id': strID,
-                    'asset_default_dir': '',
+                    'asset_default_dir': arrBlockObj['asset_default_dir'],
                     'accept': '',
                     'img_aspect_ratio': ''
                 }

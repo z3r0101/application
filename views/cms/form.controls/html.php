@@ -97,6 +97,7 @@ CSS;
         $tValue = ($this->data !== NULL) ? $this->data : '';
         $tGroup = (isset($this->controlObj['group'])) ? 'cms-group="'.strval($this->controlObj['group']).'"' : "";
         $tAutoResizeMinHeight = (isset($this->controlObj['auto_resize_min_height'])) ? strval($this->controlObj['auto_resize_min_height']) : 400;
+        $tAssetDefaultDir = (isset($this->controlObj['asset_default_dir'])) ? strval($this->controlObj['asset_default_dir']) : '';
         if ($tGroup!='') {
             if ($this->group_name!=strval($this->controlObj['group'])) {
                 $tGroup .= ' style="display: none"';
@@ -138,7 +139,7 @@ CSS;
         $controlSettings = array(
             'form_control_type'=>'asset',
             'id'=>$tName,
-            'asset_default_dir' => '',
+            'asset_default_dir' => $tAssetDefaultDir,
             'accept' => '.jpg,.jpeg,.png,.gif,.bmp,.tiff',
             'img_aspect_ratio' => ''
         );
@@ -185,15 +186,14 @@ CSS;
                     'type' => strval($objBlock['type']),
                     'caption' => strval($objBlock['caption']),
                     'title' => strval($objBlock['title']),
-                    'controls' => $arrControls
+                    'controls' => $arrControls,
+                    'asset_default_dir' => strval($objBlock['asset_default_dir'])
                 );
 
                 $jsCall = '';
                 if ($objBlock['type'] == 'gallery') {
                     $jsCall = 'cmsContentBlockFn(\'' . base64_encode(json_encode($arrControlsHandle)) . '\', null, 0);';
                 } else if ($objBlock['type'] == 'picture') {
-
-
 
                     $jsCall = '
                         cmsContentPictureBlock(\'' . base64_encode(json_encode($arrControlsHandle)) . '\', null, 0, null,
