@@ -128,11 +128,12 @@ CSS;
             'repeaterId' => $this->repeaterId,
             'asset_default_dir' => $tAssetDefaultDir,
             'accept' => $tAccept,
-            'img_aspect_ratio' => $tAspectRatio
+            'img_aspect_ratio' => $tAspectRatio,
+            'asset_url' => ASSETS_URL
         );
         $strControlSettings = base64_encode(json_encode($controlSettings));
 
-        $tDisplay = ($tValue!='') ? $tValue : 'Upload File';
+        $tDisplay = ($tValue!='') ? ASSETS_URL.$tValue : 'Upload File';
 
         return <<<EOL
             <div class="form-group" {$tGroup} {$tContainerStyle}>

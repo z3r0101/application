@@ -105,6 +105,11 @@ function cmsFnValidateFileName(pFileName) {
     var rg3=/^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
     return rg1.test(pFileName)&&!rg2.test(pFileName)&&!rg3.test(pFileName);
 }
+function cmsFnAssetLocation(pAssetDir = '', pFile = '') {
+    var strRet = '';
+    strRet = pFile.replace(pAssetDir, '');
+    return strRet;
+}
 
 
 var $image = null;
@@ -288,7 +293,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
     pExt = (typeof(pExt) != 'undefined') ? pExt : null;
     pExt2 = (typeof(pExt2) != 'undefined') ? pExt2 : null;
 
-    var cmsControlSettings = json_decode(base64_decode($('#'+pId).attr('cms-control-settings'))); //console.log(cmsControlSettings);
+    var cmsControlSettings = json_decode(base64_decode($('#'+pId).attr('cms-control-settings'))); console.log(cmsControlSettings);
     if (cmsControlSettings['repeaterId']) {
         if (cmsControlSettings['repeaterId']!='') {
             cmsControlSettings['id'] = pId;
@@ -658,6 +663,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                 }
 
                 if (tOpenFile!='') {
+                    tOpenFile = cmsControlSettings['asset_url']+tOpenFile;
+
                     if (tOpenFile.indexOf('http')>=0) {
                         $('#cmsAssetWebURLInput').val(tOpenFile);
 
@@ -738,6 +745,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                 if ($(pExt.selection.getNode()).filter('img').attr('cms-data')) {
                                     if ($(pExt.selection.getNode()).filter('img').attr('cms-data') == '1') {
                                         var img = pExt.selection.getNode();
+                                        var tAssetFile = cmsFnAssetLocation(cmsControlSettings['asset_url'], $('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
                                         tinymce.activeEditor.dom.setAttrib(img, 'src', $('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
                                         tinyMCE.activeEditor.undoManager.add();
                                     }
@@ -747,14 +755,18 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                     tinyMCE.activeEditor.undoManager.add();
                                 }
                             } else if (cmsAssetIsInput) {
-                                $('#' + pId).val($('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
+                                var tAssetFile = cmsFnAssetLocation(cmsControlSettings['asset_url'], $('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
+                                $('#' + pId).val(tAssetFile);
                                 if (typeof(pExt) == 'string') eval(pExt);
                             } else if (cmsAssetIsCustom) {
                                 pExt2($('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
                             } else {
                                 $('#' + pId + '_display').val($('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
                                 eval('' + pId + '_add_file();');
-                                $('#' + pId).val($('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
+
+                                var tAssetFile = cmsFnAssetLocation(cmsControlSettings['asset_url'], $('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path') + '/' + cmsAssetFileInfo['upload_file']);
+                                $('#' + pId).val(tAssetFile);
+
                                 $('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path-ini', $('#cmsAssetUploadBody .cmsAssetUploadSavePath').attr('data-save-path'));
                             }
 
@@ -777,7 +789,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
 
                                     if ($('#cmsAssetUploadBody .cmsAssetUploadImagePreview')[0]) {
                                         var tFuncSaveImage = function () {
-                                            $cmsAssetImage.cropper('getCroppedCanvas').toBlob(
+                                            $cmsAssetImage.cropper('getCroppedCanvas', { imageSmoothingEnabled: false, imageSmoothingQuality: 'high' }).toBlob(
                                                 function (blob) {
                                                     var form_data = new FormData();
                                                     form_data.append('cmsAssetUploadFile', blob);
@@ -838,11 +850,22 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                         }
 
                                         var tArr = cmsControlSettings['img_aspect_ratio'].split(':');
-                                        var tAspectRatio = $cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2); //parseFloat(cmsAssetFileInfo['image_info'][0]/cmsAssetFileInfo['image_info'][1]).toFixed(2);
+                                        var tAspectRatio = ($cmsAssetImage.cropper('getData').width/$cmsAssetImage.cropper('getData').height).toFixed(2); //$cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2); //parseFloat(cmsAssetFileInfo['image_info'][0]/cmsAssetFileInfo['image_info'][1]).toFixed(2);
                                         if (tArr.length == 2) {
-                                            tAspectRatioDefault = parseInt(tArr[0],10) / parseInt(tArr[1],10);
-                                            //console.log(cmsControlSettings['img_aspect_ratio'].split(':'), tAspectRatio, $cmsAssetImage.cropper('getCropBoxData').left);
-                                            if (tAspectRatio != tAspectRatioDefault) {
+                                            tAspectRatioDefault = (parseInt(tArr[0],10) / parseInt(tArr[1],10)).toFixed(2); //tAspectRatioDefault = parseInt(tArr[0],10) / parseInt(tArr[1],10);
+
+                                            if ($cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2) != tAspectRatioDefault) {
+                                                if (!$cmsAssetImage.cropper('getCropBoxData').left) {
+                                                    BootstrapDialog.alert('Please crop the image');
+                                                    cmsAssetDialog.getButton('btn-save').stopSpin();
+                                                    cmsAssetDialog.getButton('btn-save').enable();
+                                                } else {
+                                                    tFuncSaveImage();
+                                                }
+                                            } else {
+                                                tFuncSaveImage();
+                                            }
+                                            /*if (tAspectRatio != tAspectRatioDefault) {
                                                 BootstrapDialog.confirm('The image you want to insert does not match the required aspect ratio. You can crop the image to get the right size.<br><br>Are you sure you want to ignore the image aspect ratio?', function(result){
                                                     if(result) {
                                                         tFuncSaveImage();
@@ -853,7 +876,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                                 });
                                             } else {
                                                 tFuncSaveImage();
-                                            }
+                                            }*/
                                         } else {
                                             tFuncSaveImage();
                                         }
@@ -1103,10 +1126,22 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                             } else if (dialog.getButton('btn-save').html() == 'Insert') {
                                 if ($cmsAssetImage) {
                                     var tArr = cmsControlSettings['img_aspect_ratio'].split(':');
-                                    var tAspectRatio = $cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2); //parseFloat(cmsAssetFileInfo['image_info'][0]/cmsAssetFileInfo['image_info'][1]).toFixed(2);
+                                    var tAspectRatio = ($cmsAssetImage.cropper('getData').width/$cmsAssetImage.cropper('getData').height).toFixed(2); //$cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2); //parseFloat(cmsAssetFileInfo['image_info'][0]/cmsAssetFileInfo['image_info'][1]).toFixed(2);
                                     if (tArr.length == 2) {
-                                        tAspectRatioDefault = parseInt(tArr[0],10) / parseInt(tArr[1],10);
-                                        if (tAspectRatio != tAspectRatioDefault) {
+                                        tAspectRatioDefault = (parseInt(tArr[0],10) / parseInt(tArr[1],10)).toFixed(2); //tAspectRatioDefault = parseInt(tArr[0],10) / parseInt(tArr[1],10);
+
+                                        if ($cmsAssetImage.cropper('getImageData').aspectRatio.toFixed(2) != tAspectRatioDefault) {
+                                            if (!$cmsAssetImage.cropper('getCropBoxData').left) {
+                                                BootstrapDialog.alert('Please crop the image');
+                                                cmsAssetDialog.getButton('btn-save').stopSpin();
+                                                cmsAssetDialog.getButton('btn-save').enable();
+                                            } else {
+                                                tFuncInsert();
+                                            }
+                                        } else {
+                                            tFuncInsert();
+                                        }
+                                        /*if (tAspectRatio != tAspectRatioDefault) {
                                             BootstrapDialog.confirm('The image you want to insert does not match the required aspect ratio. You can crop the image to get the right size.<br><br>Are you sure you want to ignore the image aspect ratio?', function(result){
                                                 if(result) {
                                                     tFuncInsert();
@@ -1114,7 +1149,7 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                             });
                                         } else {
                                             tFuncInsert();
-                                        }
+                                        }*/
                                     } else {
                                         tFuncInsert();
                                     }
