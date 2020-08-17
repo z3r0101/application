@@ -132,7 +132,15 @@ class BaseController {
     }
 
     function loadModel($modelName) {
-        include_once(APPPATH.'models/'.$modelName.'.php');
+        if (file_exists(APPPATH.'models/'.$modelName.'.php')) {
+            include_once(APPPATH . 'models/' . $modelName . '.php');
+        } else if (file_exists(SITEROOTPATH.'www/models/'.$modelName.'.php')) {
+            include_once(SITEROOTPATH . 'www/models/' . $modelName . '.php');
+        } else {
+            print pageError("PHP script not found", "Check if the PHP script located in models directory.");
+            exit;
+        }
+
         $tArr = explode('/', $modelName);
         return new $tArr[count($tArr)-1]();
     }
