@@ -270,6 +270,20 @@ if (isset($_GET["cms-javascript"])) {
                     <div class="col-12">
                         <?php
                         if (isset($self->formLayoutData->body->navs)) {
+                            foreach ($self->formLayoutData->body->navs as $navIndex => $navObj) {
+                                print '<ul class="cms-tabs nav nav-tabs">';
+                                foreach ($navObj->children() as $Index => $Obj) {
+                                    $navId = (isset($Obj["id"])) ? "id=\"" . $Obj["id"] . "\"" : "";
+                                    $navHref = strval($Obj["href"]);
+                                    $navCaption = strval($Obj->asXML());
+                                    $navClass = strval($Obj["class"]);
+                                    $navHref = $self->layoutConfigCode($navHref);
+                                    print '<li class="nav-item"><a href="' . $navHref . '" class="nav-link ' . $navClass . '" ' . $navId . '>' . $navCaption . '</a></li>';
+                                }
+                                print '</ul>';
+                            }
+                        }
+                        /*if (isset($self->formLayoutData->body->navs)) {
                             print '<ul class="cms-tabs nav nav-tabs">';
                             foreach($self->formLayoutData->body->navs->children() as $Index => $Obj) {
                                 $navId = (isset($Obj["id"])) ? "id=\"".$Obj["id"]."\"" : "";
@@ -280,7 +294,7 @@ if (isset($_GET["cms-javascript"])) {
                                 print '<li class="nav-item"><a href="'.$navHref.'" class="nav-link '.$navClass.'" '.$navId.'>'.$navCaption.'</a></li>';
                             }
                             print '</ul>';
-                        }
+                        }*/
                         ?>
                         <div class="row cms-alert-message">
                             <div class="col-12">
@@ -326,15 +340,22 @@ if (isset($_GET["cms-javascript"])) {
                                                     $tCollapseIn = '';
                                             }
 
+                                            $strCaption = '';
+                                            if ($tCaption!='') {
+                                                $strCaption = '
+                                                    <div class="card-header cms-card-main" id="headingOne">
+                                                        <h5 class="mb-0">
+                                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{$tCounter}" aria-expanded="true" aria-controls="collapse-{$tCounter}">
+                                                                '.$tCaption.'
+                                                            </button>
+                                                        </h5>
+                                                    </div>
+                                                ';
+                                            }
+
                                             $arrHTMLOut[] = <<<EOL
                                         <div class="card">
-                                            <div class="card-header cms-card-main" id="headingOne">
-                                                <h5 class="mb-0">
-                                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{$tCounter}" aria-expanded="true" aria-controls="collapse-{$tCounter}">
-                                                        {$tCaption}
-                                                    </button>
-                                                </h5>
-                                            </div>
+                                            {$strCaption}
                                             <div id="collapse-{$tCounter}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                                                 <div class="card-body">
 EOL;
