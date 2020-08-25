@@ -53,7 +53,8 @@ class cms_administrator extends BaseControllerCMS {
                         WHERE
                            CMS_Users_Website = '{$CONFIG['website']['domain']}' AND
                            CMS_Users_Status = 1 AND  
-                           CMS_Users_Type >= 0
+                           CMS_Users_Type >= 0 AND 
+                           CMS_Users_Super_Admin = 0
                     "
                 );
 
@@ -98,9 +99,18 @@ class cms_administrator extends BaseControllerCMS {
                 }
 
                 if (isset($this->requestSlug[0])) {
-                    if (CMS_Users_Name != 'dev') {
-                        #$this->deleteTagById("passwordOpener");
-                        #$this->attributeById("CMS_Users_Password", "container-obj-class", "");
+                    if (CMS_Users_Super_Admin == 0) {
+                        $this->deleteTagById("passwordOpener");
+                        $this->attributeById("CMS_Users_Password", "container-obj-class", "");
+
+                        $arrData = $this->dbClass->select("SELECT * FROM cms_users WHERE CMS_Users_Id = ".intval($this->requestSlug[0]));
+                        if (count($arrData) == 0) {
+                            exit;
+                        }
+                        if ($arrData[0]['CMS_Users_Super_Admin'] == 1) {
+                            header("location: {$CONFIG['website']['path']}cms/administrator/users/list");
+                            exit;
+                        }
                     }
                 }
 

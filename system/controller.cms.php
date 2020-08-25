@@ -158,6 +158,7 @@ class BaseControllerCMS extends BaseController {
                                     cms_users.CMS_Users_Name_Last, 
                                     cms_users.CMS_Users_Name, 
                                     cms_users.CMS_Users_Type, 
+                                    cms_users.CMS_Users_Super_Admin,
                                     IFNULL(cms_users.CMS_Users_Date_LastLogin, '') AS CMS_Users_Date_LastLogin,
                                     cms_users.CMS_Users_Access,
                                     IFNULL(CMS_Users_Date_Login, '') AS CMS_Users_Date_Login,
@@ -207,6 +208,7 @@ class BaseControllerCMS extends BaseController {
                                     if (!defined("CMS_Users_Id")) define('CMS_Users_Id', $arrData[0]['CMS_Users_Id']);
                                     if (!defined("CMS_Users_FullName")) define('CMS_Users_FullName', $arrData[0]['CMS_Users_Name_First'] . " " . $arrData[0]['CMS_Users_Name_Last']);
                                     if (!defined("CMS_Users_FullNameL")) define('CMS_Users_FullNameL', $arrData[0]['CMS_Users_Name_Last'] . ", " . $arrData[0]['CMS_Users_Name_First']);
+                                    if (!defined("CMS_Users_Super_Admin")) define('CMS_Users_Super_Admin', $arrData[0]['CMS_Users_Super_Admin']);
                                     if (!defined("CMS_Users_Type")) define('CMS_Users_Type', $arrData[0]['CMS_Users_Type']);
                                     if (!defined("CMS_Users_Name")) define('CMS_Users_Name', $arrData[0]['CMS_Users_Name']);
                                     if (!defined("CMS_Users_SessionId")) define('CMS_Users_SessionId', $cmsSession);
