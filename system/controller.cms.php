@@ -1142,7 +1142,7 @@ class BaseControllerCMS extends BaseController {
                                 }
 
                                 #REPEATER
-                                foreach($cmsPost['repeater'] as $repeaterIndex => $repeaterObj) {
+                                /*foreach($cmsPost['repeater'] as $repeaterIndex => $repeaterObj) {
 
                                     $repeaterProperties = json_decode(base64_decode($repeaterObj['details']['properties']), true);
 
@@ -1261,13 +1261,13 @@ class BaseControllerCMS extends BaseController {
                                             if (count($repeaterItem) > 0) {
                                                 $arrData = $db->select("SELECT * FROM ".$repeaterProperties["table_name"]." WHERE ".$repeaterProperties["table_primary_field"]."=".$repeaterDataId);
                                                 if (count($arrData) > 0) {
-                                                    /*$jsonFile = json_decode($arrData[0]['Content_Block_Image'], true);
-                                                    $dirBasePath = $jsonFile['base_path'];
-                                                    $dirBasePath = SITEROOTPATH.$CONFIG['cms']['directory_upload_name']."/".$dirBasePath."/".$repeaterDataId;
-                                                    if (is_dir($dirBasePath)) {
-                                                        #print $dirBasePath;
-                                                        cmsTools::rmDir($dirBasePath);
-                                                    }*/
+                                                    #$jsonFile = json_decode($arrData[0]['Content_Block_Image'], true);
+                                                    #$dirBasePath = $jsonFile['base_path'];
+                                                    #$dirBasePath = SITEROOTPATH.$CONFIG['cms']['directory_upload_name']."/".$dirBasePath."/".$repeaterDataId;
+                                                    #if (is_dir($dirBasePath)) {
+                                                    #    #print $dirBasePath;
+                                                    #    cmsTools::rmDir($dirBasePath);
+                                                    #}
                                                 }
                                             }
                                             #print $repeaterProperties['table_name'].' = '.$repeaterDataId."\n";
@@ -1281,7 +1281,7 @@ class BaseControllerCMS extends BaseController {
                                             $db->delete($repeaterProperties['table_name'], intval($repeaterDataId));
                                         }
                                     }
-                                }
+                                }*/
 
                                 #DATATABLE
                                 foreach($cmsPost['datatable'] as $datatableIndex => $datatableObj) {
