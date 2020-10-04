@@ -360,11 +360,6 @@ if (isset($_GET["cms-javascript"])) {
 EOL;
 
                                             foreach($Panel as $Key => $Control) {
-                                                #$arrHTMLOut[] = $Control['type'];
-                                                #$arrHTMLOut[] =  '<pre>';
-                                                #$arrHTMLOut[] =  print_r($Control, true);
-                                                #$arrHTMLOut[] =  '</pre><hr>';
-
                                                 if ($Key == 'control') {
                                                     $tVisible = (isset($Control['visible'])) ? $Control['visible'] : 'true';
                                                     if ($tVisible == 'true') {
@@ -379,8 +374,6 @@ EOL;
                                                                     if (isset($self->requestSlug[0])) $controlObj->postId($self->requestSlug[0]);
                                                                 }
 
-                                                                //print_r($self->postFields[0]);
-                                                                //print_r($self->postFields[0][strval($Control['id'])]); print '<hr>';
                                                                 if (isset($self->postFields[0][strval($Control['id'])])) {
                                                                     $controlObj->value($self->postFields[0][strval($Control['id'])]);
                                                                 }
