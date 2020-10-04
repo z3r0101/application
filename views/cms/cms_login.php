@@ -32,7 +32,7 @@ if (isset($CONFIG['cms']['sso'])) {
 <html lang="en">
 <head>
     @include('cms.cms_inc_head')
-    <title>{{$CONFIG['cms']['title']}}</title>
+    <title>{!!$CONFIG['cms']['title']!!}</title>
 
     @if ($hasGoogleCaptcha)
     <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=recaptchaLoaded" async defer></script>
@@ -66,7 +66,7 @@ if (isset($CONFIG['cms']['sso'])) {
             $('.cms-reset-form').hide();
             $(pObj).attr('cms-data', 1);
             $(pObj).html('Reset password');
-            $('.cms-form-title').html(' {{$CONFIG['cms']['title']}} : Log in');
+            $('.cms-form-title').html(' {!!$CONFIG['cms']['title']!!} : Log in');
             $('.btn-primary').html('Login');
             $('#cms-login-option').val(0);
         } if (tOpt == 1) {
@@ -74,7 +74,7 @@ if (isset($CONFIG['cms']['sso'])) {
             $('.cms-reset-form').show();
             $(pObj).attr('cms-data', 0);
             $(pObj).html('Back to login');
-            $('.cms-form-title').html(' {{$CONFIG['cms']['title']}} : Reset password');
+            $('.cms-form-title').html(' {!!$CONFIG['cms']['title']!!} : Reset password');
             $('.btn-primary').html('Reset');
             $('#cms-login-option').val(1);
         }
@@ -82,7 +82,7 @@ if (isset($CONFIG['cms']['sso'])) {
 
     function recaptchaLoaded() {
         BootstrapDialog.show({
-            title: '<i class="fas fa-user"></i><span class="cms-form-title"> {{$CONFIG['cms']['title']}} : Log in</span>',
+            title: '<i class="fas fa-user"></i><span class="cms-form-title"> {!!$CONFIG['cms']['title']!!} : Log in</span>',
             message: '\
             <div class="row cms-alert-message">\
                 <div class="col-12">\

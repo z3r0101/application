@@ -39,7 +39,7 @@ $error = array();
 
     <link href="{{RES_CMS_URL}}css/list.css" rel="stylesheet">
 
-    <title>{{$CONFIG['cms']['title']}}</title>
+    <title>{!!$CONFIG['cms']['title']!!}</title>
 
     <?php
     if (isset($self->formLayoutData->header->link)) {

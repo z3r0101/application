@@ -130,8 +130,18 @@ CSS;
             'content_css' => VENDORS_URL.'fontawesome/4.6.3/css/font-awesome.min.css'.(($tContentCSS!='') ? ', '.$tContentCSS : ''),
             'relative_urls' => false,
             'remove_script_host' => false,
-            'convert_urls' => false
+            'convert_urls' => false,
+
+            'paste_as_text' => true
         );
+
+        $arrSettings = [];
+        if (is_object($this->controlObj->settings->item)) {
+            foreach ($this->controlObj->settings->item as $objItem) {
+                $arrTinyMCESettings[strval($objItem['name'])] = strval($objItem);
+            }
+        }
+
         if ($toolbar2!='') $arrTinyMCESettings['toolbar2'] = $toolbar2;
 
         $strTinyMCESettings = base64_encode(json_encode($arrTinyMCESettings));

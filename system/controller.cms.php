@@ -348,6 +348,8 @@ class BaseControllerCMS extends BaseController {
         $strRet = str_replace('[CONFIG_CMS_DIRECTORY_NAME]', $CONFIG['cms']['route_name'], $strRet);
         $strRet = str_replace('[RES_URL]', RES_URL, $strRet);
 
+        $strRet = preg_replace_callback('/\[\?(.*)\]/', function ($matches) { return (isset($_GET[$matches[1]]) ? $_GET[$matches[1]] : ''); }, $strRet);
+
         return $strRet;
     }
 

@@ -5,7 +5,7 @@ $dbConnection = new cmsDatabaseClass();
 <html lang="en">
 <head>
     @include('cms.cms_inc_head')
-    <title>{{$CONFIG['cms']['title']}}</title>
+    <title>{!!$CONFIG['cms']['title']!!}</title>
     <style type="text/css">
     </style>
 </head>
@@ -16,7 +16,7 @@ $dbConnection = new cmsDatabaseClass();
 
     function recaptchaLoaded() {
         BootstrapDialog.show({
-            title: '<i class="fas fa-user"></i><span class="cms-form-title"> {{$CONFIG['cms']['title']}} : Password Reset</span>',
+            title: '<i class="fas fa-user"></i><span class="cms-form-title"> {!!$CONFIG['cms']['title']!!} : Password Reset</span>',
             @if (!isset($arrValidation["error"]))
             message: '\
             <div class="row cms-alert-message">\

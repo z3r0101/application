@@ -56,7 +56,7 @@ function cmsFnListActionDelete(pObj) {
     BootstrapDialog.confirm(
         {
             type: BootstrapDialog.TYPE_WARNING,
-            title: '<?=$CONFIG['cms']['title']?>',
+            title: `<?=$CONFIG['cms']['title']?>`,
             message: 'You are about to delete a record. This cannot be undone. Are you sure?',
             callback: function (result) {
                 if (result) {
@@ -167,7 +167,7 @@ $('.cms-button.delete').on('click',
             BootstrapDialog.alert(
                 {
                     type: BootstrapDialog.TYPE_WARNING,
-                    title: '<?=$CONFIG['cms']['title']?>',
+                    title: `<?=$CONFIG['cms']['title']?>`,
                     message: 'No selected data.'
                 }
             );
@@ -198,7 +198,7 @@ $('.cms-button.delete').on('click',
                     BootstrapDialog.alert(
                         {
                             type: BootstrapDialog.TYPE_WARNING,
-                            title: '<?=$CONFIG['cms']['title']?>',
+                            title: `<?=$CONFIG['cms']['title']?>`,
                             message: 'You must confirm deletion.'
                         }
                     );
@@ -262,7 +262,7 @@ $('.cms-button.post').on('click',
             BootstrapDialog.alert(
                 {
                     type: BootstrapDialog.TYPE_WARNING,
-                    title: '<?=$CONFIG['cms']['title']?>',
+                    title: `<?=$CONFIG['cms']['title']?>`,
                     message: 'No selected data.'
                 }
             );

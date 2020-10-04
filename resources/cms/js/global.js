@@ -315,7 +315,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
         'doc': {type: 'document', name: 'Word Doc File', icon: 'fa fa-file-word-o'},
         'docx': {type: 'document', name: 'Word Doc File', icon: 'fa fa-file-word-o'},
         'ppt': {type: 'document', name: 'Power Point File', icon: 'fa-file-powerpoint-o'},
-        'pptx': {type: 'document', name: 'Power Point File', icon: 'fa-file-powerpoint-o'}
+        'pptx': {type: 'document', name: 'Power Point File', icon: 'fa-file-powerpoint-o'},
+        'mp4': {type: 'document', name: 'MP4', icon: 'fas fa-file-video'}
     }
 
     var cmsAssetUploadMimeType = {

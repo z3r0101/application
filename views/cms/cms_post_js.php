@@ -151,7 +151,7 @@ header("Content-Type: text/javascript")
 
         tDialog = BootstrapDialog.show({
             type: BootstrapDialog.TYPE_INFO,
-            title: '<?=$CONFIG['cms']['title']?>',
+            title: `<?=$CONFIG['cms']['title']?>`,
             message: pOnSaveMessage,
             closable: false
         });

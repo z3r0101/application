@@ -164,7 +164,7 @@ if (isset($_GET["cms-javascript"])) {
     }
     ?>
 
-    <title>{{$CONFIG['cms']['title']}}</title>
+    <title>{!!$CONFIG['cms']['title']!!}</title>
 
     <?php
     if (isset($self->formLayoutData->header->link)) {
@@ -329,23 +329,22 @@ if (isset($_GET["cms-javascript"])) {
                                                 $tCaption = $Panel["caption"];
                                             }
 
-                                            $tCollapseIn = ($tCounter == 0) ? ' in' : '';
-                                            $tHeading = ($tCounter == 0) ? ' on' : '';
+                                            $tCollapseIn = ($tCounter == 0) ? 'show' : 'hide';
 
                                             if (isset($Panel["expanded"])) {
                                                 $tExpanded = (strval($Panel["expanded"]) == 'true') ? true : false;
                                                 if ($tExpanded)
-                                                    $tCollapseIn = ' in';
+                                                    $tCollapseIn = 'show';
                                                 else
-                                                    $tCollapseIn = '';
+                                                    $tCollapseIn = 'hide';
                                             }
 
                                             $strCaption = '';
                                             if ($tCaption!='') {
                                                 $strCaption = '
-                                                    <div class="card-header cms-card-main" id="headingOne">
+                                                    <div class="card-header cms-card-main" id="heading_'.$tCounter.'">
                                                         <h5 class="mb-0">
-                                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{$tCounter}" aria-expanded="true" aria-controls="collapse-{$tCounter}">
+                                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-'.$tCounter.'" aria-expanded="true" aria-controls="collapse-'.$tCounter.'">
                                                                 '.$tCaption.'
                                                             </button>
                                                         </h5>
@@ -356,7 +355,7 @@ if (isset($_GET["cms-javascript"])) {
                                             $arrHTMLOut[] = <<<EOL
                                         <div class="card">
                                             {$strCaption}
-                                            <div id="collapse-{$tCounter}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                            <div id="collapse-{$tCounter}" class="collapse {$tCollapseIn}" aria-labelledby="heading_{$tCounter}" data-parent="#accordion">
                                                 <div class="card-body">
 EOL;
 
