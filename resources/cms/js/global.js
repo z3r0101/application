@@ -388,6 +388,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
     };
 
     var cmsAssetLoadImage = function (pImageURL, pFileName, pFileType) {
+        $('#cmsAssetUploadBody .cmsAssetUploadContainer').empty();
+        
         $('#cmsAssetUploadBody .cmsAssetUploadContainer').append('<img class="cmsAssetUploadImage" xsrc="'+pImageURL+'" style="position: absolute; top: -10000px; left: -10000px;">');
         $('#cmsAssetUploadBody .cmsAssetUploadImage').unbind('load');
         $('#cmsAssetUploadBody .cmsAssetUploadImage').on('load',
