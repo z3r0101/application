@@ -10,7 +10,7 @@ class cms_assets extends BaseControllerCMS
     private $assetPath = '';
 
     public $arrAllowedExtensions = [
-        'pdf','doc','docx','xls','xlsx','xlsm','ppt','pptx','jpg','jpeg','png','gif','bmp','tiff'
+        'pdf','doc','docx','xls','xlsx','xlsm','ppt','pptx','jpg','jpeg','png','gif','bmp','tiff','svg'
     ];
 
     public static $file_prefix = ['filename', '.', 'extension']; #['filename', '.', '[date("Y-d-m")]', '.', 'extension'];
