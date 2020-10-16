@@ -68,41 +68,6 @@ header("Content-Type: text/javascript")
             }
         );
 
-        $('div.repeater-container:parent').each(
-            function (pIndex, pObj) {
-                var dataRepeaterId = $(pObj).attr('cms-repeater-id');
-
-                cmsPost['repeater'][dataRepeaterId] = {'data': [], 'details': {}, 'deleted': []};
-
-                cmsPost['repeater'][dataRepeaterId]['details'] = {
-                    'primaryId': {
-                        'name': $('div.repeater-container').parents('#cms-content').find('.cms-form-primary-id').first().attr('name'),
-                        'value': $('div.repeater-container').parents('#cms-content').find('.cms-form-primary-id').first().val()
-                    },
-                    'properties': $(pObj).find('#'+dataRepeaterId).attr('cms-repeater-properties')
-                }
-
-                $(pObj).find('.repeater-row').each(
-                    function (pRowIndex, pObj) {
-                        cmsPost['repeater'][dataRepeaterId]['data'][pRowIndex] = {}
-
-                        $(pObj).find('.cms-form-control-repeater').each(
-                            function (pControlIndex, pObj) {
-                                var repeaterControlVal = $(pObj).val();
-                                if ($(pObj).hasClass('cms-form-primary-id')) {
-                                    repeaterControlVal = parseInt(repeaterControlVal,10);
-                                }
-                                cmsPost['repeater'][dataRepeaterId]['data'][pRowIndex][$(pObj).attr('name')] = repeaterControlVal;
-                            }
-                        );
-                    }
-                );
-
-                cmsPost['repeater'][dataRepeaterId]['deleted'] = CMS_REPEATER_DELETE[dataRepeaterId];
-
-            }
-        );
-
         return cmsPost;
     }
 

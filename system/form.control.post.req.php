@@ -1,4 +1,5 @@
 <?php
+/* UNDER DEVELOPMENT */
 
 if (isset($_GET['CMS_REQ'])) {
     $_REQUEST['CMS_POST_REQ'] = $_GET['CMS_REQ'];

@@ -27,8 +27,8 @@ class cms_upload
     public $isRepeaterControl = false;
     public $group_name = "";
 
-    public $vendor_js_path = array('jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js');
-    public $vendor_css_path = 'jquery.cropper/cropper.min.css';
+    public $vendor_js_path = array('jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js', '[RES_CMS_URL]js/cms.ctrl.upload.js');
+    public $vendor_css_path = array('jquery.cropper/cropper.min.css', '[RES_CMS_URL]css/cms.ctrl.asset.css');
 
     function __construct($controlObj)
     {

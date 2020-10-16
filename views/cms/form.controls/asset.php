@@ -20,8 +20,8 @@ class cms_asset
     public $isRepeaterControl = false;
     public $group_name = "";
 
-    public $vendor_js_path = array('jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js');
-    public $vendor_css_path = 'jquery.cropper/cropper.min.css';
+    public $vendor_js_path = array('jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js', '[RES_CMS_URL]js/cms.ctrl.asset.js');
+    public $vendor_css_path = array('jquery.cropper/cropper.min.css', '[RES_CMS_URL]css/cms.ctrl.asset.css');
 
     function __construct($controlObj)
     {
@@ -36,68 +36,6 @@ class cms_asset
 
     function value($data) {
         $this->data = $data;
-    }
-
-    function css() {
-        return <<<CSS
-                .cmsAssetTable {
-                  border-collapse: collapse;
-                  width: 100%;
-                  margin-bottom: 0px;
-                }
-
-                .cmsAssetTable td, .cmsAssetTable th {
-                  border: 1px solid #dddddd;
-                  text-align: left;
-                  padding: 8px;
-                }
-
-                .cmsAssetTable thead tr {
-                  background-color: #f0f0f0;
-                }
-
-                .cmsAssetTable tr:nth-child(even) {
-                  background-color: #f1f1f1;
-                }
-
-                #cmsAssetBrowseFolders {
-                    display: inline-block;
-                    width: 100%;
-                    height: 300px;
-                    min-height: 300px;
-                    border: 1px solid #999;
-                    overflow-x: auto;
-                }
-
-                #cmsAssetBrowseFolders .dvFoldersLoading {
-                    position: absolute;
-                    width: 140px;
-                    height: 25px;
-                    text-align: center;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    margin: auto;
-                    display: none;
-                }
-
-                #cmsAssetBrowseFolders .dvRowFolder {
-                    display: inline-block;
-                    width: 100%;
-                    padding: 5px;
-                    border-bottom: 1px #c0c0c0 solid;
-                    cursor: pointer;
-                }
-
-                #cmsAssetBrowseFolders .dvRowFolder:nth-child(n+3):last-child {
-                    border-bottom: none;
-                }
-
-                #cmsAssetUploadBody .cmsAssetUploadToolbar .btn:focus {
-                  outline: none;
-                }
-CSS;
     }
 
     function render() {

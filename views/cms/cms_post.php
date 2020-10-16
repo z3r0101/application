@@ -87,47 +87,6 @@ if (isset($_GET["cms-javascript"])) {
                                     }
                                 }
                             }
-                        } else if ($Key == 'repeater') {
-                            foreach($Control as $controlKey => $controlItem) {
-                                if ($controlKey == 'control') {
-                                    $formControlsPath = APPPATH.'views/cms/form.controls/'.$controlItem['type'].'.php';
-                                    if (file_exists($formControlsPath)) {
-                                        include_once($formControlsPath);
-                                        $classControlName = "cms_{$controlItem['type']}";
-                                        if (class_exists($classControlName)) {
-                                            $controlObj = new $classControlName($controlItem);
-                                            if (isset($controlObj->vendor_js_path)) {
-                                                if (is_string($controlObj->vendor_js_path)) {
-                                                    if ($controlObj->vendor_js_path!='')
-                                                        $arrVendorJS[] = $controlObj->vendor_js_path;
-                                                } else {
-                                                    foreach($controlObj->vendor_js_path as $subIndex => $subData) {
-                                                        if ($subData!='')
-                                                            $arrVendorJS[] = $subData;
-                                                    }
-                                                }
-                                            }
-                                            if (isset($controlObj->vendor_css_path)) {
-                                                if (is_string($controlObj->vendor_css_path)) {
-                                                    if ($controlObj->vendor_css_path!='')
-                                                        $arrVendorCSS[] = $controlObj->vendor_css_path;
-                                                } else {
-                                                    foreach($controlObj->vendor_css_path as $subIndex => $subData) {
-                                                        if ($subData!='')
-                                                            $arrVendorCSS[] = $subData;
-                                                    }
-                                                }
-                                            }
-                                            if (isset($controlObj->control_style)) {
-                                                $arrControlStyle[$Control['type']] = $controlObj->control_style;
-                                            }
-                                            if (isset($controlObj->control_js)) {
-                                                $arrControlJS[$Control['type']] = $controlObj->control_js;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 }
@@ -138,12 +97,22 @@ if (isset($_GET["cms-javascript"])) {
     }
     if (count($arrVendorCSS)>0) {
         foreach($arrVendorCSS as $Index => $Data) {
-            print '<link rel="stylesheet" href="'.VENDORS_URL.$Data.'">';
+            $linkCSS = '<link rel="stylesheet" href="' . VENDORS_URL . $Data . '" />';
+            preg_match('/\[RES_CMS_URL\]/i', $Data, $matches);
+            if (isset($matches[0])) {
+                $linkCSS = '<link rel="stylesheet" href="' . str_replace('[RES_CMS_URL]', RES_CMS_URL, $Data) . '" />';
+            }
+            print $linkCSS;
         }
     }
     if (count($arrVendorJS)>0) {
         foreach($arrVendorJS as $Index => $Data) {
-            print '<script src="'.VENDORS_URL.$Data.'"></script>';
+            $script = '<script src="'.VENDORS_URL.$Data.'"></script>';
+            preg_match('/\[RES_CMS_URL\]/i', $Data, $matches);
+            if (isset($matches[0])) {
+                $script = '<script src="'.str_replace('[RES_CMS_URL]', RES_CMS_URL, $Data).'"></script>';
+            }
+            print $script;
         }
     }
 
@@ -233,8 +202,6 @@ if (isset($_GET["cms-javascript"])) {
                                             }
 
                                         }
-                                } else if ($Key == 'repeater') {
-
                                 }
                             }
                         }
@@ -380,17 +347,6 @@ EOL;
                                                                 $arrHTMLOut[] = $controlObj->render();
                                                             }
 
-                                                        }
-                                                    }
-                                                } else if ($Key == 'repeater') {
-                                                    $formControlsPath = APPPATH.'views/cms/form.controls/repeater.php';
-                                                    if (file_exists($formControlsPath)) {
-                                                        include_once($formControlsPath);
-                                                        $classControlName = "cms_repeater";
-                                                        if (class_exists($classControlName)) {
-                                                            $controlObj = new $classControlName($Control);
-                                                            $controlObj->postRepeaterFields = $self->postRepeaterFields;
-                                                            $arrHTMLOut[] = $controlObj->render();
                                                         }
                                                     }
                                                 } else if ($Key == 'dom') {

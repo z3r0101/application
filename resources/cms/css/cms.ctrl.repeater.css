@@ -1,0 +1,33 @@
+.repeater-item {
+    width: 100%;
+    border: 1px #ced4da solid;
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    min-height: 2.5rem;
+    background-color: #fff;
+}
+.repeater-item:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+.repeater-sort-container {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.repeater-sort-container li {
+    margin: 0 3px 3px 3px;
+    padding: 0.4em;
+    padding-left: 1.5em;
+    font-size: 1em;
+}
+.repeater-sort-item {
+    background: #ffffff;
+    border: 1px solid #999;
+    color: #333333;
+}
+.repeater-sort-item:nth-child(even) {
+    background-color: #f0f0f0;
+}
