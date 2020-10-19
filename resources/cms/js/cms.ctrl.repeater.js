@@ -284,7 +284,7 @@ function cmsFnCtrlRepeater_Update(pCtrlId, pObj) {
     }
 
     if (arrData[dataIndex]) {
-        if ($(pObj).val()) {
+        if ($(pObj)[0]) {
             arrData[dataIndex][$(pObj).attr('data-ctrl-name')] = $(pObj).val().trim();
         }
     }
