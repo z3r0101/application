@@ -133,12 +133,29 @@ CSS;
             'convert_urls' => false,
 
             'paste_as_text' => true
+
+            /*
+            paste_preprocess => 'function(pl, o) {
+                            console.log('paste_preprocess', pl, o.content);
+            }',
+            paste_postprocess => 'function(pl, o) {
+                            console.log('paste_preprocess', pl, o.content);
+            }',
+            */
         );
 
         $arrSettings = [];
         if (is_object($this->controlObj->settings->item)) {
             foreach ($this->controlObj->settings->item as $objItem) {
-                $arrTinyMCESettings[strval($objItem['name'])] = strval($objItem);
+
+                $tVal = strval($objItem);
+                if ($tVal == 'true') {
+                    $tVal = true;
+                } else if ($tVal == 'false') {
+                    $tVal = false;
+                }
+
+                $arrTinyMCESettings[strval($objItem['name'])] = $tVal;
             }
         }
 
@@ -255,6 +272,13 @@ CSS;
             </div>
             <script>
                 var tinyMCESettings = JSON.parse(base64_decode($('#{$tId}').attr('cms-tinymce-settings')));
+                
+                for (const [key, value] of Object.entries(tinyMCESettings)) {
+                    if (value.toString().indexOf('function(') >= 0 || value.toString().indexOf('function (') >= 0) {
+                        eval('tinyMCESettings["'+key+'"] = '+value);
+                    }
+                }
+                
                 tinyMCESettings['setup'] = function (editor) {
                     {$strSetup}
                     

@@ -75,7 +75,7 @@ class cms_code
                     function (e) {
                         CMS_CONTROLS["{$tId}"] = t{$tId}.getValue();
                     }
-                )
+                );
             </script>
 EOL;
     }

@@ -272,17 +272,6 @@ header("Content-Type: text/javascript")
 
                         }
 
-                        $.each(retData['dataRepeater'],
-                            function (pRepeaterName, pRepeaterObj) {
-                                $.each(pRepeaterObj,
-                                    function (pRepeaterIndex, pRepeaterValue) {
-                                        console.log(pRepeaterName + ': '+pRepeaterIndex+'='+pRepeaterValue);
-                                        $('#'+pRepeaterName+' .cms-form-primary-id:eq('+pRepeaterIndex+')').val(pRepeaterValue);
-                                    }
-                                );
-                            }
-                        );
-
                         $.event.trigger({
                             type: "CMS_POST_SAVED",
                             data: retData,

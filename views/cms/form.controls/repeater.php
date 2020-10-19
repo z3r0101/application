@@ -35,6 +35,12 @@
  *                      }
  *  value               set value
  *
+ *  FOR CUSTOM CONTROL
+ *  control_block       HTML content
+ *  control_initialize  Initialize custom control - function (pCtrlId, pData, pIndex)
+ *  control_sort_render Sort caption display
+ *  control_sort_update Trigger this event when sort order - function (pObj, pIndex) {
+ *
  * SAMPLE CONTROL:
  *
                <control type="repeater" id="carousel_data" caption="Carousel Images">
