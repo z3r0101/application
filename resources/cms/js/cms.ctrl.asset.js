@@ -508,7 +508,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
 
                                     if ($('#cmsAssetUploadBody .cmsAssetUploadImagePreview')[0]) {
                                         var tFuncSaveImage = function () {
-                                            $cmsAssetImage.cropper('getCroppedCanvas', { imageSmoothingEnabled: false, imageSmoothingQuality: 'high' }).toBlob(
+                                            //imageSmoothingEnabled: false, imageSmoothingQuality: 'high'
+                                            $cmsAssetImage.cropper('getCroppedCanvas', {}).toBlob(
                                                 function (blob) {
                                                     var form_data = new FormData();
                                                     form_data.append('cmsAssetUploadFile', blob);

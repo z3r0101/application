@@ -20,8 +20,8 @@ class cms_asset
     public $isRepeaterControl = false;
     public $group_name = "";
 
-    public $vendor_js_path = array('jquery.cropper/cropper.js', 'jquery.cropper/jquery-cropper.js', '[RES_CMS_URL]js/cms.ctrl.asset.js');
-    public $vendor_css_path = array('jquery.cropper/cropper.min.css', '[RES_CMS_URL]css/cms.ctrl.asset.css');
+    public $vendor_js_path = array('jquery.cropper/1.0.1/cropper.js', 'jquery.cropper/1.0.1/jquery-cropper.js', '[RES_CMS_URL]js/cms.ctrl.asset.js');
+    public $vendor_css_path = array('jquery.cropper/1.0.1/cropper.min.css', '[RES_CMS_URL]css/cms.ctrl.asset.css');
 
     function __construct($controlObj)
     {
