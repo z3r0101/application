@@ -135,6 +135,7 @@ function cmsFnCtrlRepeater_Render(pCtrlId, pData, pIndex) {
 
                 arrTinyMCESettings['setup'] = function (editor) {
                     editor.on('blur', function (e) {
+                        $(arrTinyMCESettings['selector']).val(editor.getContent());
                         cmsFnCtrlRepeater_Update(pCtrlId, $(arrTinyMCESettings['selector'])[0]);
                     });
                 };

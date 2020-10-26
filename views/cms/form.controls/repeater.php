@@ -150,7 +150,7 @@ class cms_repeater
 
         return <<<EOL
    
-                <div id="{$tId}_Ctrl" class="mb-5" {$tContainerStyle} data-base64="{$ctrParamDataBase64}" data-empty-insert="{$ctrParamDataEmptyInsert}" data-asset-url="{$strAssetsURL}" data-ctrl-target="{$tId}" data-ctrl-row-max="{$dataCtrlRowMax}">
+                <div id="{$tId}_Ctrl" class="mb-3" {$tContainerStyle} data-base64="{$ctrParamDataBase64}" data-empty-insert="{$ctrParamDataEmptyInsert}" data-asset-url="{$strAssetsURL}" data-ctrl-target="{$tId}" data-ctrl-row-max="{$dataCtrlRowMax}">
                     <label><strong>{$tCaption}</strong></label>
                     <div class="repeater-container position-relative w-100" data-button-remove-hide="{$ctrlParamButtonRemoveHide}">
                     </div>

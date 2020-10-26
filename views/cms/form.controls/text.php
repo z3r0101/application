@@ -64,6 +64,7 @@ class cms_text
         }
 
         $tInputType = (isset($this->controlObj['input-type'])) ? $this->controlObj['input-type'] : 'text';
+        $tInputDateClear = (isset($this->controlObj['input-date-clear'])) ? ($this->controlObj['input-date-clear'] == 'true' ? true : false) : false;
 
         $strHTMLOutLeft = "";
         $strHTMLOutRight = "";
@@ -82,12 +83,26 @@ class cms_text
 
         $tStyle = (isset($this->controlObj['style'])) ? 'style="'.$this->controlObj['style'].'""' : '';
 
+        $inputControl = "<input type=\"{$tInputType}\" class=\"form-control {$tClass} {$tControlStyle}\" id=\"{$tId}\" name=\"{$tName}\" {$tPlaceHolder} {$tReadonly} {$tStyle}>";
+        if ($tInputDateClear && $tInputType == 'date') {
+            $inputControl = " 
+                <div class=\"input-group mb-3\">
+                    <div class=\"input-group-prepend\">
+                        <span class=\"input-group-text\" style=\"cursor: pointer\" id=\"{$tId}_group\" onclick=\"$('#{$tId}').attr('type', 'text'); $('#{$tId}').val(''); $('#{$tId}').attr('type', 'date');\"><i class=\"far fa-calendar-times\"> </i></span>
+                    </div>
+                    <input type=\"{$tInputType}\" class=\"form-control {$tClass} {$tControlStyle}\" id=\"{$tId}\" name=\"{$tName}\" aria-describedby=\"{$tId}_group\" {$tPlaceHolder} {$tReadonly} {$tStyle}>
+                </div>        
+            ";
+        }
+
+
+
         return <<<EOL
             <div class="form-group" {$tGroup} {$tContainerStyle}>
                 {$tCaption}
                 <div {$tContainerObjClass} {$tContainerObjStyle}>
                 {$strHTMLOutLeft}
-                <input type="{$tInputType}" class="form-control {$tClass} {$tControlStyle}" id="{$tId}" name="{$tName}" {$tPlaceHolder} {$tReadonly} {$tStyle}>
+                {$inputControl}
                 {$strHTMLOutRight}
                 </div>
             </div>
