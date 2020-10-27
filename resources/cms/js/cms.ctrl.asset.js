@@ -509,7 +509,29 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                     if ($('#cmsAssetUploadBody .cmsAssetUploadImagePreview')[0]) {
                                         var tFuncSaveImage = function () {
                                             //imageSmoothingEnabled: false, imageSmoothingQuality: 'high'
-                                            $cmsAssetImage.cropper('getCroppedCanvas', {}).toBlob(
+                                            var isOdd = function (num) { return num % 2;}
+                                            var arrDataImg = $cmsAssetImage.cropper('getImageData');
+                                            console.log(arrDataImg);
+                                            console.log((isOdd(arrDataImg.naturalWidth)) ? arrDataImg.naturalWidth-1 : arrDataImg.naturalWidth, (isOdd(arrDataImg.naturalHeight)) ? arrDataImg.naturalHeight-1 : arrDataImg.naturalHeight);
+
+                                            arrDataImg.naturalWidth = (isOdd(arrDataImg.naturalWidth)) ? arrDataImg.naturalWidth-1 : arrDataImg.naturalWidth;
+                                            arrDataImg.naturalHeight = (isOdd(arrDataImg.naturalHeight)) ? arrDataImg.naturalHeight-1 : arrDataImg.naturalHeight;
+
+                                            $cmsAssetImage.cropper('setAspectRatio', arrDataImg.naturalWidth/arrDataImg.naturalHeight);
+
+                                            $cmsAssetImage.cropper('getCroppedCanvas',
+                                                    {
+                                                        width: arrDataImg.naturalWidth,
+                                                        height: arrDataImg.naturalHeight,
+                                                        minWidth: arrDataImg.naturalWidth,
+                                                        minHeight: arrDataImg.naturalHeight,
+                                                        maxWidth: arrDataImg.naturalWidth,
+                                                        maxHeight: arrDataImg.naturalHeight,
+                                                        /*fillColor: '#fff',*/
+                                                        imageSmoothingEnabled: false,
+                                                        imageSmoothingQuality: 'high',
+                                                    }
+                                                ).toBlob(
                                                 function (blob) {
                                                     var form_data = new FormData();
                                                     form_data.append('cmsAssetUploadFile', blob);
