@@ -511,23 +511,24 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                             //imageSmoothingEnabled: false, imageSmoothingQuality: 'high'
                                             var isOdd = function (num) { return num % 2;}
                                             var arrDataImg = $cmsAssetImage.cropper('getImageData');
-                                            console.log(arrDataImg);
-                                            console.log((isOdd(arrDataImg.naturalWidth)) ? arrDataImg.naturalWidth-1 : arrDataImg.naturalWidth, (isOdd(arrDataImg.naturalHeight)) ? arrDataImg.naturalHeight-1 : arrDataImg.naturalHeight);
 
-                                            arrDataImg.naturalWidth = (isOdd(arrDataImg.naturalWidth)) ? arrDataImg.naturalWidth-1 : arrDataImg.naturalWidth;
-                                            arrDataImg.naturalHeight = (isOdd(arrDataImg.naturalHeight)) ? arrDataImg.naturalHeight-1 : arrDataImg.naturalHeight;
+                                            //console.log(arrDataImg);
+                                            //console.log((isOdd(arrDataImg.naturalWidth)) ? arrDataImg.naturalWidth-1 : arrDataImg.naturalWidth, (isOdd(arrDataImg.naturalHeight)) ? arrDataImg.naturalHeight-1 : arrDataImg.naturalHeight);
 
-                                            $cmsAssetImage.cropper('setAspectRatio', arrDataImg.naturalWidth/arrDataImg.naturalHeight);
+                                            //arrDataImg.naturalWidth = (isOdd(arrDataImg.naturalWidth)) ? arrDataImg.naturalWidth-1 : arrDataImg.naturalWidth;
+                                            //arrDataImg.naturalHeight = (isOdd(arrDataImg.naturalHeight)) ? arrDataImg.naturalHeight-1 : arrDataImg.naturalHeight;
+
+                                            //$cmsAssetImage.cropper('setAspectRatio', arrDataImg.naturalWidth/arrDataImg.naturalHeight);
 
                                             $cmsAssetImage.cropper('getCroppedCanvas',
                                                     {
-                                                        width: arrDataImg.naturalWidth,
+                                                        /*width: arrDataImg.naturalWidth,
                                                         height: arrDataImg.naturalHeight,
                                                         minWidth: arrDataImg.naturalWidth,
                                                         minHeight: arrDataImg.naturalHeight,
                                                         maxWidth: arrDataImg.naturalWidth,
-                                                        maxHeight: arrDataImg.naturalHeight,
-                                                        /*fillColor: '#fff',*/
+                                                        maxHeight: arrDataImg.naturalHeight,*/
+                                                        fillColor: '#fff',
                                                         imageSmoothingEnabled: false,
                                                         imageSmoothingQuality: 'high',
                                                     }
