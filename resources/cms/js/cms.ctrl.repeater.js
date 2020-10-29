@@ -134,10 +134,24 @@ function cmsFnCtrlRepeater_Render(pCtrlId, pData, pIndex) {
                     + "textarea[cols|rows|disabled|name|readonly],tt,var,big,div[cms-data|cms-data-val|cms-data-caption|cms-data-link|onclick|cms-block-control|cms-block-type],iframe[src|width|height|frameborder|style],button[class|style|onclick],span[cms-data|cms-data-val],z3r0101[cms-block-type]"
 
                 arrTinyMCESettings['setup'] = function (editor) {
-                    editor.on('blur', function (e) {
-                        $(arrTinyMCESettings['selector']).val(editor.getContent());
-                        cmsFnCtrlRepeater_Update(pCtrlId, $(arrTinyMCESettings['selector'])[0]);
+                    editor.on('change', function (e) {
+                        setTimeout(
+                            function () {
+                                //$(arrTinyMCESettings['selector']).val(editor.getContent());
+                                cmsFnCtrlRepeater_Update(pCtrlId, $(arrTinyMCESettings['selector'])[0], editor.getContent());
+                            }, 600
+                        );
                     });
+
+                    if (pField['setup']) {
+                        pField['setup'](editor);
+                    }
+                };
+
+                arrTinyMCESettings['paste_preprocess'] = function (pl, editor) {
+                    //$(arrTinyMCESettings['selector']).val(editor.content);
+                    //cmsFnCtrlRepeater_Update(pCtrlId, $(arrTinyMCESettings['selector'])[0]);
+                    cmsFnCtrlRepeater_Update(pCtrlId, $(arrTinyMCESettings['selector'])[0], editor.content);
                 };
 
                 if (pField['settings']) {
@@ -272,7 +286,7 @@ function cmsFnCtrlRepeater_Add(pCtrlId) {
         $('#'+pCtrlId+'_Ctrl .repeater-add-item').removeClass('d-none');
     }
 }
-function cmsFnCtrlRepeater_Update(pCtrlId, pObj) {
+function cmsFnCtrlRepeater_Update(pCtrlId, pObj, pValueOverwrite = null) {
     var dataBase64 = $('#'+pCtrlId+'_Ctrl').attr('data-base64');
     var dataIndex = $(pObj).parents('.repeater-item').attr('data-index');
 
@@ -284,9 +298,17 @@ function cmsFnCtrlRepeater_Update(pCtrlId, pObj) {
             arrData = json_decode($('#'+pCtrlId).val());
     }
 
-    if (arrData[dataIndex]) {
-        if ($(pObj)[0]) {
-            arrData[dataIndex][$(pObj).attr('data-ctrl-name')] = $(pObj).val().trim();
+    if (pValueOverwrite) {
+        if (arrData[dataIndex]) {
+            if ($(pObj)[0]) {
+                arrData[dataIndex][$(pObj).attr('data-ctrl-name')] = pValueOverwrite;
+            }
+        }
+    } else {
+        if (arrData[dataIndex]) {
+            if ($(pObj)[0]) {
+                arrData[dataIndex][$(pObj).attr('data-ctrl-name')] = $(pObj).val().trim();
+            }
         }
     }
 
