@@ -374,6 +374,16 @@ function cmsFnCtrlRepeater_Sort(pCtrlId) {
     if (filteredResults[0]) {
         defaultField = filteredResults[0]['id'];
     }
+    var defaultType = '';
+    if (filteredResults[0]) {
+        defaultType = filteredResults[0]['type'];
+    }
+    var defaultOptions = '';
+    if (filteredResults[0]) {
+        defaultOptions = (typeof(filteredResults[0]['options']) != 'undefined') ? filteredResults[0]['options'] : [];
+    }
+
+    console.log(defaultField, defaultType, defaultOptions);
 
     var arrList = [];
     arrData.forEach(
@@ -386,10 +396,17 @@ function cmsFnCtrlRepeater_Sort(pCtrlId) {
             );
 
             if (typeof(tArrResult[0]['control_sort_render']) == 'undefined') {
-                arrList[arrList.length] = `<li class="repeater-sort-item" data-index="${pIndex}">${(pData[defaultField].trim() != '') ? pData[defaultField] : '...'}</li>`;
+                var text = '...';
+                if (defaultType == 'select') {
+                    text = $("<div/>").html(defaultOptions[parseInt(pData[defaultField], 10)]).text();
+                } else {
+                    text = $("<div/>").html(((pData[defaultField].trim() != '') ? pData[defaultField] : '...')).text();
+                }
+                arrList[arrList.length] = `<li class="repeater-sort-item" data-index="${pIndex}">${text}</li>`;
             } else {
                 var tDisplay = tArrResult[0]['control_sort_render'](pData, pIndex);
-                arrList[arrList.length] = `<li class="repeater-sort-item" data-index="${pIndex}">${tDisplay}</li>`;
+                var text = $("<div/>").html(tDisplay).text();
+                arrList[arrList.length] = `<li class="repeater-sort-item" data-index="${pIndex}">${text}</li>`;
             }
         }
     );
@@ -444,6 +461,9 @@ function cmsFnCtrlRepeater_Sort(pCtrlId) {
                                     function (subObj, subIndex) {
                                         if (typeof(subObj['control_sort_update']) == 'undefined') {
                                             $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] .form-control[data-ctrl-name="${subObj['id']}"]`).val(pObj[subObj['id']]);
+                                            if (subObj['type'] == 'select') {
+                                                $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] .form-control[data-ctrl-name="${subObj['id']}"]`).change();
+                                            }
                                         } else {
                                             subObj['control_sort_update'](pObj, pIndex);
                                         }
