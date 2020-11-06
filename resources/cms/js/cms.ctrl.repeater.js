@@ -18,8 +18,10 @@ function cmsFnCtrlRepeater_Block(pCtrlId, pRowIndex) {
         function (pData, pIndex) {
             if (typeof(pData['placeholder']) == 'undefined') pData['placeholder'] = '';
 
-            var strCtrl = `<input type="text" class="form-control" placeholder="${pData['placeholder']}" data-ctrl-name="${pData['id']}" id="${pCtrlId+'_'+pData['id']+'_'+pRowIndex}" data-ctrl-type="${pData['type']}" onblur="cmsFnCtrlRepeater_Update('${pCtrlId}', this)" />`;
-            if (pData['type'] == 'asset') {
+            var strCtrl = ``;
+            if (pData['type'] == 'text') {
+                strCtrl = `<input type="${(!pData['input-type']) ? 'text' : pData['input-type']}" class="form-control" placeholder="${pData['placeholder']}" data-ctrl-name="${pData['id']}" id="${pCtrlId+'_'+pData['id']+'_'+pRowIndex}" data-ctrl-type="${pData['type']}" onblur="cmsFnCtrlRepeater_Update('${pCtrlId}', this)" />`;
+            } else if (pData['type'] == 'asset') {
                 var controlSettings = {
                     form_control_type: 'asset',
                     id: pCtrlId+'_'+pData['id']+'_'+pRowIndex,
