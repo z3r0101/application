@@ -98,6 +98,9 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
         $cmsAssetImage.cropper({
             aspectRatio: tAspectRatio,
             crop: function(event) {
+                //console.log(event);
+                //console.log(event.detail.originalEvent);
+                //console.log(event.detail.action);
             }
         });
         // Get the Cropper.js instance after initialized
@@ -140,6 +143,10 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                 $('#cmsAssetUploadBody .cmsAssetUploadImagePreview')[0].addEventListener('cropstart', function (event) {
                         $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop-ok"]').show();
                         $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop-cancel"]').show();
+
+                        cmsAssetDialog.getButton('btn-save').attr('data-prev', cmsAssetDialog.getButton('btn-save').html());
+                        cmsAssetDialog.getButton('btn-save').html('Crop');
+
                         cmsAssetKeyPress();
                     }
                 );
@@ -724,15 +731,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
 
                                     if (typeof($(pObj).attr('cms-asset-filename-suffix'))!='undefined') {
                                         if ($(pObj).attr('cms-asset-filename-suffix')!='') {
-                                            console.log(cmsAssetFileInfo);
-                                            console.log(cmsAssetFileInfo['upload_file']);
-                                            console.log($(pObj).attr('cms-asset-filename-suffix'), cmsFnfileName(cmsAssetFileInfo['upload_file']), cmsFnFileExtension(cmsAssetFileInfo['upload_file']))
-
                                             var tSufExt = (typeof(cmsFnFileExtension(cmsAssetFileInfo['upload_file'])) != 'undefined') ? '.' + cmsFnFileExtension(cmsAssetFileInfo['upload_file']) : '';
-
                                             cmsAssetFileInfo['upload_file'] = cmsFnfileName(cmsAssetFileInfo['upload_file']) + '-' + $(pObj).attr('cms-asset-filename-suffix') + tSufExt;
-
-                                            alert(cmsAssetFileInfo['upload_file']);
                                         }
                                     }
 
@@ -755,6 +755,12 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                         ).done(
                                             function (data) {
                                                 var postRet = parseInt(data, 10);
+
+                                                if (typeof($(pObj).attr('cms-asset-filename-overwrite'))!='undefined') {
+                                                    if (parseFloat($(pObj).attr('cms-asset-filename-overwrite'), 10) == 1) {
+                                                        postRet = 0;
+                                                    }
+                                                }
 
                                                 if (postRet == 1) {
                                                     BootstrapDialog.show({
@@ -921,6 +927,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                 } else {
                                     tFuncInsert();
                                 }
+                            } else if (dialog.getButton('btn-save').html() == 'Crop') {
+                                if ($('.cmsAssetUploadToolbar button:eq(1)')[0]) $('.cmsAssetUploadToolbar button:eq(1)').click();
                             }
                         } else {
                             //WEB ADDRESS URL
@@ -1041,6 +1049,10 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                 $cmsAssetImage.cropper('crop');
                 $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop-ok"]').show();
                 $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop-cancel"]').show();
+
+                cmsAssetDialog.getButton('btn-save').attr('data-prev', cmsAssetDialog.getButton('btn-save').html());
+                cmsAssetDialog.getButton('btn-save').html('Crop');
+
                 $(pObj).blur();
                 cmsAssetKeyPress();
                 $(pObj).attr('data-mode', '1');
@@ -1075,6 +1087,10 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
             $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop"]').attr('data-mode', '-1');
             $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop-ok"]').hide();
             $('#cmsAssetUploadBody .cmsAssetUploadToolbar button[data-type="crop-cancel"]').hide();
+
+            cmsAssetDialog.getButton('btn-save').html(cmsAssetDialog.getButton('btn-save').attr('data-prev'));
+            cmsAssetDialog.getButton('btn-save').removeAttr('data-prev');
+
         } else if (pOption == 3) {
             //FLIP HORIZONTAL
             $cmsAssetImage.cropper('scaleX', parseInt($(pObj).attr('data-mode'),10));
