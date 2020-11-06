@@ -60,6 +60,8 @@ class cms_asset
         $tAssetDefaultDir = (isset($this->controlObj['asset_default_dir'])) ? strval($this->controlObj['asset_default_dir']) : '';
         $tAspectRatio = (isset($this->controlObj['img_aspect_ratio'])) ? strval($this->controlObj['img_aspect_ratio']) : '';
 
+        $tOnClick = (isset($this->controlObj['onclick'])) ? strval($this->controlObj['onclick']) : "cmsAssetUpload(this, '{$tId}', 0);";
+
         $controlSettings = array(
             'form_control_type'=>'asset',
             'id'=>$tName,
@@ -78,9 +80,9 @@ class cms_asset
                 {$tCaption}
                 <div class="input-group mb-3" style="cursor: pointer">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1" onclick="cmsAssetUpload(this, '{$tId}', 0);"><i class="fa fa-upload" aria-hidden="true"></i></span>
+                    <span class="input-group-text" id="basic-addon1" onclick="{$tOnClick}"><i class="fa fa-upload" aria-hidden="true"></i></span>
                   </div>
-                  <input type="text" class="form-control cms-upload" id="{$tId}_display" aria-describedby="basic-addon1" readonly="readonly" value="{$tDisplay}" style="cursor: pointer" onclick="cmsAssetUpload(this, '{$tId}', 0);">
+                  <input type="text" class="form-control cms-upload" id="{$tId}_display" aria-describedby="basic-addon1" readonly="readonly" value="{$tDisplay}" style="cursor: pointer" onclick="{$tOnClick}">
                 </div>
                 <input type="hidden" id="{$tId}" name="{$tName}" class="{$tClass}" cms-control-settings="{$strControlSettings}">
             </div>

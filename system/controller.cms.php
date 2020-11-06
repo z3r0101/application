@@ -1653,14 +1653,14 @@ EOL;
 
         if (isset($this->formLayoutData->body)) {
             $tArr = json_decode(json_encode($this->formLayoutData->body), true);
-            $this->recursiveUnset($tArr, 'repeater');
+            #$this->recursiveUnset($tArr, 'repeater');
             $tArr = $this->recursiveFind($tArr, 'control');
 
-            //print_r($tArr); exit;
+            #print '<pre>'; print_r($tArr); exit;
 
             foreach($tArr as $arrObj) {
                 if (isset($arrObj['@attributes'])) {
-                    if ($arrObj['@attributes']['type']!='datatable')
+                    if (isset($arrObj['@attributes']['type']) && $arrObj['@attributes']['type']!='datatable')
                         $arrReturn[$arrObj['@attributes']['id']] = $arrObj['@attributes'];
                 } else {
                     if (isset($arrObj['type'])) {

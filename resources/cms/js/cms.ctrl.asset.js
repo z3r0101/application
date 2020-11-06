@@ -721,6 +721,22 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                 };
 
                                 var tFuncIni = function () {
+
+                                    if (typeof($(pObj).attr('cms-asset-filename-suffix'))!='undefined') {
+                                        if ($(pObj).attr('cms-asset-filename-suffix')!='') {
+                                            console.log(cmsAssetFileInfo);
+                                            console.log(cmsAssetFileInfo['upload_file']);
+                                            console.log($(pObj).attr('cms-asset-filename-suffix'), cmsFnfileName(cmsAssetFileInfo['upload_file']), cmsFnFileExtension(cmsAssetFileInfo['upload_file']))
+
+                                            var tSufExt = (typeof(cmsFnFileExtension(cmsAssetFileInfo['upload_file'])) != 'undefined') ? '.' + cmsFnFileExtension(cmsAssetFileInfo['upload_file']) : '';
+
+                                            cmsAssetFileInfo['upload_file'] = cmsFnfileName(cmsAssetFileInfo['upload_file']) + '-' + $(pObj).attr('cms-asset-filename-suffix') + tSufExt;
+
+                                            alert(cmsAssetFileInfo['upload_file']);
+                                        }
+                                    }
+
+
                                     if ($('.cmsAssetUploadSavePath').attr('data-save-owner') == '0') {
                                         var form_data = new FormData();
                                         form_data.append('cmsAssetFileCheck', json_encode(cmsAssetFileInfo));
@@ -756,6 +772,12 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                                                                         var form_data = new FormData();
                                                                         var tCmsAssetFileInfo = cmsAssetFileInfo; //JSON.parse(JSON.stringify(cmsAssetFileInfo));
                                                                         tCmsAssetFileInfo['upload_file'] = $('#cmsAssetUploadFilename').val().trim();
+
+                                                                        if ( typeof(cmsFnFileExtension($('#cmsAssetUploadFilename').val().trim())) == 'undefined' ) {
+                                                                            if ( typeof(cmsFnFileExtension($('#cmsAssetUploadFilenameLabel').html())) != 'undefined' ) {
+                                                                                tCmsAssetFileInfo['upload_file'] = $('#cmsAssetUploadFilename').val().trim() + '.' + cmsFnFileExtension($('#cmsAssetUploadFilenameLabel').html());
+                                                                            }
+                                                                        }
 
                                                                         form_data.append('cmsAssetFileCheck', json_encode(tCmsAssetFileInfo));
                                                                         form_data.append('CMS_POST_REQ', $('#' + pId).attr('cms-control-settings'));

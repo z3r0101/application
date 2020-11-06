@@ -70,6 +70,11 @@ function cmsFnBaseName(path) {
     const rx2 = /()(.*)$/;
     return (rx1.exec(path) || rx2.exec(path))[2];
 }
+function cmsFnfileName(str) {
+    if (typeof str !== 'string') return;
+    var frags = str.split('.')
+    return frags.splice(0,frags.length-1).join('.');
+}
 function cmsFnFileExtension(pFileName) {
     const rx = /(?:\.([^.]+))?$/;
     return rx.exec(pFileName)[1];
