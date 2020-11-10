@@ -234,12 +234,29 @@ header("Content-Type: text/javascript")
                                     } else if ($save_message_action == 1) {
                                     ?>
                                     {
-                                        id: 'cms-dialog-new',
+                                        id: 'cms-dialog-continue-edit',
                                         label: 'Continue editing',
                                         action: function(dialog) {
                                             $('#'+retData['primaryId']['name']).val(retData['primaryId']['value']);
 
                                             dialog.close();
+                                        }
+                                    },
+                                    {
+                                        id: 'cms-dialog-new',
+                                        label: '<?=$save_message_button_new_caption?>',
+                                        action: function(dialog) {
+                                            <?php
+                                                $tQueryString = '';
+                                                if (isset($_SERVER['QUERY_STRING'])) {
+                                                    $tArr = explode('&', $_SERVER['QUERY_STRING']);
+                                                    if (isset($tArr[0])) unset($tArr[0]);
+                                                    if (isset($tArr[1])) unset($tArr[1]);
+                                                    if (isset($tArr[2])) unset($tArr[2]);
+                                                    $tQueryString = implode('&', $tArr);
+                                                }
+                                            ?>
+                                            window.location = selectedUrlPath+'/post<?=($tQueryString!='') ? '?'.$tQueryString : ''?>';
                                         }
                                     }
                                     <?php } ?>
