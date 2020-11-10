@@ -966,9 +966,11 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
     } else if (pMode == 1) {
         //UPLOAD FILE
         var file_data = $(pObj).prop("files");
+        console.log(pObj, file_data);
 
         if (file_data && file_data.length) {
             var file = file_data[0];
+            console.log(file);
 
             $('#cmsAssetUploadBody span').hide();
             $('#cmsAssetUploadBody .cmsAssetUploadMessage button').hide();
@@ -994,7 +996,8 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                     $.event.trigger({
                         type: "CMS_ASSET_CHECK_FILE",
                         data: null,
-                        isGifAni: false
+                        isGifAni: false,
+                        ctrlObj: pObj
                     });
                     return;
                 }
@@ -1020,21 +1023,25 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
                 $.event.trigger({
                     type: "CMS_ASSET_CHECK_FILE",
                     data: null,
-                    isGifAni: (frames > 0) ? true : false
+                    isGifAni: (frames > 0) ? true : false,
+                    ctrlObj: pObj
                 });
             }, false);
             reader.readAsArrayBuffer(file);
 
             $(document).on('CMS_ASSET_CHECK_FILE',
-                function (pObj) {
-                    if (pObj.isGifAni) {
-                        cmsAssetLoadFile('', file.name, file.type);
-                    } else {
-                        if (/^image\/\w+$/.test(file.type)) {
-                            var uploadedImageURL = URL.createObjectURL(file);
-                            cmsAssetLoadImage(uploadedImageURL, file.name, file.type);
-                        } else {
+                function (pObjEvent) {
+                    if (pObjEvent.ctrlObj === pObj) {
+                        if (pObjEvent.isGifAni) {
                             cmsAssetLoadFile('', file.name, file.type);
+                        } else {
+                            console.log(file);
+                            if (/^image\/\w+$/.test(file.type)) {
+                                var uploadedImageURL = URL.createObjectURL(file);
+                                cmsAssetLoadImage(uploadedImageURL, file.name, file.type);
+                            } else {
+                                cmsAssetLoadFile('', file.name, file.type);
+                            }
                         }
                     }
                 }
