@@ -465,6 +465,10 @@ function cmsFnCtrlRepeater_Sort(pCtrlId) {
                                             $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] .form-control[data-ctrl-name="${subObj['id']}"]`).val(pObj[subObj['id']]);
                                             if (subObj['type'] == 'select') {
                                                 $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] .form-control[data-ctrl-name="${subObj['id']}"]`).change();
+                                            } else if (subObj['type'] == 'html') {
+                                                //console.log(pObj[subObj['id']], $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] .form-control[data-ctrl-name="${subObj['id']}"]`)[0]);
+                                                var tId = $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] .form-control[data-ctrl-name="${subObj['id']}"]`).attr('id');
+                                                tinymce.get(tId).setContent(pObj[subObj['id']]);
                                             }
                                         } else {
                                             subObj['control_sort_update'](pObj, pIndex);
