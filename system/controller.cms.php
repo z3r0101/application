@@ -1451,6 +1451,7 @@ class BaseControllerCMS extends BaseController {
                                         $buttonsCount = (isset($subColumn->button)) ? count($subColumn->button) : 0;
 
                                         $arrActionButton = array();
+                                        $arrActionConditions = array();
                                         if ($buttonsCount > 0) {
                                             foreach($subColumn->button as $actionButton) {
 
@@ -1462,35 +1463,38 @@ class BaseControllerCMS extends BaseController {
                                                         $cmsUrl = '';
                                                         if (isset($actionButton['cms-url'])) {
                                                             $cmsUrl = strval($actionButton['cms-url']);
-                                                            $cmsUrl = str_replace('[id]', '{$d}', $cmsUrl);
+                                                            #$cmsUrl = str_replace('[id]', '{$d}', $cmsUrl);
                                                             $cmsUrl = $this->layoutConfigCode($cmsUrl);
                                                             $tHref = $cmsUrl;
                                                         } else {
-                                                            $tHref = $tHref.'/{$d}';
+                                                            $tHref = $tHref.'/[id]';
                                                         }
                                                         $className = (isset($actionButton['class'])) ? $actionButton['class'] : "fas fa-edit";
-                                                        $arrActionButton[] = '<a href=\\"'.$tHref.'\\"><i class=\\"cms-action-btn '.$className.'\\" aria-hidden=\\"true\\"></i></a>';
+                                                        $arrActionButton[] = '<a href="'.$tHref.'"><i class="cms-action-btn '.$className.'" aria-hidden="true"></i></a>';
                                                     } else if ($actionButton['type'] == 'delete') {
-                                                        $arrActionButton[] = '<a href=\\"javascript:void(0)\\" data-table=\\"'.$tableId.'\\" data-id=\\"[id]\\" onclick=\\"cmsFnListActionDelete(this)\\"><i class=\\"cms-action-btn far fa-trash-alt\\" aria-hidden=\\"true\\"></i></a>';
+                                                        $arrActionButton[] = '<a href="javascript:void(0)" data-table="'.$tableId.'" data-id="[id]" onclick="cmsFnListActionDelete(this)"><i class="cms-action-btn far fa-trash-alt" aria-hidden="true"></i></a>';
                                                     } else if ($actionButton['type'] == 'post') {
                                                         $buttonId = (isset($actionButton['id'])) ? $actionButton['id'] : "";
                                                         $className = (isset($actionButton['class'])) ? $actionButton['class'] : "";
-                                                        $arrActionButton[] = '<a href=\\"javascript:void(0)\\" id=\\"'.$buttonId.'_[id]\\" data-table=\\"'.$tableId.'\\" data-button=\\"'.$buttonId.'\\" data-id=\\"[id]\\" onclick=\\"cmsFnListActionPost(this)\\"><i class=\\"cms-action-btn '.$className.'\\" aria-hidden=\\"true\\"></i></a>';
+                                                        $arrActionButton[] = '<a href="javascript:void(0)" id="'.$buttonId.'_[id]" data-table="'.$tableId.'" data-button="'.$buttonId.'" data-id="[id]" onclick="cmsFnListActionPost(this)"><i class="cms-action-btn '.$className.'" aria-hidden="true"></i></a>';
                                                     } else if ($actionButton['type'] == 'custom') {
                                                         $link = (isset($actionButton['link'])) ? $actionButton['link'] : "";
                                                         $link = $this->layoutConfigCode($link);
-                                                        $target = (isset($actionButton['target'])) ? ' target=\\"'.$actionButton['target'].'\\"' : "";
+                                                        $target = (isset($actionButton['target'])) ? ' target="'.$actionButton['target'].'"' : "";
                                                         $className = (isset($actionButton['class'])) ? $actionButton['class'] : "";
                                                         $title = (isset($actionButton['title'])) ? $actionButton['title'] : "";
-                                                        $buttonOnClick = (isset($actionButton['onclick'])) ? 'onclick=\\"'.$actionButton['onclick'].'\\"' : '';
+                                                        $buttonOnClick = (isset($actionButton['onclick'])) ? 'onclick="'.$actionButton['onclick'].'"' : '';
                                                         $caption = strval($actionButton['caption']);
+
+                                                        $hideIf = (isset($actionButton['hide_if'])) ? $actionButton['hide_if'] : "";
+
                                                         if (strpos($className, 'fa-') !== false) {
-                                                            $arrActionButton[] = '<a href=\\"'.$link.'\\"'.$target.' title=\\"'.$title.'\\" '.$buttonOnClick.'><i class=\\"cms-action-btn '.$className.'\\" aria-hidden=\\"true\\"></i></a>';
+                                                            $arrActionButton[] = '<a '.(($hideIf!='') ? 'hide_if="'.$hideIf.'"' : '').' href="'.$link.'" '.$target.' title="'.$title.'" '.$buttonOnClick.'><i class="cms-action-btn '.$className.'" aria-hidden="true"></i></a>';
                                                         } else {
                                                             if (!isset($actionButton['class_icon']))
-                                                                $arrActionButton[] = '<a href=\\"'.$link.'\\"'.$target.' title=\\"'.$title.'\\" '.$buttonOnClick.' class=\\"'.$className.'\\">'.$caption.'</a>';
+                                                                $arrActionButton[] = '<a '.(($hideIf!='') ? 'hide_if="'.$hideIf.'"' : '').' href="'.$link.'" '.$target.' title="'.$title.'" '.$buttonOnClick.' class="'.$className.'">'.$caption.'</a>';
                                                             else
-                                                                $arrActionButton[] = '<a href=\\"'.$link.'\\"'.$target.' title=\\"'.$title.'\\" '.$buttonOnClick.' class=\\"'.$className.'\\"><i class=\\"'.strval($actionButton['class_icon']).'\\" aria-hidden=\\"true\\"></i>'.(($caption!='') ? ' '.$caption : '').'</a>';
+                                                                $arrActionButton[] = '<a '.(($hideIf!='') ? 'hide_if="'.$hideIf.'"' : '').' href="'.$link.'" '.$target.' title="'.$title.'" '.$buttonOnClick.' class="'.$className.'"><i class="'.strval($actionButton['class_icon']).'" aria-hidden="true"></i>'.(($caption!='') ? ' '.$caption : '').'</a>';
                                                         }
                                                     }
                                                 }
@@ -1498,27 +1502,52 @@ class BaseControllerCMS extends BaseController {
                                             }
                                         }
 
-                                        $actionButton = implode("", $arrActionButton);
-
-                                        $buttonActionEval = <<<EOL
-                                \$buttonActionFn = function(\$d, \$row) {
-                                    \$retBtn = str_replace('[id]', \$d, "{$actionButton}");
-
-                                    foreach(\$row as \$Index => \$Val) {
-                                        \$retBtn = str_replace('['.\$Index.']', \$Val, \$retBtn);
-                                    }
-
-                                    \$retBtn = str_replace('[CMS_DATA_ROW]', base64_encode(json_encode(\$row)), \$retBtn);
-
-                                    return \$retBtn;
-                                };
-EOL;
-                                        eval($buttonActionEval);
+                                        $actionButton = base64_encode(json_encode($arrActionButton));
 
                                         $columns[] = array(
                                             'db'        => 'cms_datatable_action',
                                             'dt'        => 'cms_datatable_action',
-                                            'formatter' => $buttonActionFn
+                                            'formatter' => function ($d, $row) use ($actionButton) {
+                                                $arrButtons = json_decode(base64_decode($actionButton), true);
+
+                                                $tRow = [];
+                                                foreach($row as $subIndex => $subData) {
+                                                    if (!is_numeric($subIndex)) {
+                                                        $tRow[$subIndex] = $subData;
+                                                    }
+                                                }
+                                                $row = $tRow;
+
+                                                $arrSelButtons = [];
+                                                foreach($arrButtons as $Index => $Data) {
+                                                    foreach($row as $subIndex => $subData) {
+                                                        $arrButtons[$Index] = str_replace('['.$subIndex.']', $subData, $arrButtons[$Index]);
+                                                    }
+
+                                                    $match_data = [];
+                                                    preg_match('/hide_if="(.*?)"/i', $arrButtons[$Index], $match_data);
+
+                                                    if (isset($match_data[0])) {
+                                                        $tMatch = str_replace('hide_if="', '', $match_data[0]);
+                                                        $tMatch = str_replace('"', '', $tMatch);
+
+                                                        $tCond = false;
+                                                        eval("\$tCond = (({$tMatch}) ? true : false);");
+
+                                                        if (!$tCond) {
+                                                            $arrSelButtons[] = $arrButtons[$Index];
+                                                        }
+                                                    } else {
+                                                        $arrSelButtons[] = $arrButtons[$Index];
+                                                    }
+                                                }
+
+                                                $strButtons = implode("", $arrSelButtons);
+                                                $retBtn = str_replace('[id]', $d, $strButtons);
+                                                $retBtn = str_replace('[CMS_DATA_ROW]', base64_encode(json_encode($row)), $retBtn);
+
+                                                return $retBtn;
+                                            }
                                         );
 
                                     } else if ($subColumn['type']=='select') {
