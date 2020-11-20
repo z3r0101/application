@@ -407,6 +407,7 @@ function cmsFnDataTableOrder() {
 
                 foreach($child->children() as $subChild) {
                     $arrColumns = array();
+                    $arrScriptCodes = array();
                     if (count($child->children())) {
                         /* BODY */
                         if (count($subChild->body->column) > 0) {
@@ -485,6 +486,12 @@ function cmsFnDataTableOrder() {
                                 $arrEvents[] = $tFunc;
                             }
                         }
+
+                        if (isset($subChild->scripts->code) && count($subChild->scripts->code) > 0) {
+                            foreach($subChild->scripts->code as $subCode) {
+                                $arrScriptCodes[strval($subCode['name'])] = strval($subCode);
+                            }
+                        }
                     }
 
                     $counter = count($arrListColumnAll);
@@ -522,12 +529,23 @@ function cmsFnDataTableOrder() {
                     $strEvents = implode(",", $arrEvents);
                     if ($strEvents!='') $strEvents.=',';
 
+                    $strScriptCodesAjaxData = '';
+                    if (isset($arrScriptCodes['ajax_data'])) {
+                        $strScriptCodesAjaxData = $arrScriptCodes['ajax_data'];
+                    }
+
+
                     $arrHTMLOut[] = <<<EOL
                         CMS_DATATABLE['{$child->table['id']}'] = $('#{$child->table['id']}').DataTable(
                             {
                                 "processing": true,
                                 "serverSide": true,
-                                "ajax": "{$self->cmsActivePath}?datatable={$child->table['id']}{$strQuery}",
+                                "ajax": {
+                                    url: "{$self->cmsActivePath}?datatable={$child->table['id']}{$strQuery}",
+                                    data: function (data) {
+                                        {$strScriptCodesAjaxData}
+                                    }
+                                },
                                 "columns": [
                                     {$strColumns}
                                 ],
