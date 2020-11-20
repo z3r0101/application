@@ -303,6 +303,10 @@ function cmsFnDataTableOrder() {
             $(this).find('tr[role="row"]').removeAttr('style');
             $(this).find('tr[role="row"] td').removeAttr('style');
 
+            $.event.trigger({
+                type: "CMS_DATATABLE_ORDER_DONE",
+                dtId: $(this).parents('table').attr('id')
+            });
 
             var tSelf = this;
             setTimeout(
