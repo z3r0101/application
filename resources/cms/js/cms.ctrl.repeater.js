@@ -309,7 +309,8 @@ function cmsFnCtrlRepeater_Update(pCtrlId, pObj, pValueOverwrite = null) {
     } else {
         if (arrData[dataIndex]) {
             if ($(pObj)[0]) {
-                arrData[dataIndex][$(pObj).attr('data-ctrl-name')] = $(pObj).val().trim();
+                if ($(pObj).val())
+                    arrData[dataIndex][$(pObj).attr('data-ctrl-name')] = $(pObj).val().trim();
             }
         }
     }
