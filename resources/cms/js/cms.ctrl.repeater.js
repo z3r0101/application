@@ -31,6 +31,9 @@ function cmsFnCtrlRepeater_Block(pCtrlId, pRowIndex) {
                     img_aspect_ratio: pData['img_aspect_ratio'],
                     asset_url: ((pData['asset_url']) ? pData['asset_url'] : $('#'+pCtrlId+'_Ctrl').attr('data-asset-url'))
                 };
+                if (pData['cropper_canvas_options']) {
+                    controlSettings['cropper_canvas_options'] = pData['cropper_canvas_options'];
+                }
                 var strControlSettings = base64_encode(json_encode(controlSettings));
                 strCtrl = `
                     <div class="input-group mb-3" style="cursor: pointer">
