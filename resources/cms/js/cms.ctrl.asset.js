@@ -537,13 +537,13 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
 
                                             var oGetCroppedCanvas = {};
 
-                                            /*tArrCropOptions.forEach(
+                                            tArrCropOptions.forEach(
                                                 function (tObjVal, tObjIndex) {
                                                     //console.log(tObjVal.split(':')[0].trim(), tObjVal.split(':')[1].trim());
                                                     oGetCroppedCanvas[tObjVal.split(':')[0].trim()] = eval(tObjVal.split(':')[1].trim());
                                                 }
                                             );
-                                            console.log(oGetCroppedCanvas);*/
+                                            console.log(oGetCroppedCanvas);
 
                                             /*width: arrDataImg.naturalWidth,
                                              height: arrDataImg.naturalHeight,
