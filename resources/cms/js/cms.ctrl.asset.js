@@ -527,19 +527,36 @@ function cmsAssetUpload(pObj, pId, pMode, pOption, pExt, pExt2) {
 
                                             //$cmsAssetImage.cropper('setAspectRatio', arrDataImg.naturalWidth/arrDataImg.naturalHeight);
 
-                                            $cmsAssetImage.cropper('getCroppedCanvas',
-                                                    {
-                                                        /*width: arrDataImg.naturalWidth,
-                                                        height: arrDataImg.naturalHeight,
-                                                        minWidth: arrDataImg.naturalWidth,
-                                                        minHeight: arrDataImg.naturalHeight,
-                                                        maxWidth: arrDataImg.naturalWidth,
-                                                        maxHeight: arrDataImg.naturalHeight,*/
-                                                        fillColor: '#fff',
-                                                        imageSmoothingEnabled: false,
-                                                        imageSmoothingQuality: 'high',
-                                                    }
-                                                ).toBlob(
+                                            if (!cmsControlSettings['cropper_canvas_options']) {
+                                                cmsControlSettings['cropper_canvas_options'] = "fillColor: '#fff', imageSmoothingEnabled: false, imageSmoothingQuality: 'high'";
+                                            }
+
+                                            console.log(cmsControlSettings['cropper_canvas_options']);
+                                            var tArrCropOptions = cmsControlSettings['cropper_canvas_options'].split(',');
+                                            console.log(tArrCropOptions);
+
+                                            var oGetCroppedCanvas = {};
+
+                                            /*tArrCropOptions.forEach(
+                                                function (tObjVal, tObjIndex) {
+                                                    //console.log(tObjVal.split(':')[0].trim(), tObjVal.split(':')[1].trim());
+                                                    oGetCroppedCanvas[tObjVal.split(':')[0].trim()] = eval(tObjVal.split(':')[1].trim());
+                                                }
+                                            );
+                                            console.log(oGetCroppedCanvas);*/
+
+                                            /*width: arrDataImg.naturalWidth,
+                                             height: arrDataImg.naturalHeight,
+                                             minWidth: arrDataImg.naturalWidth,
+                                             minHeight: arrDataImg.naturalHeight,
+                                             maxWidth: arrDataImg.naturalWidth,
+                                             maxHeight: arrDataImg.naturalHeight,*/
+                                            /*fillColor: '#fff',
+                                             imageSmoothingEnabled: false,
+                                             imageSmoothingQuality: 'high',
+                                            */
+
+                                            $cmsAssetImage.cropper('getCroppedCanvas', oGetCroppedCanvas).toBlob(
                                                 function (blob) {
                                                     var form_data = new FormData();
                                                     form_data.append('cmsAssetUploadFile', blob);

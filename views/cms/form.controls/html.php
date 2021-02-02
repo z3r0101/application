@@ -174,6 +174,8 @@ CSS;
 
         $strSetup = strval($this->controlObj->setup);
 
+        $strScriptOverride = strval($this->controlObj->script_override);
+
         $arrBlocks = array();
         $strBlocks = '';
         if (isset($this->controlObj->blocks)) {
@@ -278,6 +280,8 @@ CSS;
                         eval('tinyMCESettings["'+key+'"] = '+value);
                     }
                 }
+                
+                {$strScriptOverride}
                 
                 tinyMCESettings['setup'] = function (editor) {
                     {$strSetup}

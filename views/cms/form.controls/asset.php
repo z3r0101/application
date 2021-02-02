@@ -62,6 +62,8 @@ class cms_asset
 
         $tOnClick = (isset($this->controlObj['onclick'])) ? strval($this->controlObj['onclick']) : "cmsAssetUpload(this, '{$tId}', 0);";
 
+        $cropperCanvasOptions = (isset($this->controlObj['cropper_canvas_options'])) ? strval($this->controlObj['cropper_canvas_options']) : "fillColor: '#fff', imageSmoothingEnabled: false, imageSmoothingQuality: 'high'";
+
         $controlSettings = array(
             'form_control_type'=>'asset',
             'id'=>$tName,
@@ -69,7 +71,8 @@ class cms_asset
             'asset_default_dir' => $tAssetDefaultDir,
             'accept' => $tAccept,
             'img_aspect_ratio' => $tAspectRatio,
-            'asset_url' => ASSETS_URL
+            'asset_url' => ASSETS_URL,
+            'cropper_canvas_options' => $cropperCanvasOptions
         );
         $strControlSettings = base64_encode(json_encode($controlSettings));
 
