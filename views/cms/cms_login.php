@@ -93,11 +93,11 @@ if (isset($CONFIG['cms']['sso'])) {
             </div>\
             <div class="form-group cms-login-form">\
                 <label for="cmsUsername">Email</label>\
-                <input type="email" class="form-control" id="cms-username" aria-describedby="emailHelp" placeholder="Enter your email">\
+                <input type="email" class="form-control" id="cms-username" aria-describedby="emailHelp" placeholder="Enter your email" autocomplete="false">\
             </div>\
             <div class="form-group cms-login-form">\
                 <label for="cmsPassword">Password</label>\
-                <input type="password" class="form-control" id="cms-password" aria-describedby="emailHelp2" placeholder="Enter your password">\
+                <input type="password" class="form-control" id="cms-password" aria-describedby="emailHelp2" placeholder="Enter your password" autocomplete="false">\
             </div>\
             <div class="form-group cms-reset-form">\
                 <label for="cmsUsername">Email</label>\
