@@ -56,7 +56,7 @@ class BaseController {
         return $ret;
     }
 
-    function loadView($viewName, $type = 0 /* 0: include, 1: blade */, $variant = null) {
+    function loadView($viewName, $type = 0 /* 0: include, 1: blade */, $variant = null, $http_response = 0) {
         include_once(APPPATH.'system/globals.php');
         if ($type == 0) {
             if (file_exists(SITEROOTPATH . 'www/views/' . $viewName . '.php')) {
@@ -115,6 +115,9 @@ class BaseController {
                 echo $blade->run($viewName.".php", $variant);
             }
 
+            if ($http_response > 0) {
+                http_response_code($http_response);
+            }
             exit;
         }
     }
