@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="[vendors]jquery.cropper/cropper.min.css" />
         <script src="[vendors]jquery.cropper/cropper.js"> </script>
         <script src="[vendors]jquery.cropper/jquery-cropper.js"> </script>
+        <script src="[RES_CMS_URL]js/cms.ctrl.asset.js"> </script>
         <script src="[RES_CMS_URL]js/cms-content-blocks.js"> </script>
         <style>
             <![CDATA[
