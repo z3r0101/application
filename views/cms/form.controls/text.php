@@ -54,7 +54,14 @@ class cms_text
         $tControlStyle = (isset($this->controlObj['control_style'])) ? $this->controlObj['control_style'] : '';
         $tReadonly = (isset($this->controlObj['readonly'])) ? 'readonly="'.$this->controlObj['readonly'].'"' : '';
 
-        $tValue = base64_encode($tValue);
+        $tInputType = (isset($this->controlObj['input-type'])) ? $this->controlObj['input-type'] : 'text';
+
+        if ($tInputType == 'datetime-local') {
+            $tValue = base64_encode(str_replace(' ', 'T', $tValue));
+        } else {
+            $tValue = base64_encode($tValue);
+        }
+
 
         if ($this->isRepeaterControl) {
 
@@ -63,7 +70,6 @@ class cms_text
             }
         }
 
-        $tInputType = (isset($this->controlObj['input-type'])) ? $this->controlObj['input-type'] : 'text';
         $tInputDateClear = (isset($this->controlObj['input-date-clear'])) ? ($this->controlObj['input-date-clear'] == 'true' ? true : false) : false;
 
         $strHTMLOutLeft = "";
@@ -84,7 +90,7 @@ class cms_text
         $tStyle = (isset($this->controlObj['style'])) ? 'style="'.$this->controlObj['style'].'""' : '';
 
         $inputControl = "<input type=\"{$tInputType}\" class=\"form-control {$tClass} {$tControlStyle}\" id=\"{$tId}\" name=\"{$tName}\" {$tPlaceHolder} {$tReadonly} {$tStyle}>";
-        if ($tInputDateClear && $tInputType == 'date') {
+        if ($tInputDateClear && strpos($tInputType, 'date')  !== false) {
             $inputControl = " 
                 <div class=\"input-group mb-3\">
                     <div class=\"input-group-prepend\">
