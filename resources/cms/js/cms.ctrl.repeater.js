@@ -63,6 +63,27 @@ function cmsFnCtrlRepeater_Block(pCtrlId, pRowIndex) {
                         <select class="form-control" data-ctrl-name="${pData['id']}" id="${pCtrlId+'_'+pData['id']+'_'+pRowIndex}" data-ctrl-type="${pData['type']}" onchange="cmsFnCtrlRepeater_Update('${pCtrlId}', this)">${tOption}</select>
                     `
                 }
+            } else if (pData['type'] == 'table') {
+                var arrTableCols = [];
+                pData['fields'].forEach(
+                    function (pData, pIndex) {
+                        arrTableCols[arrTableCols.length] = `<th>${pData['caption']}</th>`;
+                    }
+                );
+
+                pData['control_block'] = `
+                    <table class="table ${pData['id']} table-bordered mt-0 mb-2">
+                        <thead>
+                            ${arrTableCols.join('')}
+                            <th></th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-secondary" onclick="cmsFnCtrlRepeater_subItemAdd(this, '${base64_encode(json_encode(pData))}')"><span class="fas fa-plus"></span></a>
+                `;
+
+                strCtrl = (pData['control_block']) ? `${pData['control_block']}<input type="hidden" data-ctrl-name="${pData['id']}" id="${pCtrlId+'_'+pData['id']+'_'+pRowIndex}" data-ctrl-type="${pData['type']}" />` : '';
             } else if (pData['type'] == 'custom') {
                 strCtrl = (pData['control_block']) ? `${pData['control_block']}<input type="hidden" data-ctrl-name="${pData['id']}" id="${pCtrlId+'_'+pData['id']+'_'+pRowIndex}" data-ctrl-type="${pData['type']}" />` : '';
             }
@@ -81,6 +102,131 @@ function cmsFnCtrlRepeater_Block(pCtrlId, pRowIndex) {
     return strData;
 }
 
+function cmsFnCtrlRepeater_subItemRender(dataCtrlTarget, pMainIndex = null, pSubIndex = 0, pData) {
+    var dataIndex = pMainIndex+'_'+pSubIndex;
+
+    var arrTableCols = [];
+    pData['fields'].forEach(
+        function (pObjData, pObjIndex) {
+            arrTableCols[arrTableCols.length] = `<td><input type="text" class="form-control mb-1 ${pObjData['id']}" placeholder="${pObjData['caption']}" oninput="cmsFnCtrlRepeater_subItemSave(this, '${base64_encode(json_encode(pData))}')" /></td>`;
+        }
+    );
+
+    $('#'+dataCtrlTarget+'_Ctrl .repeater-item[data-index="'+pMainIndex+'"] table.'+pData['id']+' tbody').append(
+        `
+            <tr>
+                ${arrTableCols.join('')}
+                <td class="text-center" style="vertical-align: middle"><a href="javascript:void(0)" onclick="cmsFnCtrlRepeater_subItemRemove(this, '${base64_encode(json_encode(pData))}')"><i class="fas fa-minus-circle"></i></a></td>
+            </tr>
+        `
+    );
+}
+function cmsFnCtrlRepeater_subItemAdd(pObj, pData) {
+    pData = json_decode(base64_decode(pData));
+
+    var dataCtrlTarget = ($(pObj).parents('div[data-ctrl-target]').attr('data-ctrl-target'));
+
+    var arrData = [];
+    if ($(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val() != '') {
+        arrData = json_decode(base64_decode($(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val()));
+    }
+
+    cmsFnCtrlRepeater_subItemRender(
+        dataCtrlTarget,
+        parseInt($(pObj).parents('.repeater-item').attr('data-index'), 10),
+        arrData.length,
+        pData
+    );
+
+    var tObj = {};
+    pData['fields'].forEach(
+        function (pData, pIndex) {
+            tObj[pData['id']] = '';
+        }
+    );
+
+    arrData[arrData.length] = tObj;
+
+    $(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val(base64_encode(json_encode(arrData)));
+
+    cmsFnCtrlRepeater_Update(dataCtrlTarget, $(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]')[0]);
+}
+function cmsFnCtrlRepeater_subItemSave(pObj, pData) {
+    pData = json_decode(base64_decode(pData));
+
+    var dataIndex = $(pObj).parents('tr').index();
+
+    var arrData = [];
+    if ($(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val()!='') {
+        arrData = json_decode(base64_decode($(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val()));
+    }
+
+    if (arrData[dataIndex]) {
+        var tObj = {};
+        pData['fields'].forEach(
+            function (pData, pIndex) {
+                tObj[pData['id']] = $(pObj).parents('tr').find('.'+pData['id']).val();
+            }
+        );
+
+        arrData[dataIndex] = tObj;
+    }
+
+    $(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val(base64_encode(json_encode(arrData)));
+
+    var dataCtrlTarget = ($(pObj).parents('div[data-ctrl-target]').attr('data-ctrl-target'));
+
+    cmsFnCtrlRepeater_Update(dataCtrlTarget, $(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]')[0]);
+}
+function cmsFnCtrlRepeater_subItemRemove(pObj, pData) {
+    pData = json_decode(base64_decode(pData));
+
+    var dataIndex = $(pObj).parents('tr').index();
+
+    var arrData = [];
+    if ($(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val()!='') {
+        arrData = json_decode(base64_decode($(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val()));
+    }
+
+    delete arrData[dataIndex];
+    arrData = arrData.filter(val => val);
+
+    var dataCtrlTarget = ($(pObj).parents('div[data-ctrl-target]').attr('data-ctrl-target'));
+
+    $(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]').val(base64_encode(json_encode(arrData)));
+    cmsFnCtrlRepeater_Update(dataCtrlTarget, $(pObj).parents('.repeater-item').find('input[data-ctrl-name="'+pData['id']+'"]')[0]);
+
+    $(pObj).parents('tr').remove();
+}
+function cmsFnCtrlRepeater_subItemInitialize(pCtrlId, pIndex, pField, pData = null) {
+    console.log('cmsFnCtrlRepeater_subItemInitialize:', pField)
+    var arrData = [];
+    if (!pData) {
+        if ($('#'+pCtrlId+'_'+pField['id']+'_'+pIndex).val()!='') {
+            arrData = (json_decode(base64_decode($('#'+pCtrlId+'_'+pField['id']+'_'+pIndex).val())));
+        }
+    } else {
+        arrData = pData;
+    }
+    if (arrData.length > 0) {
+        arrData.forEach(
+            function (pSubData, pSubIndex) {
+                //repeaterSubItemRender(pIndex, pSubIndex);
+                cmsFnCtrlRepeater_subItemRender(pCtrlId, pIndex, pSubIndex, pField);
+
+                pField['fields'].forEach(
+                    function (pFieldData, pFieldIndex) {
+                        $('#'+pCtrlId+'_Ctrl .repeater-item[data-index="'+pIndex+'"] table tbody tr:eq('+pSubIndex+') .'+pFieldData['id']).val(pSubData[pFieldData['id']]);
+                    }
+                );
+            }
+        );
+    } else {
+        //console.log($('#'+pCtrlId+'_Ctrl .repeater-item[data-index="'+pIndex+'"] table tbody')[0]);
+        $('#'+pCtrlId+'_Ctrl .repeater-item[data-index="'+pIndex+'"] table tbody').empty();
+    }
+}
+
 function cmsFnCtrlRepeater_Render_Special(pType, pThis) {
     if (pType == 'textarea') {
         pThis.style.height = 'auto';
@@ -91,6 +237,7 @@ function cmsFnCtrlRepeater_Render_Special(pType, pThis) {
 
 function cmsFnCtrlRepeater_Render(pCtrlId, pData, pIndex) {
     var arrDataFields = cmsFnCtrlRepeater_Fields(pCtrlId);
+    console.log(arrDataFields);
     arrDataFields.forEach(
         function (pField, pFieldIndex) {
             if (pField['type'] == 'asset') {
@@ -170,6 +317,12 @@ function cmsFnCtrlRepeater_Render(pCtrlId, pData, pIndex) {
                 }
 
                 tinymce.init(arrTinyMCESettings);
+
+            } else if (pField['type'] == 'table') {
+                console.log(pField);
+                //alert(pField['id']);
+                $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] input[data-ctrl-name="${pField['id']}"]`).val(pData[pField['id']]);
+                cmsFnCtrlRepeater_subItemInitialize(pCtrlId, pIndex, pField);
             } else if (pField['type'] == 'custom') {
                 $(`#${pCtrlId}_Ctrl .repeater-container .repeater-item[data-index="${pIndex}"] input[data-ctrl-name="${pField['id']}"]`).val(pData[pField['id']]);
                 if (pField['control_initialize']) pField['control_initialize'](pCtrlId, pData, pIndex);

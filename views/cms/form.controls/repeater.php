@@ -23,7 +23,7 @@
  * data-insert-max      Maximum rows inserted (integer)
  * table structure in json format
  *  id                  Column Id (string)
- *  type                Control Type: text, textarea, select, html, asset
+ *  type                Control Type: text, textarea, select, html, asset, table
  *  caption             Control Caption Display
  *  default             Show value in sort caption display
  *  placeholder         Input placeholder. Applicable only in text, textarea control
