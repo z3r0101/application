@@ -163,7 +163,8 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
 
                 $defaultPath = ($postControlSettings['asset_default_dir']!='') ? $CONFIG['website']['path'].$postControlSettings['asset_default_dir'] : '';
 
-                $defaultPath = (isset($_POST['cmsAssetSavePath'])) ? (($_POST['cmsAssetSavePath'] != '') ? ltrim($_POST['cmsAssetSavePath'], $CONFIG['website']['path']) : $defaultPath) : $defaultPath;
+                $defaultPath = (isset($_POST['cmsAssetSavePath'])) ? (($_POST['cmsAssetSavePath'] != '') ? cmsTools::str_replace_once($CONFIG['website']['path'], '', $_POST['cmsAssetSavePath']) : $defaultPath) : $defaultPath;
+                #$defaultPath = (isset($_POST['cmsAssetSavePath'])) ? (($_POST['cmsAssetSavePath'] != '') ? ltrim($_POST['cmsAssetSavePath'], $CONFIG['website']['path']) : $defaultPath) : $defaultPath;
                 if (substr($defaultPath, 0, strlen($CONFIG['cms']['directory_assets_name'])) == $CONFIG['cms']['directory_assets_name']) $defaultPath = substr($defaultPath, strlen($CONFIG['cms']['directory_assets_name']));
 
                 if (isset($_POST["cmsAssetFileCheck"])) {
