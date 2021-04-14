@@ -267,6 +267,8 @@ if (isset($_REQUEST['CMS_POST_REQ'])) {
                         require_once(VENDORSPATH . 'php-image-resize/ImageResize.php');
                         require_once(VENDORSPATH . 'php-image-resize/ImageResizeException.php');
 
+                        chmod($assetsDir.$defaultPath.'/.cms.'.$cmsAssetFileInfo['upload_file'],0777);
+
                         $image = new \Gumlet\ImageResize($assetsDir.$defaultPath.'/.cms.'.$cmsAssetFileInfo['upload_file']);
                         $image->resizeToWidth(220);
                         $image->save($assetsDir.$defaultPath.'/.cms.'.$cmsAssetFileInfo['upload_file']);
